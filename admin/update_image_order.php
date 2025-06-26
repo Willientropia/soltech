@@ -76,7 +76,7 @@ try {
     $remove_primary_stmt->execute();
     
     // 3. Atualizar ordem e definir primeira como principal
-    $update_query = "UPDATE project_media SET order_position = :order_position, is_primary = CAST(:is_primary AS BOOLEAN) WHERE id = :image_id AND project_id = :project_id";
+   $update_query = "UPDATE project_media SET order_position = :order_position, is_primary = :is_primary WHERE id = :image_id AND project_id = :project_id";
     $update_stmt = $db->prepare($update_query);
     
     $updated_count = 0;

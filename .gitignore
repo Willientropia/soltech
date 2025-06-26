@@ -1,0 +1,33 @@
+# Arquivos de Configuração de Ambiente
+config/database.php          # Credenciais do banco de dados (altamente sensível)
+
+# Arquivos de Uploads
+upload/                      # Diretório de uploads (imagens de projetos, etc.)
+
+# Logs
+*.log                        # Arquivos de log
+logs/                        # Diretório de logs
+
+# Arquivos de Cache e Temporários
+*.tmp                        # Arquivos temporários
+*.bak                        # Arquivos de backup
+temp/                        # Diretórios temporários
+cache/                       # Diretórios de cache
+
+# Ignorar o diretório "vendor" do Composer (se estiver usando Composer)
+# Se você gerencia dependências PHP com Composer, esta pasta é grande e deve ser ignorada.
+# Cada ambiente deve instalar suas próprias dependências.
+vendor/
+
+# Arquivos específicos de IDEs e Sistemas Operacionais
+.idea/                       # JetBrains IDEs (PhpStorm, IntelliJ)
+.vscode/                     # VS Code
+.DS_Store                    # macOS
+Thumbs.db                    # Windows
+npm-debug.log                # Node.js debug logs (se você estiver usando npm para algo)
+.env                         # Arquivos de variáveis de ambiente (geralmente .env)
+.env.*.local                 # Variações de .env
+
+# Arquivos de Teste (se existirem)
+/tests                       # Diretório de testes (se não for parte do código de produção)
+/phpunit.xml                 # Arquivo de configuração do PHPUnit

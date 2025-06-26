@@ -32,7 +32,7 @@ try {
     
     // 2. Definir a mídia selecionada como principal
     // ***** CORREÇÃO APLICADA AQUI *****
-    $update_primary = "UPDATE project_media SET is_primary = TRUE WHERE id = :image_id AND project_id = :project_id";
+    $update_primary = "UPDATE project_media SET is_primary = 1 WHERE id = :image_id AND project_id = :project_id"; 
     $stmt_primary = $db->prepare($update_primary);
     $stmt_primary->bindParam(':image_id', $image_id);
     $stmt_primary->bindParam(':project_id', $project_id);

@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                   slug = :slug, 
                   category_id = :category_id, 
                   description = :description, 
-                  featured = CAST(:featured AS BOOLEAN),
+                  featured = :featured,
                   updated_at = CURRENT_TIMESTAMP
                   WHERE id = :id";
         $stmt = $db->prepare($query);
@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                             // Query para a tabela correta 'project_media'
                             $media_query = "INSERT INTO project_media (project_id, path, media_type, is_primary, order_position) 
-                                        VALUES (:project_id, :path, :media_type, CAST(:is_primary AS BOOLEAN), :order_position)";
+                                        VALUES (:project_id, :path, :media_type, :is_primary, :order_position)";
 
                             $media_stmt = $db->prepare($media_query);
 

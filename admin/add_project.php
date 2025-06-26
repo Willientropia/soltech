@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // 1. Inserir na tabela `projects` (sem detailed_description)
         $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $_POST['title'])));
         $query = "INSERT INTO projects (title, slug, category_id, description, featured, status)
-                  VALUES (:title, :slug, :category_id, :description, CAST(:featured AS BOOLEAN), 'active')";
+                  VALUES (:title, :slug, :category_id, :description, :featured, 'active')";
         $stmt = $db->prepare($query);
 
         $featured = isset($_POST['featured']) ? 1 : 0;
@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                             // Query para a tabela correta 'project_media'
                             $media_query = "INSERT INTO project_media (project_id, path, media_type, is_primary, order_position) 
-                                        VALUES (:project_id, :path, :media_type, CAST(:is_primary AS BOOLEAN), :order_position)";
+                                        VALUES (:project_id, :path, :media_type, :is_primary, :order_position)"; 
 
                             $media_stmt = $db->prepare($media_query);
 
