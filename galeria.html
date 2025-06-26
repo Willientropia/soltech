@@ -909,33 +909,35 @@
         }
 
         function renderProjects(projectsToRender) {
+            // SUBSTITUA PELO CÓDIGO ABAIXO:
             ui.galleryGrid.innerHTML = projectsToRender.map(project => {
-                const imageUrl = project.images && project.images.length > 0
-                    ? `upload/images/projects/${project.images[0]}`
-                    : '';
-                const hasImage = imageUrl ? 'has-image' : '';
-                const imageStyle = imageUrl ? `background-image: url('${imageUrl}');` : '';
+                const primaryMedia = project.media && project.media.length > 0 ? project.media[0] : null;
+                const hasMedia = !!primaryMedia;
+                const isVideo = hasMedia && primaryMedia.media_type === 'video';
+
+                const mediaPath = hasMedia ? `upload/images/projects/${primaryMedia.path}` : '';
+                // Define o fundo apenas se for uma imagem
+                const mediaStyle = hasMedia && !isVideo ? `background-image: url('${mediaPath}');` : '';
+
+                // Define o ícone de overlay
+                const mediaIcon = isVideo 
+                    ? '<i class="fas fa-play view-icon"></i>' 
+                    : '<i class="fas fa-search-plus view-icon"></i>';
 
                 return `
                 <div class="project-card" data-project-id="${project.id}">
-                    <div class="project-image ${hasImage}" style="${imageStyle}">
-                        <div class="project-overlay"><i class="fas fa-search-plus view-icon"></i></div>
+                    <div class="project-image ${hasMedia ? 'has-image' : ''}" style="${mediaStyle}">
+                        ${isVideo ? '<div class="project-image" style="background: #222;"></div>' : ''}
+                        <div class="project-overlay">${mediaIcon}</div>
                     </div>
                     <div class="project-info">
                         <div class="project-category">${project.category.name}</div>
                         <div class="project-title">${project.title}</div>
-                        <div class="project-description">${project.description}</div>
-                        
-                        <div class="project-specs-preview">
-                            ${project.specifications.power ? `<div class="spec-item"><i class="fas fa-bolt"></i> ${project.specifications.power}</div>` : ''}
-                            ${project.specifications.savings ? `<div class="spec-item"><i class="fas fa-coins"></i> ${project.specifications.savings}</div>` : ''}
-                            ${project.specifications.location ? `<div class="spec-item"><i class="fas fa-map-marker-alt"></i> ${project.specifications.location}</div>` : ''}
-                            ${project.specifications.year ? `<div class="spec-item"><i class="fas fa-calendar"></i> ${project.specifications.year}</div>` : ''}
-                        </div>
                     </div>
                 </div>
                 `;
             }).join('');
+                ui.galleryGrid.style.display = 'grid';
         }
 
         function setupFilterEventListeners() {
@@ -1071,25 +1073,26 @@
                     descEl.innerHTML = description.replace(/\n/g, '<br>');
                 }
                 
-                this.setupImages(project.images || []);
+                this.setupMedia(project.media || []); // <-- Chamada corrigida
                 this.renderSpecs(project.specifications || {});
                 this.setupWhatsAppButton(project);
             }
             
-            setupImages(images) {
-                this.images = images.filter(img => img);
-                this.currentImageIndex = 0;
-                
-                if (this.images.length === 0) {
+            // SUBSTITUA POR ISTO:
+            setupMedia(media) {
+                this.media = media.filter(m => m && m.path); // <-- Usa o novo array 'media'
+                this.currentMediaIndex = 0;
+
+                if (this.media.length === 0) {
                     this.mainImage.innerHTML = '<div class="modal-image-placeholder">📸</div>';
-                    this.mainImage.style.backgroundImage = '';
+                    this.mainImage.style.backgroundImage = 'none';
                     this.hideImageNavigation();
                     return;
                 }
-                
+
                 this.showCurrentImage();
-                
-                if (this.images.length > 1) {
+
+                if (this.media.length > 1) {
                     this.showImageNavigation();
                     this.renderThumbnails();
                 } else {
@@ -1097,14 +1100,25 @@
                 }
             }
             
+            // SUBSTITUA POR ISTO:
             showCurrentImage() {
-                if (this.images.length === 0) return;
-                
-                const currentImage = this.images[this.currentImageIndex];
-                const imageUrl = `upload/images/projects/${currentImage}`;
-                
-                this.mainImage.innerHTML = '';
-                this.mainImage.style.backgroundImage = `url('${imageUrl}')`;
+                if (this.media.length === 0) return;
+
+                const currentMedia = this.media[this.currentImageIndex];
+                const mediaUrl = `upload/images/projects/${currentMedia.path}`;
+
+                this.mainImage.innerHTML = ''; // Limpa o container
+                this.mainImage.style.backgroundImage = 'none'; // Remove fundo antigo
+
+                if (currentMedia.media_type === 'video') {
+                    const videoElement = document.createElement('video');
+                    videoElement.src = mediaUrl;
+                    videoElement.controls = true;
+                    videoElement.style.cssText = 'width: 100%; height: 100%; object-fit: contain;';
+                    this.mainImage.appendChild(videoElement);
+                } else {
+                    this.mainImage.style.backgroundImage = `url('${mediaUrl}')`;
+                }
             }
             
             showImageNavigation() {
@@ -1119,39 +1133,41 @@
                 this.thumbnailsContainer.style.display = 'none';
             }
             
+            // SUBSTITUA A FUNÇÃO 'renderThumbnails' INTEIRA POR ISTO:
             renderThumbnails() {
-                this.thumbnailsContainer.innerHTML = this.images.map((image, index) => {
-                    const imageUrl = `upload/images/projects/${image}`;
-                    const activeClass = index === this.currentImageIndex ? 'active' : '';
-                    return `
-                        <div class="modal-thumbnail ${activeClass}" 
-                            style="background-image: url('${imageUrl}')"
-                            data-index="${index}">
-                        </div>
-                    `;
+                this.thumbnailsContainer.innerHTML = this.media.map((item, index) => {
+                    const isActive = index === this.currentMediaIndex ? 'active' : '';
+                    const isVideo = item.media_type === 'video';
+                    const thumbStyle = !isVideo 
+                        ? `background-image: url('upload/images/projects/${item.path}')` 
+                        : 'background-color: #333; display:flex; align-items:center; justify-content:center;';
+                    const thumbContent = isVideo ? '<i class="fas fa-play" style="color:white;"></i>' : '';
+
+                    return `<div class="modal-thumbnail ${isActive}" style="${thumbStyle}" data-index="${index}">${thumbContent}</div>`;
                 }).join('');
-                
+
                 this.thumbnailsContainer.querySelectorAll('.modal-thumbnail').forEach((thumb, index) => {
                     thumb.addEventListener('click', () => this.goToImage(index));
                 });
             }
             
+            // SUBSTITUA AS 3 FUNÇÕES DE NAVEGAÇÃO POR ESTAS:
             prevImage() {
-                if (this.images.length <= 1) return;
-                this.currentImageIndex = this.currentImageIndex === 0 ? this.images.length - 1 : this.currentImageIndex - 1;
+                if (this.media.length <= 1) return;
+                this.currentImageIndex = this.currentImageIndex === 0 ? this.media.length - 1 : this.currentImageIndex - 1;
                 this.showCurrentImage();
                 this.updateThumbnails();
             }
-            
+
             nextImage() {
-                if (this.images.length <= 1) return;
-                this.currentImageIndex = this.currentImageIndex === this.images.length - 1 ? 0 : this.currentImageIndex + 1;
+                if (this.media.length <= 1) return;
+                this.currentImageIndex = this.currentImageIndex === this.media.length - 1 ? 0 : this.currentImageIndex + 1;
                 this.showCurrentImage();
                 this.updateThumbnails();
             }
-            
+
             goToImage(index) {
-                if (index >= 0 && index < this.images.length) {
+                if (index >= 0 && index < this.media.length) {
                     this.currentImageIndex = index;
                     this.showCurrentImage();
                     this.updateThumbnails();
@@ -1263,5 +1279,8 @@
             }
         }
     </script>
+
+
+
 </body>
 </html>

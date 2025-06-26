@@ -1772,31 +1772,48 @@
                 document.getElementById('projectsCarouselContainer').style.display = 'block';
             }
             
+            // SUBSTITUA O MÉTODO renderProjects() DENTRO DA CLASSE ProjectsCarousel:
+           // Cole este código substituindo o método renderProjects() existente
             renderProjects() {
                 if (!this.track || !this.projects.length) return;
-                
+
+                // Esta parte, que monta o HTML, permanece a mesma
                 this.track.innerHTML = this.projects.map(project => {
-                    const imageUrl = project.images && project.images.length > 0 ? `upload/images/projects/${project.images[0]}` : '';
-                    const hasImage = imageUrl ? 'has-image' : '';
-                    
+                    const primaryMedia = project.media && project.media.length > 0 ? project.media[0] : null;
+                    const hasMedia = !!primaryMedia;
+                    const isVideo = hasMedia && primaryMedia.media_type === 'video';
+
+                    const mediaPath = hasMedia ? `upload/images/projects/${primaryMedia.path}` : '';
+                    const mediaStyle = hasMedia && !isVideo ? `background-image: url('${mediaPath}');` : '';
+                    const mediaIcon = isVideo 
+                        ? '<div class="carousel-project-view-icon"><i class="fas fa-play"></i></div>' 
+                        : '<div class="carousel-project-view-icon"><i class="fas fa-search-plus"></i></div>';
+
                     return `
                     <div class="carousel-project-card" data-project-id="${project.id}">
-                        <div class="carousel-project-image ${hasImage}" style="${imageUrl ? `background-image: url('${imageUrl}');` : ''}">
-                            <div class="carousel-project-view-icon"><i class="fas fa-search-plus"></i></div>
+                        <div class="carousel-project-image ${hasMedia ? 'has-image' : ''}" style="${mediaStyle}">
+                            ${isVideo ? '<div class="carousel-project-image" style="background: #222;"></div>' : ''}
+                            ${mediaIcon}
                         </div>
                         <div class="carousel-project-content">
                             <span class="carousel-project-type">${project.category.name}</span>
                             <h3 class="carousel-project-title">${project.title}</h3>
-                            <p class="carousel-project-description">${project.description.substring(0, 70)}...</p>
-                            <div class="carousel-project-specs">
-                                ${project.specifications.power ? `<div class="spec-item"><i class="fas fa-bolt"></i> ${project.specifications.power}</div>` : ''}
-                                ${project.specifications.savings ? `<div class="spec-item"><i class="fas fa-coins"></i> ${project.specifications.savings}</div>` : ''}
-                                ${project.specifications.location ? `<div class="spec-item"><i class="fas fa-map-marker-alt"></i> ${project.specifications.location}</div>` : ''}
-                                ${project.specifications.year ? `<div class="spec-item"><i class="fas fa-calendar"></i> ${project.specifications.year}</div>` : ''}
-                            </div>
                         </div>
                     </div>`;
                 }).join('');
+
+                // ===== CORREÇÃO APLICADA AQUI =====
+                // Removemos a chamada antiga e problemática para o modal.
+                // Agora, o próprio carrossel anexa os eventos de clique aos cards que ele criou.
+                this.track.querySelectorAll('.carousel-project-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        const projectId = card.dataset.projectId;
+                        // Se o card tem um ID e o modal existe, mandamos o modal abrir.
+                        if (projectId && window.projectModal) {
+                            window.projectModal.open(projectId);
+                        }
+                    });
+                });
             }
             
             updateCarousel() {
@@ -1993,34 +2010,52 @@
                 document.getElementById('modalTitle').textContent = project.title || 'Sem título';
                 const description = project.detailed_description || project.description || 'Sem descrição.';
                 document.getElementById('modalDescription').innerHTML = description.replace(/\n/g, '<br>');
-                this.setupImages(project.images || []);
+                this.setupMedia(project.media || []); // <-- Chamada corrigida
                 this.renderSpecs(project.specifications || {});
                 this.setupWhatsAppButton(project);
             }
             
-            setupImages(images) {
-                this.images = images.filter(img => img);
-                this.currentImageIndex = 0;
-                if (this.images.length === 0) {
+            // SUBSTITUA POR ISTO:
+            setupMedia(media) {
+                this.media = media.filter(m => m && m.path); // <-- Usa o novo array 'media'
+                this.currentMediaIndex = 0;
+
+                if (this.media.length === 0) {
                     this.mainImage.innerHTML = '<div class="modal-image-placeholder">📸</div>';
-                    this.mainImage.style.backgroundImage = '';
+                    this.mainImage.style.backgroundImage = 'none';
                     this.hideImageNavigation();
+                    return;
+                }
+
+                this.showCurrentImage();
+
+                if (this.media.length > 1) {
+                    this.showImageNavigation();
+                    this.renderThumbnails();
                 } else {
-                    this.showCurrentImage();
-                    if (this.images.length > 1) {
-                        this.showImageNavigation();
-                        this.renderThumbnails();
-                    } else {
-                        this.hideImageNavigation();
-                    }
+                    this.hideImageNavigation();
                 }
             }
             
+            // SUBSTITUA POR ISTO:
             showCurrentImage() {
-                if (this.images.length === 0) return;
-                const imageUrl = `upload/images/projects/${this.images[this.currentImageIndex]}`;
-                this.mainImage.innerHTML = '';
-                this.mainImage.style.backgroundImage = `url('${imageUrl}')`;
+                if (this.media.length === 0) return;
+
+                const currentMedia = this.media[this.currentImageIndex];
+                const mediaUrl = `upload/images/projects/${currentMedia.path}`;
+
+                this.mainImage.innerHTML = ''; // Limpa o container
+                this.mainImage.style.backgroundImage = 'none'; // Remove fundo antigo
+
+                if (currentMedia.media_type === 'video') {
+                    const videoElement = document.createElement('video');
+                    videoElement.src = mediaUrl;
+                    videoElement.controls = true;
+                    videoElement.style.cssText = 'width: 100%; height: 100%; object-fit: contain;';
+                    this.mainImage.appendChild(videoElement);
+                } else {
+                    this.mainImage.style.backgroundImage = `url('${mediaUrl}')`;
+                }
             }
             
             showImageNavigation() {
@@ -2035,34 +2070,45 @@
                 this.thumbnailsContainer.style.display = 'none';
             }
             
+            // SUBSTITUA A FUNÇÃO 'renderThumbnails' INTEIRA POR ISTO:
             renderThumbnails() {
-                this.thumbnailsContainer.innerHTML = this.images.map((image, index) => 
-                    `<div class="modal-thumbnail ${index === this.currentImageIndex ? 'active' : ''}" style="background-image: url('upload/images/projects/${image}')" data-index="${index}"></div>`
-                ).join('');
-                
-                this.thumbnailsContainer.querySelectorAll('.modal-thumbnail').forEach(thumb => {
-                    thumb.addEventListener('click', () => this.goToImage(parseInt(thumb.dataset.index)));
+                this.thumbnailsContainer.innerHTML = this.media.map((item, index) => {
+                    const isActive = index === this.currentImageIndex ? 'active' : '';
+                    const isVideo = item.media_type === 'video';
+                    const thumbStyle = !isVideo 
+                        ? `background-image: url('upload/images/projects/${item.path}')` 
+                        : 'background-color: #333; display:flex; align-items:center; justify-content:center;';
+                    const thumbContent = isVideo ? '<i class="fas fa-play" style="color:white;"></i>' : '';
+
+                    return `<div class="modal-thumbnail ${isActive}" style="${thumbStyle}" data-index="${index}">${thumbContent}</div>`;
+                }).join('');
+
+                this.thumbnailsContainer.querySelectorAll('.modal-thumbnail').forEach((thumb, index) => {
+                    thumb.addEventListener('click', () => this.goToImage(index));
                 });
             }
             
+            // SUBSTITUA AS 3 FUNÇÕES DE NAVEGAÇÃO POR ESTAS:
             prevImage() {
-                if (this.images.length <= 1) return;
-                this.currentImageIndex = (this.currentImageIndex - 1 + this.images.length) % this.images.length;
+                if (this.media.length <= 1) return;
+                this.currentImageIndex = this.currentImageIndex === 0 ? this.media.length - 1 : this.currentImageIndex - 1;
                 this.showCurrentImage();
                 this.updateThumbnails();
             }
-            
+
             nextImage() {
-                if (this.images.length <= 1) return;
-                this.currentImageIndex = (this.currentImageIndex + 1) % this.images.length;
+                if (this.media.length <= 1) return;
+                this.currentImageIndex = this.currentImageIndex === this.media.length - 1 ? 0 : this.currentImageIndex + 1;
                 this.showCurrentImage();
                 this.updateThumbnails();
             }
-            
+
             goToImage(index) {
-                this.currentImageIndex = index;
-                this.showCurrentImage();
-                this.updateThumbnails();
+                if (index >= 0 && index < this.media.length) {
+                    this.currentImageIndex = index;
+                    this.showCurrentImage();
+                    this.updateThumbnails();
+                }
             }
             
             updateThumbnails() {

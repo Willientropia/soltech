@@ -74,19 +74,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if (!empty($tmp_name)) {
                     $file_name = $_FILES['images']['name'][$key];
                     $file_extension = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-                    $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+
+                    // Lista de extensões permitidas para imagens e vídeos
+                    $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'mov', 'webm'];
+
                     if (in_array($file_extension, $allowed_extensions)) {
                         $new_file_name = $project_id . '_' . uniqid() . '.' . $file_extension;
                         $upload_path = $upload_dir . $new_file_name;
+
                         if (move_uploaded_file($tmp_name, $upload_path)) {
-                            $img_query = "INSERT INTO project_images (project_id, image_path, is_primary, order_position) 
-                                          VALUES (:project_id, :image_path, CAST(:is_primary AS BOOLEAN), :order_position)";
-                            $img_stmt = $db->prepare($img_query);
+                            // Define se é imagem ou vídeo
+                            $video_types = ['mp4', 'mov', 'webm'];
+                            $media_type = in_array($file_extension, $video_types) ? 'video' : 'image';
+
+                            // Define se é a mídia principal
                             $is_primary = ($key == 0) ? 1 : 0;
-                            $img_stmt->execute([
-                                ':project_id' => $project_id, 
-                                ':image_path' => $new_file_name,
-                                ':is_primary' => $is_primary,
+
+                            // Query para a tabela correta 'project_media'
+                            $media_query = "INSERT INTO project_media (project_id, path, media_type, is_primary, order_position) 
+                                        VALUES (:project_id, :path, :media_type, CAST(:is_primary AS BOOLEAN), :order_position)";
+
+                            $media_stmt = $db->prepare($media_query);
+
+                            $media_stmt->execute([
+                                ':project_id'     => $project_id, 
+                                ':path'           => $new_file_name,
+                                ':media_type'     => $media_type,
+                                ':is_primary'     => $is_primary,
                                 ':order_position' => $key
                             ]);
                         }
@@ -213,6 +227,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             font-size: 16px;
             transition: border-color 0.3s ease;
         }
+
+        /* Adicione este CSS dentro da sua tag <style> */
+
+        .image-item {
+            /* ... seus estilos existentes ... */
+            transition: transform 0.2s ease-in-out; /* Adiciona uma transição suave */
+        }
+
+        /* Este estilo será aplicado ao item que está sendo arrastado */
+        .image-item.dragging {
+            opacity: 0.5;
+            transform: scale(1.05); /* Levemente maior para dar destaque */
+}
 
         .form-group input:focus,
         .form-group select:focus,
@@ -411,8 +438,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <label for="category_id">Categoria *</label>
                 <select id="category_id" name="category_id" required>
                     <option value="">Selecione uma categoria</option>
-                    <?php foreach ($categories as $cat): ?>
-                        <option value="<?php echo htmlspecialchars($cat['id']); ?>"><?php echo htmlspecialchars($cat['name']); ?></option>
+                     <?php foreach ($categories as $cat): ?>
+                         <option value="<?php echo htmlspecialchars($cat['id']); ?>"><?php echo htmlspecialchars($cat['name']); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -481,8 +508,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <i class="fas fa-cloud-upload-alt"></i>
                     </div>
                     <p>Clique para selecionar imagens</p>
-                    <p style="font-size: 0.9rem; color: #666;">Formatos aceitos: JPG, PNG, GIF, WEBP (máx. 5MB cada)</p>
-                    <input type="file" id="images" name="images[]" multiple accept="image/*">
+                    <p style="font-size: 0.9rem; color: #666;">Formatos aceitos: JPG, PNG, GIF, WEBP, MP4, MOV (máx. 100MB)</p>
+                    <input type="file" id="images" name="images[]" multiple accept="image/*,video/*">
                 </div>
                 <div id="filePreview" class="file-preview"></div>
             </div>
@@ -499,42 +526,142 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 
     <script>
-        document.getElementById('images').addEventListener('change', function(e) {
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // --- PARTE 1: PRÉ-VISUALIZAÇÃO DE NOVOS ARQUIVOS (código mantido) ---
+            const fileInput = document.getElementById('images');
             const previewContainer = document.getElementById('filePreview');
-            previewContainer.innerHTML = '';
-            const files = Array.from(e.target.files);
 
-            files.forEach((file, index) => {
-                if (!file.type.startsWith('image/')) return;
+            if (fileInput && previewContainer) {
+                fileInput.addEventListener('change', function(event) {
+                    previewContainer.innerHTML = '';
+                    const files = event.target.files;
+                    for (const file of files) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            let mediaElement;
+                            if (file.type.startsWith('image/')) {
+                                mediaElement = document.createElement('img');
+                            } else if (file.type.startsWith('video/')) {
+                                mediaElement = document.createElement('video');
+                                mediaElement.muted = true;
+                                mediaElement.autoplay = true;
+                                mediaElement.loop = true;
+                            }
+                            if (mediaElement) {
+                                mediaElement.src = e.target.result;
+                                mediaElement.style.cssText = 'width: 120px; height: 90px; object-fit: cover; border-radius: 5px; margin: 5px;';
+                                previewContainer.appendChild(mediaElement);
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
 
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    const div = document.createElement('div');
-                    div.className = 'preview-item';
-                    div.setAttribute('data-file-index', index);
-                    div.innerHTML = `
-                        <img src="${event.target.result}" alt="${file.name}">
-                        <button type="button" class="remove-preview" onclick="removePreviewItem(this, '${file.name}')">×</button>
-                    `;
-                    previewContainer.appendChild(div);
-                };
-                reader.readAsDataURL(file);
-            });
+            // --- PARTE 2: NOVA LÓGICA DE DRAG & DROP ---
+            const sortableContainer = document.getElementById('sortableImages');
+            if (sortableContainer) {
+                let draggedItem = null;
+
+                // Evento quando você começa a arrastar um item
+                sortableContainer.addEventListener('dragstart', e => {
+                    if (e.target.classList.contains('image-item')) {
+                        draggedItem = e.target;
+                        // Adiciona a classe 'dragging' para dar o efeito visual
+                        setTimeout(() => {
+                            draggedItem.classList.add('dragging');
+                        }, 0);
+                    }
+                });
+
+                // Evento quando você solta o item
+                sortableContainer.addEventListener('dragend', e => {
+                    if (draggedItem) {
+                        // Remove a classe e salva a nova ordem
+                        draggedItem.classList.remove('dragging');
+                        draggedItem = null;
+                        saveImageOrder();
+                    }
+                });
+
+                // Evento principal: acontece enquanto você move o item sobre a área
+                sortableContainer.addEventListener('dragover', e => {
+                    e.preventDefault(); // Essencial para permitir o 'drop'
+                    
+                    const afterElement = getDragAfterElement(sortableContainer, e.clientX);
+                    
+                    // Move o item arrastado em tempo real
+                    if (draggedItem) {
+                        if (afterElement == null) {
+                            sortableContainer.appendChild(draggedItem);
+                        } else {
+                            sortableContainer.insertBefore(draggedItem, afterElement);
+                        }
+                    }
+                });
+            }
         });
 
-        function removePreviewItem(button, fileName) {
-            const input = document.getElementById('images');
-            const dataTransfer = new DataTransfer();
-            const files = Array.from(input.files);
+        /**
+         * Função auxiliar que descobre qual elemento está logo a seguir
+         * ao cursor do rato, para saber onde inserir o item arrastado.
+         * @param {HTMLElement} container O container onde os itens estão.
+         * @param {number} x A posição horizontal do rato (clientX).
+         */
+        function getDragAfterElement(container, x) {
+            const draggableElements = [...container.querySelectorAll('.image-item:not(.dragging)')];
 
-            files.forEach(file => {
-                if (file.name !== fileName) {
-                    dataTransfer.items.add(file);
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = x - box.left - box.width / 2;
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
                 }
-            });
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
 
-            input.files = dataTransfer.files;
-            button.parentElement.remove();
+        // --- PARTE 3: FUNÇÕES DE DELETAR E SALVAR (mantidas) ---
+        function deleteMedia(mediaId) {
+            if (confirm('Tem certeza que deseja remover esta mídia?')) {
+                window.location.href = `delete_media.php?id=${mediaId}&project_id=<?php echo $project_id; ?>`;
+            }
+        }
+
+        function saveImageOrder() {
+            const imageItems = document.querySelectorAll('#sortableImages .image-item');
+            const newOrder = Array.from(imageItems).map((item, index) => ({
+                image_id: parseInt(item.dataset.imageId),
+                order_position: index
+            }));
+            
+            fetch('update_image_order.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    project_id: <?php echo $project_id; ?>,
+                    order: newOrder
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Atualiza o badge "Principal" no primeiro item da lista
+                    document.querySelectorAll('.primary-badge').forEach(b => b.remove());
+                    const firstItem = document.querySelector('.image-item');
+                    if(firstItem) {
+                        const badge = document.createElement('div');
+                        badge.className = 'primary-badge';
+                        badge.textContent = 'Principal';
+                        firstItem.appendChild(badge);
+                    }
+                } else {
+                    throw new Error(data.message || 'Erro ao salvar a ordem.');
+                }
+            })
+            .catch(error => console.error('Erro ao salvar a ordem:', error));
         }
     </script>
 </body>

@@ -64,34 +64,37 @@ try {
         }
     }
     
-    // 4. Copiar imagens (duplicar arquivos físicos)
-    $images_query = "SELECT image_path, is_primary, order_position FROM project_images WHERE project_id = :project_id ORDER BY order_position ASC";
-    $images_stmt = $db->prepare($images_query);
-    $images_stmt->bindParam(':project_id', $original_project_id);
-    $images_stmt->execute();
-    $images = $images_stmt->fetchAll(PDO::FETCH_ASSOC);
+    // ***** CORREÇÃO APLICADA AQUI *****
+    // 4. Copiar mídias (duplicar arquivos físicos)
+    $media_query = "SELECT path, media_type, is_primary, order_position FROM project_media WHERE project_id = :project_id ORDER BY order_position ASC";
+    $media_stmt = $db->prepare($media_query);
+    $media_stmt->bindParam(':project_id', $original_project_id);
+    $media_stmt->execute();
+    $media_files = $media_stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    if ($images) {
-        $insert_image_query = "INSERT INTO project_images (project_id, image_path, is_primary, order_position) VALUES (:project_id, :image_path, CAST(:is_primary AS BOOLEAN), :order_position)";
-        $insert_image_stmt = $db->prepare($insert_image_query);
-        
-        foreach ($images as $index => $image) {
-            $original_file_path = '../upload/images/projects/' . $image['image_path'];
-            
+    // ***** CORREÇÃO APLICADA AQUI *****
+    if ($media_files) {
+        $insert_media_query = "INSERT INTO project_media (project_id, path, media_type, is_primary, order_position) VALUES (:project_id, :path, :media_type, CAST(:is_primary AS BOOLEAN), :order_position)";
+        $insert_media_stmt = $db->prepare($insert_media_query);
+
+        foreach ($media_files as $media) {
+            $original_file_path = '../upload/images/projects/' . $media['path'];
+
             if (file_exists($original_file_path)) {
                 // Gerar novo nome de arquivo
-                $file_extension = pathinfo($image['image_path'], PATHINFO_EXTENSION);
-                $new_image_name = $new_project_id . '_copy_' . uniqid() . '.' . $file_extension;
-                $new_file_path = '../upload/images/projects/' . $new_image_name;
-                
+                $file_extension = pathinfo($media['path'], PATHINFO_EXTENSION);
+                $new_media_name = $new_project_id . '_copy_' . uniqid() . '.' . $file_extension;
+                $new_file_path = '../upload/images/projects/' . $new_media_name;
+
                 // Copiar arquivo físico
                 if (copy($original_file_path, $new_file_path)) {
                     // Inserir registro no banco
-                    $insert_image_stmt->execute([
-                        ':project_id' => $new_project_id,
-                        ':image_path' => $new_image_name,
-                        ':is_primary' => ($index == 0) ? 1 : 0,
-                        ':order_position' => $image['order_position']
+                    $insert_media_stmt->execute([
+                        ':project_id'     => $new_project_id,
+                        ':path'           => $new_media_name,
+                        ':media_type'     => $media['media_type'], // <-- Copia o tipo da mídia
+                        ':is_primary'     => $media['is_primary'], // <-- Copia o status de principal
+                        ':order_position' => $media['order_position']
                     ]);
                 }
             }

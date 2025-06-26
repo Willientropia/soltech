@@ -66,20 +66,20 @@ try {
             $specs = $spec_stmt->fetchAll(PDO::FETCH_KEY_PAIR);
             $proj = array_merge($proj, $specs);
 
-            // CORREÇÃO: Buscar a imagem principal do projeto
-            $img_query = "SELECT image_path 
-                        FROM project_images 
-                        WHERE project_id = :project_id 
-                        ORDER BY 
-                            CASE WHEN is_primary = true THEN 0 ELSE 1 END,
-                            order_position ASC, 
-                            id ASC 
-                        LIMIT 1";
-            $img_stmt = $db->prepare($img_query);
-            $img_stmt->bindParam(':project_id', $proj['id']);
-            $img_stmt->execute();
-            $image = $img_stmt->fetch(PDO::FETCH_ASSOC);
-            $proj['image_path'] = $image ? $image['image_path'] : null;
+            // Buscar da nova tabela 'project_media' e usar a coluna 'path'
+            $media_query = "SELECT path, media_type 
+                            FROM project_media 
+                            WHERE project_id = :project_id 
+                            ORDER BY is_primary DESC, order_position ASC, id ASC 
+                            LIMIT 1";
+            $media_stmt = $db->prepare($media_query);
+            $media_stmt->bindParam(':project_id', $proj['id']);
+            $media_stmt->execute();
+            $media = $media_stmt->fetch(PDO::FETCH_ASSOC);
+
+            // Adiciona o path e o tipo da mídia principal ao projeto
+            $proj['primary_media_path'] = $media ? $media['path'] : null;
+            $proj['primary_media_type'] = $media ? $media['media_type'] : 'image';
 
             $projects[] = $proj;
         }
@@ -413,10 +413,20 @@ try {
                 <?php foreach ($projects as $proj): ?>
                     <div class="project-card">
                         <?php 
-                        $imageClass = $proj['image_path'] ? 'has-image' : '';
-                        $imageStyle = $proj['image_path'] ? 'background-image: url(../upload/images/projects/' . htmlspecialchars($proj['image_path']) . ');' : '';
+                        // ***** CORREÇÃO APLICADA AQUI *****
+                        $media_path = $proj['primary_media_path'];
+                        $media_type = $proj['primary_media_type'];
+                        $has_media_class = $media_path ? 'has-image' : '';
+                        // Define o estilo de background apenas se for uma imagem
+                        $background_style = ($media_path && $media_type === 'image') ? 'background-image: url(../upload/images/projects/' . htmlspecialchars($media_path) . ');' : '';
                         ?>
-                        <div class="project-image <?php echo $imageClass; ?>" style="<?php echo $imageStyle; ?>">
+                        <div class="project-image <?php echo $has_media_class; ?>" style="<?php echo $background_style; ?>">
+                            <?php if ($media_type === 'video'): ?>
+                                <i class="fas fa-play" style="font-size: 4rem; color: rgba(255,255,255,0.8);"></i>
+                            <?php elseif (!$media_path): ?>
+                                📸
+                            <?php endif; ?> 
+                            
                             <?php if ($proj['featured']): ?>
                                 <div class="featured-badge">
                                     <i class="fas fa-star"></i> Destaque

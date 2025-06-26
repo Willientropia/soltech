@@ -9,16 +9,18 @@ include_once '../models/Project.php';
 $database = new Database();
 $db = $database->getConnection();
 
+// ***** CORREÇÃO APLICADA AQUI *****
 function getProjectDetails($db, $project_id) {
     $spec_stmt = $db->prepare("SELECT spec_name, spec_value FROM project_specs WHERE project_id = :id");
     $spec_stmt->execute([':id' => $project_id]);
     $specs = $spec_stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
-    $img_stmt = $db->prepare("SELECT image_path FROM project_images WHERE project_id = :id ORDER BY CASE WHEN is_primary = true THEN 0 ELSE 1 END, order_position ASC, id ASC");
-    $img_stmt->execute([':id' => $project_id]);
-    $images = $img_stmt->fetchAll(PDO::FETCH_COLUMN);
+    // Busca da nova tabela 'project_media' e retorna tanto o path quanto o tipo da mídia
+    $media_stmt = $db->prepare("SELECT path, media_type FROM project_media WHERE project_id = :id ORDER BY is_primary DESC, order_position ASC, id ASC");
+    $media_stmt->execute([':id' => $project_id]);
+    $media = $media_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    return ['specifications' => $specs, 'images' => $images];
+    return ['specifications' => $specs, 'media' => $media]; // Retorna um array 'media'
 }
 
 $project = new Project($db);
@@ -40,7 +42,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             ],
             "description" => $row['description'],
             "specifications" => $details['specifications'],
-            "images" => $details['images'],
+             "media" => $details['media'], //
             "featured" => (bool)$row['featured']
         ];
         echo json_encode($project_item);
@@ -66,7 +68,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             ],
             "description" => $row['description'],
             "specifications" => $details['specifications'],
-            "images" => $details['images'],
+             "media" => $details['media'], //
             "featured" => (bool)$row['featured']
         ];
         array_push($projects_arr["records"], $project_item);

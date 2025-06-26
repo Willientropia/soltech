@@ -1,14 +1,14 @@
 version: '3.8'
 
 services:
-  # Serviço do Site (PHP + Apache)
   web:
     build: .
     container_name: soltech_web
     ports:
-      - "8000:80" # Acessaremos o site em http://localhost:8000
+      - "8000:80"
     volumes:
-      - ./:/var/www/html/ # Mapeia o código local para dentro do container
+      - ./:/var/www/html/
+      - ./config/custom.ini:/usr/local/etc/php/conf.d/custom.ini  # <--- ADICIONE ESTA LINHA
     depends_on:
       - db
     environment:

@@ -25,15 +25,17 @@ CREATE TABLE projects (
 );
 
 -- Criação da tabela de imagens dos projetos
-CREATE TABLE project_images (
+CREATE TABLE project_media (
     id SERIAL PRIMARY KEY,
     project_id INTEGER NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
-    image_path VARCHAR(500) NOT NULL,
+    path VARCHAR(255) NOT NULL,
+    media_type VARCHAR(10) NOT NULL DEFAULT 'image' CHECK (media_type IN ('image', 'video')),
     alt_text VARCHAR(255),
     is_primary BOOLEAN DEFAULT FALSE,
     order_position INTEGER DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 
 -- Criação da tabela de especificações técnicas
 CREATE TABLE project_specs (
@@ -134,8 +136,9 @@ CREATE TRIGGER update_admin_users_updated_at
     EXECUTE FUNCTION update_updated_at_column();
 
 -- Índices para otimização
+-- ***** CORREÇÃO APLICADA AQUI *****
 CREATE INDEX idx_projects_category ON projects(category_id);
-CREATE INDEX idx_project_images_project ON project_images(project_id);
+CREATE INDEX idx_project_media_project ON project_media(project_id); -- Linha corrigida
 CREATE INDEX idx_project_specs_project ON project_specs(project_id);
 CREATE INDEX idx_contacts_created ON contacts(created_at);
 CREATE INDEX idx_admin_users_username ON admin_users(username);
@@ -156,3 +159,7 @@ SELECT setval('project_specs_id_seq', (SELECT MAX(id) FROM project_specs));
 
 -- Sincroniza o contador da tabela 'admin_users'
 SELECT setval('admin_users_id_seq', (SELECT MAX(id) FROM admin_users));
+
+
+SELECT setval('project_media_id_seq', (SELECT MAX(id) FROM project_media));
+

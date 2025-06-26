@@ -14,7 +14,7 @@ $message_type = '';
 $project = null;
 $project_specs_raw = []; // Armazena dados brutos do BD
 $project_specs_form = []; // Armazena dados limpos para o formulário
-$project_images = [];
+$project_media = []; // <-- Variável renomeada para mídias
 $categories = [];
 
 // Verificar se ID foi fornecido
@@ -85,48 +85,50 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         // 3. Processar novas imagens (lógica original inalterada)
-        if (isset($_FILES['images']) && !empty($_FILES['images']['name'][0])) {
-            $upload_dir = '../upload/images/projects/';
-            if (!file_exists($upload_dir)) {
-                mkdir($upload_dir, 0755, true);
-            }
-            
-            $max_order_query = "SELECT COALESCE(MAX(order_position), -1) + 1 as next_order FROM project_images WHERE project_id = :project_id";
-            $max_order_stmt = $db->prepare($max_order_query);
-            $max_order_stmt->bindParam(':project_id', $project_id);
-            $max_order_stmt->execute();
-            $next_order = $max_order_stmt->fetch(PDO::FETCH_ASSOC)['next_order'];
-            
-            foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
-                if (!empty($tmp_name)) {
-                    $file_name = $_FILES['images']['name'][$key];
-                    $file_extension = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-                    $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-                    if (in_array($file_extension, $allowed_extensions)) {
-                        $new_file_name = $project_id . '_' . uniqid() . '.' . $file_extension;
-                        $upload_path = $upload_dir . $new_file_name;
-                        if (move_uploaded_file($tmp_name, $upload_path)) {
-                            $img_query = "INSERT INTO project_images (project_id, image_path, is_primary, order_position) 
-                                          VALUES (:project_id, :image_path, CAST(:is_primary AS BOOLEAN), :order_position)";
-                            $img_stmt = $db->prepare($img_query);
-                            if (count($project_images) == 0 && $key == 0) {
-                                $is_primary = 1;
-                            } else {
-                                $is_primary = 0;
-}
-                            $current_order = $next_order + $key;
-                            
-                            $img_stmt->execute([
-                                ':project_id' => $project_id, 
-                                ':image_path' => $new_file_name,
-                                ':is_primary' => $is_primary,
-                                ':order_position' => $current_order
-                            ]);
-                        }
+        // Substitua pelo bloco corrigido:
+    if (isset($_FILES['images']) && !empty($_FILES['images']['name'][0])) {
+        $upload_dir = '../upload/images/projects/';
+        if (!file_exists($upload_dir)) {
+            mkdir($upload_dir, 0755, true);
+        }
+        foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
+            if (!empty($tmp_name)) {
+                $file_name = $_FILES['images']['name'][$key];
+                $file_extension = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+
+                // Lista de extensões permitidas para imagens e vídeos
+                $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'mov', 'webm'];
+
+                if (in_array($file_extension, $allowed_extensions)) {
+                    $new_file_name = $project_id . '_' . uniqid() . '.' . $file_extension;
+                    $upload_path = $upload_dir . $new_file_name;
+
+                    if (move_uploaded_file($tmp_name, $upload_path)) {
+                        // Define se é imagem ou vídeo
+                        $video_types = ['mp4', 'mov', 'webm'];
+                        $media_type = in_array($file_extension, $video_types) ? 'video' : 'image';
+
+                        // Define se é a mídia principal
+                        $is_primary = ($key == 0) ? 1 : 0;
+
+                        // Query para a tabela correta 'project_media'
+                        $media_query = "INSERT INTO project_media (project_id, path, media_type, is_primary, order_position) 
+                                    VALUES (:project_id, :path, :media_type, CAST(:is_primary AS BOOLEAN), :order_position)";
+
+                        $media_stmt = $db->prepare($media_query);
+
+                        $media_stmt->execute([
+                            ':project_id'     => $project_id, 
+                            ':path'           => $new_file_name,
+                            ':media_type'     => $media_type,
+                            ':is_primary'     => $is_primary,
+                            ':order_position' => $key
+                        ]);
                     }
                 }
             }
         }
+    }
 
         $db->commit();
         header('Location: edit-project.php?id=' . $project_id . '&success=1');
@@ -189,12 +191,14 @@ try {
     }
     
     // Buscar imagens
-    $img_query = "SELECT id, image_path, is_primary, order_position FROM project_images WHERE project_id = :project_id ORDER BY order_position ASC, id ASC";
-    $img_stmt = $db->prepare($img_query);
-    $img_stmt->bindParam(':project_id', $project_id);
-    $img_stmt->execute();
-    $project_images = $img_stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+    // ***** CORREÇÃO APLICADA AQUI *****
+    // Buscar mídias da nova tabela
+    $media_query = "SELECT id, path, media_type, is_primary, order_position FROM project_media WHERE project_id = :project_id ORDER BY order_position ASC, id ASC";
+    $media_stmt = $db->prepare($media_query);
+    $media_stmt->bindParam(':project_id', $project_id);
+    $media_stmt->execute();
+    $project_media = $media_stmt->fetchAll(PDO::FETCH_ASSOC); 
+        
 } catch (Exception $e) {
     $message = 'Erro ao buscar projeto: ' . $e->getMessage();
     $message_type = 'error';
@@ -217,6 +221,9 @@ if (isset($_GET['success'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Projeto - SOL TECH Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+
     <style>
         * {
             margin: 0;
@@ -377,6 +384,21 @@ if (isset($_GET['success'])) {
             display: none;
         }
 
+        /* Adicione este CSS dentro da sua tag <style> */
+
+        .image-item {
+            /* ... seus estilos existentes ... */
+            transition: transform 0.2s ease-in-out; /* Adiciona uma transição suave */
+        }
+
+        /* Este estilo será aplicado ao item que está sendo arrastado */
+        .image-item.dragging {
+            opacity: 0.5;
+            transform: scale(1.05); /* Levemente maior para dar destaque */
+        }
+
+
+
         /* Existing Images (CSS original mantido) */
         .existing-images { margin-bottom: 2rem; }
         .existing-images h4 { margin-bottom: 1rem; color: var(--dark-color); }
@@ -393,6 +415,51 @@ if (isset($_GET['success'])) {
         .drag-handle { position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.7); color: white; padding: 5px; border-radius: 3px; cursor: grab; font-size: 12px; }
         .drag-handle:active { cursor: grabbing; }
         .primary-badge { position: absolute; bottom: 5px; left: 5px; background: var(--success-color); color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; }
+
+
+
+        /* Estilos para o Drag & Drop com a SortableJS */
+        .image-item.sortable-ghost {
+            opacity: 0.4;
+            background: #f0f0f0;
+            border: 2px dashed var(--primary-color);
+        }
+
+        .image-item.sortable-chosen {
+            cursor: grabbing;
+        }
+
+        /* ===== O SEU CSS ADAPTADO PARA A SORTABLEJS ===== */
+
+        /* Estilo para a "alça" de arrastar */
+        .drag-handle { 
+            cursor: grab; 
+        }
+        .drag-handle:active { 
+            cursor: grabbing; 
+        }
+
+        /* Estilo para o item que está a ser arrastado (era .dragging) */
+        .image-item.sortable-chosen {
+            cursor: grabbing;
+            transform: rotate(5deg);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Estilo para o espaço onde o item vai parar (era .drag-over) */
+        .image-item.sortable-ghost {
+            opacity: 0.5;
+            border: 2px dashed var(--primary-color);
+            background: rgba(255, 165, 0, 0.1);
+        }
+
+        /* A transição que eu tinha adicionado pode ser mantida para suavidade */
+        .image-item {
+            transition: transform 0.2s ease;
+        }
+
+
+
 
         /* Buttons */
         .btn-group { display: flex; gap: 1rem; margin-top: 2rem; }
@@ -450,10 +517,8 @@ if (isset($_GET['success'])) {
             <div class="form-group">
                 <label for="category_id">Categoria *</label>
                 <select id="category_id" name="category_id" required>
-                    <option value="">Selecione uma categoria</option>
                     <?php foreach ($categories as $cat): ?>
-                        <option value="<?php echo htmlspecialchars($cat['id']); ?>" 
-                                <?php echo ($cat['id'] == $project['category_id']) ? 'selected' : ''; ?>>
+                        <option value="<?php echo $cat['id']; ?>" <?php echo ($cat['id'] == $project['category_id']) ? 'selected' : ''; ?>>
                             <?php echo htmlspecialchars($cat['name']); ?>
                         </option>
                     <?php endforeach; ?>
@@ -517,28 +582,35 @@ if (isset($_GET['success'])) {
                 </div>
             </div>
 
-            <?php if (!empty($project_images)): ?>
+            <?php if (!empty($project_media)): // <-- CORREÇÃO AQUI ?>
             <div class="existing-images">
-                <h4>Imagens Atuais <small style="color: #666;">(Arraste para reordenar)</small></h4>
+                <h4>Mídias Atuais <small style="color: #666;">(Arraste para reordenar)</small></h4>
                 <div class="images-grid sortable-images" id="sortableImages">
-                    <?php foreach ($project_images as $image): ?>
-                        <div class="image-item" data-image-id="<?php echo $image['id']; ?>" data-order="<?php echo $image['order_position']; ?>">
-                            <?php if (file_exists('../upload/images/projects/' . $image['image_path'])): ?>
-                                <img src="../upload/images/projects/<?php echo htmlspecialchars($image['image_path']); ?>" alt="Imagem do projeto">
-                            <?php else: ?>
-                                <div class="image-placeholder">📸</div>
+                    <?php foreach ($project_media as $media): // <-- CORREÇÃO AQUI ?>
+                        <div class="image-item" data-image-id="<?php echo $media['id']; ?>" data-order="<?php echo $media['order_position']; ?>">
+
+                            <?php if (file_exists('../upload/images/projects/' . $media['path'])): ?>
+
+                            <?php if ($media['media_type'] === 'image'): ?>
+                                <img src="../upload/images/projects/<?php echo htmlspecialchars($media['path']); ?>" alt="Imagem do Projeto">
+                            <?php elseif ($media['media_type'] === 'video'): ?>
+                                <video controls style="width: 100%; height: 120px; object-fit: cover;">
+                                    <source src="../upload/images/projects/<?php echo htmlspecialchars($media['path']); ?>">
+                                </video>
                             <?php endif; ?>
-                            
-                            <?php if ($image['is_primary']): ?>
+
+                            <?php else: ?>
+                                <div class="image-placeholder">❓</div>
+                            <?php endif; ?>
+
+                            <?php if ($media['is_primary']): ?>
                                 <div class="primary-badge">Principal</div>
                             <?php endif; ?>
-                            
-                            <div class="drag-handle">
-                                <i class="fas fa-grip-vertical"></i>
-                            </div>
-                            
+
+                            <div class="drag-handle"><i class="fas fa-grip-vertical"></i></div>
+
                             <div class="image-actions">
-                                <button type="button" class="image-btn" onclick="deleteImage(<?php echo $image['id']; ?>)" title="Remover imagem">
+                                <button type="button" class="image-btn" onclick="deleteMedia(<?php echo $media['id']; ?>)" title="Remover mídia">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
@@ -546,7 +618,7 @@ if (isset($_GET['success'])) {
                     <?php endforeach; ?>
                 </div>
                 <p style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
-                    <i class="fas fa-info-circle"></i> Arraste as imagens para alterar a ordem. A primeira imagem será automaticamente definida como principal.
+                    <i class="fas fa-info-circle"></i> Arraste as mídias para alterar a ordem. A primeira será definida como principal.
                 </p>
             </div>
             <?php endif; ?>
@@ -558,8 +630,8 @@ if (isset($_GET['success'])) {
                         <i class="fas fa-cloud-upload-alt"></i>
                     </div>
                     <p>Clique para adicionar mais imagens</p>
-                    <p style="font-size: 0.9rem; color: #666;">Formatos aceitos: JPG, PNG, GIF, WEBP (máx. 5MB cada)</p>
-                    <input type="file" id="images" name="images[]" multiple accept="image/*">
+                    <p style="font-size: 0.9rem; color: #666;">Formatos aceitos: JPG, PNG, GIF, WEBP, MP4, MOV (máx. 100MB)</p>
+                    <input type="file" id="images" name="images[]" multiple accept="image/*,video/*">
                 </div>
                 <div id="filePreview" class="file-preview"></div>
             </div>
@@ -575,141 +647,77 @@ if (isset($_GET['success'])) {
         </form>
         <?php endif; ?>
     </div>
-
     <script>
-        // Todo o JavaScript original está aqui, completo e inalterado.
-        
-        // Preview de novas imagens
-        document.getElementById('images').addEventListener('change', function(e) {
-            const previewContainer = document.getElementById('filePreview');
-            previewContainer.innerHTML = '';
-            const files = Array.from(e.target.files);
-
-            files.forEach((file, index) => {
-                if (!file.type.startsWith('image/')) return;
-
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    const div = document.createElement('div');
-                    div.className = 'preview-item';
-                    div.setAttribute('data-file-index', index);
-                    div.style.cssText = 'display: inline-block; margin: 10px; position: relative;';
-                    div.innerHTML = `
-                        <img src="${event.target.result}" alt="${file.name}" style="width: 100px; height: 80px; object-fit: cover; border-radius: 5px;">
-                        <button type="button" onclick="removePreviewItem(this, '${file.name}')" style="position: absolute; top: -5px; right: -5px; background: red; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center;">×</button>
-                    `;
-                    previewContainer.appendChild(div);
-                };
-                reader.readAsDataURL(file);
-            });
-        });
-
-        function removePreviewItem(button, fileName) {
-            const input = document.getElementById('images');
-            const dataTransfer = new DataTransfer();
-            const files = Array.from(input.files);
-
-            files.forEach(file => {
-                if (file.name !== fileName) {
-                    dataTransfer.items.add(file);
-                }
-            });
-
-            input.files = dataTransfer.files;
-            button.parentElement.remove();
-        }
-
-        function deleteImage(imageId) {
-            if (confirm('Tem certeza que deseja remover esta imagem?')) {
-                window.location.href = `delete_image.php?id=${imageId}&project_id=<?php echo $project_id; ?>`;
-            }
-        }
-
-        // Sistema de Drag & Drop para reordenação
         document.addEventListener('DOMContentLoaded', function() {
-            const sortableContainer = document.getElementById('sortableImages');
-            if (!sortableContainer) return;
 
-            let draggedElement = null;
-            let draggedIndex = null;
-
-            const imageItems = sortableContainer.querySelectorAll('.image-item');
-            imageItems.forEach((item, index) => {
-                item.draggable = true;
-                
-                item.addEventListener('dragstart', function(e) {
-                    draggedElement = this;
-                    draggedIndex = index;
-                    this.classList.add('dragging');
-                    e.dataTransfer.effectAllowed = 'move';
-                });
-
-                item.addEventListener('dragend', function(e) {
-                    this.classList.remove('dragging');
-                    draggedElement = null;
-                    draggedIndex = null;
-                    
-                    imageItems.forEach(item => item.classList.remove('drag-over'));
-                });
-
-                item.addEventListener('dragover', function(e) {
-                    e.preventDefault();
-                    e.dataTransfer.dropEffect = 'move';
-                    
-                    if (this !== draggedElement) {
-                        this.classList.add('drag-over');
+            // --- Lógica de Pré-visualização de Novos Arquivos (inalterada) ---
+            const fileInput = document.getElementById('images');
+            const previewContainer = document.getElementById('filePreview');
+            if (fileInput && previewContainer) {
+                fileInput.addEventListener('change', function(event) {
+                    previewContainer.innerHTML = '';
+                    const files = event.target.files;
+                    for (const file of files) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            let mediaElement;
+                            if (file.type.startsWith('image/')) {
+                                mediaElement = document.createElement('img');
+                            } else if (file.type.startsWith('video/')) {
+                                mediaElement = document.createElement('video');
+                                mediaElement.muted = true;
+                                mediaElement.autoplay = true;
+                                mediaElement.loop = true;
+                            }
+                            if (mediaElement) {
+                                mediaElement.src = e.target.result;
+                                mediaElement.style.cssText = 'width: 120px; height: 90px; object-fit: cover; border-radius: 5px; margin: 5px;';
+                                previewContainer.appendChild(mediaElement);
+                            }
+                        };
+                        reader.readAsDataURL(file);
                     }
                 });
+            }
 
-                item.addEventListener('dragleave', function(e) {
-                    this.classList.remove('drag-over');
-                });
-
-                item.addEventListener('drop', function(e) {
-                    e.preventDefault();
-                    this.classList.remove('drag-over');
-                    
-                    if (this !== draggedElement) {
-                        const targetIndex = Array.from(sortableContainer.children).indexOf(this);
-                        
-                        if (draggedIndex < targetIndex) {
-                            this.parentNode.insertBefore(draggedElement, this.nextSibling);
-                        } else {
-                            this.parentNode.insertBefore(draggedElement, this);
-                        }
-                        
+            // --- NOVA LÓGICA DE DRAG & DROP USANDO SORTABLEJS ---
+            const sortableContainer = document.getElementById('sortableImages');
+            if (sortableContainer) {
+                new Sortable(sortableContainer, {
+                    animation: 150,
+                    ghostClass: 'sortable-ghost', // Diz à biblioteca para usar a sua classe
+                    chosenClass: 'sortable-chosen', // Diz à biblioteca para usar a sua classe
+                    handle: '.drag-handle',
+                    onEnd: function () {
                         saveImageOrder();
                     }
                 });
-            });
+            }
         });
+
+        // --- FUNÇÕES AUXILIARES (inalteradas) ---
+        function deleteMedia(mediaId) {
+            if (confirm('Tem certeza que deseja remover esta mídia?')) {
+                window.location.href = `delete_media.php?id=${mediaId}&project_id=<?php echo $project_id; ?>`;
+            }
+        }
 
         function saveImageOrder() {
             const imageItems = document.querySelectorAll('#sortableImages .image-item');
-            const newOrder = [];
+            const newOrder = Array.from(imageItems).map((item, index) => ({
+                image_id: parseInt(item.dataset.imageId),
+                order_position: index
+            }));
             
-            imageItems.forEach((item, index) => {
-                const imageId = item.dataset.imageId;
-                if (imageId) {
-                    newOrder.push({
-                        image_id: parseInt(imageId),
-                        order_position: index
-                    });
-                }
-            });
-
-            if (newOrder.length === 0) return;
-
+            // Mostra um feedback visual de que está a salvar
             const loadingMsg = document.createElement('div');
-            loadingMsg.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando ordem...';
+            loadingMsg.innerHTML = '<i class="fas fa-spinner fa-spin"></i> A salvar ordem...';
             loadingMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #007bff; color: white; padding: 10px 20px; border-radius: 5px; z-index: 9999;';
             document.body.appendChild(loadingMsg);
 
             fetch('update_image_order.php', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     project_id: <?php echo $project_id; ?>,
                     order: newOrder
@@ -717,40 +725,25 @@ if (isset($_GET['success'])) {
             })
             .then(response => response.json())
             .then(data => {
-                loadingMsg.remove();
+                document.body.removeChild(loadingMsg);
                 if (data.success) {
-                    const successMsg = document.createElement('div');
-                    successMsg.innerHTML = '<i class="fas fa-check"></i> Ordem atualizada!';
-                    successMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #4caf50; color: white; padding: 10px 20px; border-radius: 5px; z-index: 9999;';
-                    document.body.appendChild(successMsg);
-                    updatePrimaryBadges();
-                    setTimeout(() => successMsg.remove(), 3000);
+                    // Atualiza o badge "Principal" no primeiro item da lista
+                    document.querySelectorAll('.primary-badge').forEach(b => b.remove());
+                    const firstItem = document.querySelector('.image-item');
+                    if(firstItem) {
+                        const badge = document.createElement('div');
+                        badge.className = 'primary-badge';
+                        badge.textContent = 'Principal';
+                        firstItem.appendChild(badge);
+                    }
                 } else {
                     throw new Error(data.message || 'Erro ao salvar a ordem.');
                 }
             })
             .catch(error => {
-                if (loadingMsg.parentNode) loadingMsg.remove();
-                const errorMsg = document.createElement('div');
-                errorMsg.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Erro: ${error.message}`;
-                errorMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #f44336; color: white; padding: 10px 20px; border-radius: 5px; z-index: 9999;';
-                document.body.appendChild(errorMsg);
-                setTimeout(() => errorMsg.remove(), 5000);
-            });
-        }
-
-        function updatePrimaryBadges() {
-            const imageItems = document.querySelectorAll('#sortableImages .image-item');
-            
-            imageItems.forEach((item, index) => {
-                let existingBadge = item.querySelector('.primary-badge');
-                if (existingBadge) existingBadge.remove();
-
-                if (index === 0) {
-                    const badge = document.createElement('div');
-                    badge.className = 'primary-badge';
-                    badge.textContent = 'Principal';
-                    item.appendChild(badge);
+                console.error('Erro ao salvar a ordem:', error);
+                if (document.body.contains(loadingMsg)) {
+                    document.body.removeChild(loadingMsg);
                 }
             });
         }

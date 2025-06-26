@@ -70,13 +70,13 @@ try {
     }
     
     // 2. Remover flag primary de todas as imagens do projeto
-    $remove_primary_query = "UPDATE project_images SET is_primary = CAST(0 AS BOOLEAN) WHERE project_id = :project_id";
+    $remove_primary_query = "UPDATE project_media SET is_primary = FALSE WHERE project_id = :project_id";
     $remove_primary_stmt = $db->prepare($remove_primary_query);
     $remove_primary_stmt->bindParam(':project_id', $project_id, PDO::PARAM_INT);
     $remove_primary_stmt->execute();
     
     // 3. Atualizar ordem e definir primeira como principal
-    $update_query = "UPDATE project_images SET order_position = :order_position, is_primary = CAST(:is_primary AS BOOLEAN) WHERE id = :image_id AND project_id = :project_id";
+    $update_query = "UPDATE project_media SET order_position = :order_position, is_primary = CAST(:is_primary AS BOOLEAN) WHERE id = :image_id AND project_id = :project_id";
     $update_stmt = $db->prepare($update_query);
     
     $updated_count = 0;
