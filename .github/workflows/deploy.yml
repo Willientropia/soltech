@@ -1,0 +1,28 @@
+# Este workflow é acionado a cada push para o branch principal (main)
+on:
+  push:
+    branches:
+      - main # ou o nome do seu branch principal, ex: master
+
+jobs:
+  deploy:
+    name: Deploy to Locaweb
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Clona o seu repositório para o ambiente de execução
+      - uses: actions/checkout@v3
+
+      # 2. Executa a ação de deploy via FTP
+      - name: FTP Deploy Locaweb
+        uses: locaweb/ftp-deploy@1.0.0
+        with:
+          # -- Credenciais --
+          # Use as "Secrets" do GitHub para segurança.
+          # Vá em Settings > Secrets and variables > Actions no seu repositório.
+          host: ${{ secrets.FTP_HOST }}
+          user: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+
+          # -- Diretório a ser enviado --
+          # Como seu projeto está na raiz, usamos "."
+          localDir: "."
