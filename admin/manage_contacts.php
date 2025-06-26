@@ -74,8 +74,7 @@ try {
     $database = new Database();
     $db = $database->getConnection();
 
-    $db->query("DELETE FROM contacts WHERE status = 'lixeira' AND deleted_at < NOW() - INTERVAL '30 days'");
-
+    $db->query("DELETE FROM contacts WHERE status = 'lixeira' AND deleted_at < NOW() - INTERVAL 30 DAY");
     $query = "SELECT status, COUNT(*) as count FROM contacts GROUP BY status";
     $stmt = $db->prepare($query);
     $stmt->execute();
@@ -88,14 +87,14 @@ try {
 
     $current_tab = $_GET['tab'] ?? 'novo';
     $contacts_query = "SELECT *, 
-                       CASE 
-                         WHEN status = 'lixeira' AND deleted_at IS NOT NULL 
-                         THEN 30 - EXTRACT(DAY FROM NOW() - deleted_at)
-                         ELSE NULL 
-                       END as days_left
-                       FROM contacts 
-                       WHERE status = :status 
-                       ORDER BY created_at DESC";
+                    CASE 
+                        WHEN status = 'lixeira' AND deleted_at IS NOT NULL 
+                        THEN 30 - DATEDIFF(NOW(), deleted_at)
+                        ELSE NULL 
+                    END as days_left
+                    FROM contacts 
+                    WHERE status = :status 
+                    ORDER BY created_at DESC";
     $contacts_stmt = $db->prepare($contacts_query);
     $contacts_stmt->bindValue(':status', $current_tab);
     $contacts_stmt->execute();
