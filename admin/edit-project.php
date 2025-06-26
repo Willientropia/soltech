@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                   category_id = :category_id, 
                   description = :description, 
                   detailed_description = :detailed_description, 
-                  featured = :featured,
+                  featured = CAST(:featured AS BOOLEAN),
                   updated_at = CURRENT_TIMESTAMP
                   WHERE id = :id";
         $stmt = $db->prepare($query);
@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bindParam(':category_id', $_POST['category_id']);
         $stmt->bindParam(':description', $_POST['description']);
         $stmt->bindParam(':detailed_description', $_POST['detailed_description']);
-        $stmt->bindParam(':featured', $featured, PDO::PARAM_BOOL);
+        $stmt->bindParam(':featured', $featured, PDO::PARAM_INT);
         $stmt->bindParam(':id', $project_id);
         $stmt->execute();
 
@@ -140,14 +140,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         $upload_path = $upload_dir . $new_file_name;
                         if (move_uploaded_file($tmp_name, $upload_path)) {
                             $img_query = "INSERT INTO project_images (project_id, image_path, is_primary, order_position) 
-                                          VALUES (:project_id, :image_path, :is_primary, :order_position)";
+                                          VALUES (:project_id, :image_path, CAST(:is_primary AS BOOLEAN), :order_position)";
                             $img_stmt = $db->prepare($img_query);
-                            $is_primary = (count($project_images) == 0 && $key == 0) ? true : false;
+                            $is_primary = (count($project_images) == 0 && $key == 0) ? 1 : 0;
+                            $current_order = $next_order + $key;
+                            
                             $img_stmt->execute([
                                 ':project_id' => $project_id, 
                                 ':image_path' => $new_file_name,
                                 ':is_primary' => $is_primary,
-                                ':order_position' => $next_order + $key
+                                ':order_position' => $current_order
                             ]);
                         }
                     }
@@ -173,6 +175,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 // Verificar se veio de um redirect com sucesso
 if (isset($_GET['success'])) {
     $message = 'Projeto atualizado com sucesso!';
+    $message_type = 'success';
+} elseif (isset($_GET['duplicated'])) {
+    $message = 'Projeto duplicado com sucesso! Agora você pode editá-lo.';
+    $message_type = 'success';
+} elseif (isset($_GET['deleted'])) {
+    $message = 'Imagem removida com sucesso!';
     $message_type = 'success';
 }
 
@@ -367,12 +375,30 @@ if (isset($_GET['success'])) {
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            cursor: grab;
+            transition: all 0.3s ease;
+        }
+
+        .image-item:active {
+            cursor: grabbing;
+        }
+
+        .image-item.dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .image-item.drag-over {
+            border: 2px dashed var(--primary-color);
+            background: rgba(255, 165, 0, 0.1);
         }
 
         .image-item img {
             width: 100%;
             height: 120px;
             object-fit: cover;
+            pointer-events: none;
         }
 
         .image-placeholder {
@@ -384,6 +410,7 @@ if (isset($_GET['success'])) {
             justify-content: center;
             font-size: 2rem;
             color: white;
+            pointer-events: none;
         }
 
         .image-actions {
@@ -402,10 +429,27 @@ if (isset($_GET['success'])) {
             padding: 5px 8px;
             cursor: pointer;
             font-size: 12px;
+            transition: background 0.3s ease;
         }
 
         .image-btn:hover {
             background: rgba(0,0,0,0.9);
+        }
+
+        .drag-handle {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 5px;
+            border-radius: 3px;
+            cursor: grab;
+            font-size: 12px;
+        }
+
+        .drag-handle:active {
+            cursor: grabbing;
         }
 
         .primary-badge {
@@ -600,10 +644,10 @@ if (isset($_GET['success'])) {
 
             <?php if (!empty($project_images)): ?>
             <div class="existing-images">
-                <h4>Imagens Atuais</h4>
-                <div class="images-grid">
+                <h4>Imagens Atuais <small style="color: #666;">(Arraste para reordenar)</small></h4>
+                <div class="images-grid sortable-images" id="sortableImages">
                     <?php foreach ($project_images as $image): ?>
-                        <div class="image-item">
+                        <div class="image-item" data-image-id="<?php echo $image['id']; ?>" data-order="<?php echo $image['order_position']; ?>">
                             <?php if (file_exists('../upload/images/projects/' . $image['image_path'])): ?>
                                 <img src="../upload/images/projects/<?php echo htmlspecialchars($image['image_path']); ?>" alt="Imagem do projeto">
                             <?php else: ?>
@@ -614,14 +658,21 @@ if (isset($_GET['success'])) {
                                 <div class="primary-badge">Principal</div>
                             <?php endif; ?>
                             
+                            <div class="drag-handle">
+                                <i class="fas fa-grip-vertical"></i>
+                            </div>
+                            
                             <div class="image-actions">
-                                <button type="button" class="image-btn" onclick="deleteImage(<?php echo $image['id']; ?>)">
+                                <button type="button" class="image-btn" onclick="deleteImage(<?php echo $image['id']; ?>)" title="Remover imagem">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
                         </div>
                     <?php endforeach; ?>
                 </div>
+                <p style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
+                    <i class="fas fa-info-circle"></i> Arraste as imagens para alterar a ordem. A primeira imagem será automaticamente definida como principal.
+                </p>
             </div>
             <?php endif; ?>
 
@@ -695,6 +746,182 @@ if (isset($_GET['success'])) {
             if (confirm('Tem certeza que deseja remover esta imagem?')) {
                 window.location.href = `delete_image.php?id=${imageId}&project_id=<?php echo $project_id; ?>`;
             }
+        }
+
+        // Sistema de Drag & Drop para reordenação
+        document.addEventListener('DOMContentLoaded', function() {
+            const sortableContainer = document.getElementById('sortableImages');
+            if (!sortableContainer) return;
+
+            let draggedElement = null;
+            let draggedIndex = null;
+
+            // Adicionar eventos de drag para cada imagem
+            const imageItems = sortableContainer.querySelectorAll('.image-item');
+            imageItems.forEach((item, index) => {
+                item.draggable = true;
+                
+                item.addEventListener('dragstart', function(e) {
+                    draggedElement = this;
+                    draggedIndex = index;
+                    this.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                });
+
+                item.addEventListener('dragend', function(e) {
+                    this.classList.remove('dragging');
+                    draggedElement = null;
+                    draggedIndex = null;
+                    
+                    // Remover classes de drag-over de todos os elementos
+                    imageItems.forEach(item => item.classList.remove('drag-over'));
+                });
+
+                item.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    
+                    if (this !== draggedElement) {
+                        this.classList.add('drag-over');
+                    }
+                });
+
+                item.addEventListener('dragleave', function(e) {
+                    this.classList.remove('drag-over');
+                });
+
+                item.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('drag-over');
+                    
+                    if (this !== draggedElement) {
+                        const targetIndex = Array.from(sortableContainer.children).indexOf(this);
+                        
+                        // Reordenar elementos no DOM
+                        if (draggedIndex < targetIndex) {
+                            this.parentNode.insertBefore(draggedElement, this.nextSibling);
+                        } else {
+                            this.parentNode.insertBefore(draggedElement, this);
+                        }
+                        
+                        // Salvar nova ordem
+                        saveImageOrder();
+                    }
+                });
+            });
+        });
+
+        function saveImageOrder() {
+            const imageItems = document.querySelectorAll('#sortableImages .image-item');
+            const newOrder = [];
+            
+            imageItems.forEach((item, index) => {
+                const imageId = item.dataset.imageId;
+                if (imageId) {
+                    newOrder.push({
+                        image_id: parseInt(imageId),
+                        order_position: index
+                    });
+                }
+            });
+
+            if (newOrder.length === 0) {
+                console.warn('Nenhuma imagem para reordenar');
+                return;
+            }
+
+            // Mostrar indicador de carregamento
+            const loadingMsg = document.createElement('div');
+            loadingMsg.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando ordem...';
+            loadingMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #007bff; color: white; padding: 10px 20px; border-radius: 5px; z-index: 9999;';
+            document.body.appendChild(loadingMsg);
+
+            const requestData = {
+                project_id: <?php echo $project_id; ?>,
+                order: newOrder
+            };
+
+            console.log('Enviando dados:', requestData);
+
+            fetch('update_image_order.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => {
+                console.log('Status da resposta:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                return response.json();
+            })
+            .then(data => {
+                console.log('Resposta do servidor:', data);
+                
+                // Remover indicador de carregamento
+                loadingMsg.remove();
+                
+                if (data.success) {
+                    // Feedback visual de sucesso
+                    const successMsg = document.createElement('div');
+                    successMsg.innerHTML = '<i class="fas fa-check"></i> Ordem atualizada! Primeira imagem definida como principal.';
+                    successMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #4caf50; color: white; padding: 10px 20px; border-radius: 5px; z-index: 9999; max-width: 300px; text-align: center;';
+                    document.body.appendChild(successMsg);
+                    
+                    // Atualizar badges visuais
+                    updatePrimaryBadges();
+                    
+                    setTimeout(() => {
+                        successMsg.remove();
+                    }, 3000);
+                } else {
+                    throw new Error(data.message || 'Erro desconhecido no servidor');
+                }
+            })
+            .catch(error => {
+                console.error('Erro completo:', error);
+                
+                // Remover indicador de carregamento se ainda estiver lá
+                if (loadingMsg.parentNode) {
+                    loadingMsg.remove();
+                }
+                
+                // Mostrar erro detalhado
+                const errorMsg = document.createElement('div');
+                errorMsg.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Erro: ${error.message}`;
+                errorMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #f44336; color: white; padding: 10px 20px; border-radius: 5px; z-index: 9999; max-width: 300px; text-align: center;';
+                document.body.appendChild(errorMsg);
+                
+                setTimeout(() => {
+                    errorMsg.remove();
+                }, 5000);
+            });
+        }
+        function updatePrimaryBadges() {
+            const imageItems = document.querySelectorAll('#sortableImages .image-item');
+            
+            imageItems.forEach((item, index) => {
+                const existingBadge = item.querySelector('.primary-badge');
+                
+                if (index === 0) {
+                    // Primeira imagem - adicionar badge se não existir
+                    if (!existingBadge) {
+                        const badge = document.createElement('div');
+                        badge.className = 'primary-badge';
+                        badge.textContent = 'Principal';
+                        item.appendChild(badge);
+                    }
+                } else {
+                    // Outras imagens - remover badge se existir
+                    if (existingBadge) {
+                        existingBadge.remove();
+                    }
+                }
+            });
         }
     </script>
 </body>

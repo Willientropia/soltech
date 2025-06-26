@@ -296,6 +296,7 @@ try {
         }
 
         .btn-edit { background: var(--info-color); color: white; }
+        .btn-duplicate { background: #17a2b8; color: white; }
         .btn-toggle { background: var(--success-color); color: white; }
         .btn-delete { background: var(--danger-color); color: white; }
         .btn:hover { opacity: 0.9; transform: translateY(-1px); }
@@ -346,6 +347,17 @@ try {
         @media (max-width: 768px) {
             .projects-grid { grid-template-columns: 1fr; }
             .actions-bar { flex-direction: column; gap: 1rem; align-items: stretch; }
+            
+            .project-actions {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0.5rem;
+            }
+            
+            .btn {
+                font-size: 0.75rem;
+                padding: 6px 10px;
+            }
         }
     </style>
 </head>
@@ -407,7 +419,7 @@ try {
                         <div class="project-content">
                             <div class="project-category"><?php echo htmlspecialchars($proj['category_name']); ?></div>
                             <div class="project-title"><?php echo htmlspecialchars($proj['title']); ?></div>
-                            <div class="project-description"><?php echo htmlspecialchars(substr($proj['description'], 0, 100)); ?></div>
+                            <div class="project-description"><?php echo htmlspecialchars(substr($proj['description'], 0, 100)); ?>...</div>
                             
                             <div class="project-specs">
                                 <div class="spec-item"><i class="fas fa-bolt"></i> <?php echo htmlspecialchars($proj['power'] ?? 'N/A'); ?></div>
@@ -419,6 +431,10 @@ try {
                             <div class="project-actions">
                                 <a href="edit-project.php?id=<?php echo $proj['id']; ?>" class="btn btn-edit">
                                     <i class="fas fa-edit"></i> Editar
+                                </a>
+                                <a href="duplicate_project.php?id=<?php echo $proj['id']; ?>" class="btn btn-duplicate" 
+                                   onclick="return confirm('Deseja duplicar este projeto? Você será redirecionado para editar a cópia.')">
+                                    <i class="fas fa-copy"></i> Duplicar
                                 </a>
                                 <a href="?action=toggle_featured&id=<?php echo $proj['id']; ?>" class="btn btn-toggle" 
                                    onclick="return confirm('Tem certeza que deseja alterar o status de destaque deste projeto?')">

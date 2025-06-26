@@ -5,7 +5,6 @@ $admin = checkAdminAuth();
 include_once '../config/database.php';
 include_once '../models/Category.php';
 
-
 $database = new Database();
 $db = $database->getConnection();
 $category = new Category($db);
@@ -23,16 +22,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // 1. Inserir na tabela `projects`
         $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $_POST['title'])));
         $query = "INSERT INTO projects (title, slug, category_id, description, detailed_description, featured, status)
-                  VALUES (:title, :slug, :category_id, :description, :detailed_description, :featured, 'active')";
+                  VALUES (:title, :slug, :category_id, :description, :detailed_description, CAST(:featured AS BOOLEAN), 'active')";
         $stmt = $db->prepare($query);
 
-        $featured = isset($_POST['featured']) ? 1 : 0;
+        $featured = isset($_POST['featured']) ? 1 : 0; // CORREÇÃO: usar 1/0 ao invés de true/false
         $stmt->bindParam(':title', $_POST['title']);
         $stmt->bindParam(':slug', $slug);
         $stmt->bindParam(':category_id', $_POST['category_id']);
         $stmt->bindParam(':description', $_POST['description']);
         $stmt->bindParam(':detailed_description', $_POST['detailed_description']);
-        $stmt->bindParam(':featured', $featured, PDO::PARAM_BOOL);
+        $stmt->bindParam(':featured', $featured, PDO::PARAM_INT); // CORREÇÃO: usar PDO::PARAM_INT
         $stmt->execute();
         $project_id = $db->lastInsertId();
 
@@ -71,9 +70,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         $upload_path = $upload_dir . $new_file_name;
                         if (move_uploaded_file($tmp_name, $upload_path)) {
                             $img_query = "INSERT INTO project_images (project_id, image_path, is_primary, order_position) 
-                                          VALUES (:project_id, :image_path, :is_primary, :order_position)";
+                                          VALUES (:project_id, :image_path, CAST(:is_primary AS BOOLEAN), :order_position)";
                             $img_stmt = $db->prepare($img_query);
-                            $is_primary = ($key == 0) ? true : false;
+                            $is_primary = ($key == 0) ? 1 : 0; // CORREÇÃO: usar 1/0 ao invés de true/false
                             $img_stmt->execute([
                                 ':project_id' => $project_id, 
                                 ':image_path' => $new_file_name,
