@@ -211,6 +211,29 @@
             border-radius: 2px;
         }
 
+
+        .form-feedback {
+            padding: 15px;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none; /* Começa escondido */
+            transition: all 0.3s ease;
+            border-left: 5px solid;
+        }
+        .form-feedback.success {
+            display: block;
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #4caf50;
+        }
+        .form-feedback.error {
+            display: block;
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f44336;
+        }
+
         /* About Section */
         #about { background: white; }
         .about-content { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin-top: 3rem; }
@@ -1003,7 +1026,27 @@
         }
 
 
-
+        .form-feedback {
+            padding: 15px;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none; /* Começa escondido */
+            transition: all 0.3s ease;
+            border-left: 5px solid;
+        }
+        .form-feedback.success {
+            display: block;
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #4caf50;
+        }
+        .form-feedback.error {
+            display: block;
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f44336;
+        }
 
 
 
@@ -1443,7 +1486,7 @@
             <div class="location-content fade-in">
                 <div class="location-info">
                     <h3>Visite Nossa Sede</h3>
-                    <p><i class="fas fa-map-marker-alt" style="color: var(--primary-color);"></i> São Luís de Montes Belos - GO, Nº 2223</p>
+                    <p><i class="fas fa-map-marker-alt" style="color: var(--primary-color);"></i> Av. Hermógenes Coelho, Nº 1000 - São Luís de Montes Belos - GO</p>
                     <p><i class="fas fa-phone" style="color: var(--primary-color);"></i> (64) 3601-1000</p>
                     <p><i class="fab fa-whatsapp" style="color: var(--primary-color);"></i> WhatsApp: (64) 3601-1000</p>
                     <p><i class="fas fa-clock" style="color: var(--primary-color);"></i> Segunda a Sexta: 8h às 18h</p>
@@ -1451,7 +1494,7 @@
                 </div>
                 <div class="map-container">
                     <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3824.270928578717!2d-50.379206685135!3d-16.51261598859943!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x936171a938c3a1b1%3A0x6b8c9f7a3f303a2a!2sSOL%20TECH%20ENERGIA%20SOLAR!5e0!3m2!1spt-BR!2sbr!4v1678886432123!5m2!1spt-BR!2sbr" 
+                        src="https://maps.google.com/maps?q=-16.537220,-50.359790&t=&z=17&ie=UTF8&iwloc=&output=embed"
                         width="100%" height="100%" style="border:0;" 
                         allowfullscreen="" loading="lazy"
                         referrerpolicy="no-referrer-when-downgrade">
@@ -1479,7 +1522,13 @@
                     </div>
                     <div class="form-group"><label for="consumption">Valor médio da conta de luz (R$)</label><input type="number" id="consumption" name="consumption" placeholder="Ex: 350"></div>
                     <div class="form-group"><label for="message">Mensagem</label><textarea id="message" name="message" placeholder="Conte-nos sobre seu projeto ou dúvidas..."></textarea></div>
-                    <button type="submit" class="submit-btn"><i class="fas fa-paper-plane" style="margin-right: 10px;"></i> Enviar Solicitação</button>
+                    
+                    <div id="form-feedback" class="form-feedback"></div>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane" style="margin-right: 10px;"></i> Enviar Solicitação
+                    </button>
+                   
+                    
                 </form>
             </div>
             
@@ -1495,7 +1544,7 @@
             <div class="company-info">
                 <h3>SOL TECH ENERGIA SOLAR</h3>
                 <p>CNPJ: 10.619.680/0001-80</p>
-                <p>São Luís de Montes Belos - GO, Nº 2223</p>
+                <p>Av. Hermógenes Coelho, Nº 1000 - São Luís de Montes Belos - GO</p>
             </div>
             <div class="social-links">
                 <a href="https://www.instagram.com/sol_tech_ofc/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
@@ -1571,7 +1620,6 @@
         </div>
     </div>
 
-
     <script>
         function toggleMenu() {
             document.querySelector('.nav-links').classList.toggle('active');
@@ -1596,11 +1644,20 @@
         
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
+        // ####################################################################
+        // ## FUNÇÃO DE ENVIO DO FORMULÁRIO CORRIGIDA E NO LOCAL CERTO ##
+        // ####################################################################
         async function handleSubmit(event) {
             event.preventDefault();
             const form = event.target;
+            const button = form.querySelector('.submit-btn');
+            const feedbackDiv = document.getElementById('form-feedback');
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
+
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+            feedbackDiv.style.display = 'none';
 
             try {
                 const response = await fetch('/api/contact.php', {
@@ -1609,18 +1666,45 @@
                     body: JSON.stringify(data)
                 });
 
-                if (response.ok) {
-                    alert('Solicitação enviada com sucesso! Entraremos em contato em breve.');
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Erro do Servidor (Status ${response.status}): ${errorText}`);
+                }
+                
+                const result = await response.json();
+
+                if (result.message && result.message.includes("sucesso")) {
+                    feedbackDiv.className = 'form-feedback success';
+                    feedbackDiv.innerHTML = '<i class="fas fa-check-circle"></i> Solicitação enviada com sucesso! Entraremos em contato em breve.';
                     form.reset();
                 } else {
-                    const errorData = await response.json();
-                    alert('Erro ao enviar: ' + (errorData.message || 'Tente novamente mais tarde.'));
+                    throw new Error(result.message || 'Ocorreu um erro na resposta.');
                 }
+
             } catch (error) {
-                console.error('Erro no envio do formulário:', error);
-                alert('Ocorreu um erro de conexão. Verifique sua internet ou tente mais tarde.');
+                console.error("Erro detalhado:", error);
+                feedbackDiv.className = 'form-feedback error';
+                
+                if (error.message.includes("Failed to fetch")) {
+                    feedbackDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Não foi possível conectar ao servidor. Verifique sua internet.`;
+                } else {
+                    feedbackDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Ocorreu um erro ao enviar a solicitação. Tente novamente mais tarde.`;
+                }
+            
+            } finally {
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Solicitação';
+                feedbackDiv.style.display = 'block';
+                
+                setTimeout(() => {
+                    feedbackDiv.style.display = 'none';
+                }, 7000);
             }
         }
+
+        // ####################################################################
+        // ## TODO O RESTANTE DO SCRIPT (CARROSSEL E MODAL) ##
+        // ####################################################################
 
         // Carrossel de Projetos - Funcionalidade JavaScript
         class ProjectsCarousel {
@@ -1648,28 +1732,22 @@
                 this.prevBtn?.addEventListener('click', () => this.prevSlide());
                 this.nextBtn?.addEventListener('click', () => this.nextSlide());
                 
-                // Responsivo
                 window.addEventListener('resize', () => {
                     this.slidesPerView = this.getSlidesPerView();
                     this.updateCarousel();
                 });
                 
-                // Navegação por teclado
                 document.addEventListener('keydown', (e) => {
                     if (e.key === 'ArrowLeft') this.prevSlide();
                     if (e.key === 'ArrowRight') this.nextSlide();
                 });
                 
-                // Touch/Swipe (básico)
                 let startX = 0;
-                this.track?.addEventListener('touchstart', (e) => {
-                    startX = e.touches[0].clientX;
-                });
+                this.track?.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; });
                 
                 this.track?.addEventListener('touchend', (e) => {
                     const endX = e.changedTouches[0].clientX;
                     const diff = startX - endX;
-                    
                     if (Math.abs(diff) > 50) {
                         if (diff > 0) this.nextSlide();
                         else this.prevSlide();
@@ -1677,8 +1755,6 @@
                 });
             }
             
-
-
             getSlidesPerView() {
                 const width = window.innerWidth;
                 if (width < 480) return 1;
@@ -1693,22 +1769,8 @@
                 this.renderProjects();
                 this.renderIndicators();
                 this.updateCarousel();
-                
-                // Mostrar carrossel
                 document.getElementById('projectsCarouselContainer').style.display = 'block';
             }
-
-
-
-
-
-
-
-
-
-
-
-
             
             renderProjects() {
                 if (!this.track || !this.projects.length) return;
@@ -1720,15 +1782,12 @@
                     return `
                     <div class="carousel-project-card" data-project-id="${project.id}">
                         <div class="carousel-project-image ${hasImage}" style="${imageUrl ? `background-image: url('${imageUrl}');` : ''}">
-                            <div class="carousel-project-view-icon">
-                                <i class="fas fa-search-plus"></i>
-                            </div>
+                            <div class="carousel-project-view-icon"><i class="fas fa-search-plus"></i></div>
                         </div>
                         <div class="carousel-project-content">
                             <span class="carousel-project-type">${project.category.name}</span>
                             <h3 class="carousel-project-title">${project.title}</h3>
                             <p class="carousel-project-description">${project.description.substring(0, 70)}...</p>
-                            
                             <div class="carousel-project-specs">
                                 ${project.specifications.power ? `<div class="spec-item"><i class="fas fa-bolt"></i> ${project.specifications.power}</div>` : ''}
                                 ${project.specifications.savings ? `<div class="spec-item"><i class="fas fa-coins"></i> ${project.specifications.savings}</div>` : ''}
@@ -1736,55 +1795,31 @@
                                 ${project.specifications.year ? `<div class="spec-item"><i class="fas fa-calendar"></i> ${project.specifications.year}</div>` : ''}
                             </div>
                         </div>
-                    </div>
-                    `;
+                    </div>`;
                 }).join('');
             }
-
-
-
-
-
-
-
-
             
             updateCarousel() {
                 if (!this.track || !this.projects.length) return;
                 
-                const slideWidth = 320 + 32; // largura do card + gap
+                const slideWidth = 320 + 32;
                 const offset = this.currentSlide * slideWidth;
                 
                 this.track.style.transform = `translateX(-${offset}px)`;
-                
-                // Atualizar botões
                 this.updateButtons();
-                
-                // Atualizar indicadores
                 this.updateIndicators();
             }
             
             updateButtons() {
-                // CORREÇÃO: Calcular máximo para sempre mostrar cards completos
-                // Se temos 5 cards e mostramos 3, podemos navegar até a posição 2
-                // Assim: pos 0 = cards 0,1,2 | pos 1 = cards 1,2,3 | pos 2 = cards 2,3,4
                 const maxSlides = Math.max(0, this.projects.length - Math.floor(this.slidesPerView));
-                
-                if (this.prevBtn) {
-                    this.prevBtn.disabled = this.currentSlide <= 0;
-                }
-                
-                if (this.nextBtn) {
-                    this.nextBtn.disabled = this.currentSlide >= maxSlides;
-                }
+                if (this.prevBtn) this.prevBtn.disabled = this.currentSlide <= 0;
+                if (this.nextBtn) this.nextBtn.disabled = this.currentSlide >= maxSlides;
             }
             
             updateIndicators() {
-                // CORREÇÃO: Indicadores baseados na navegação real
                 const maxSlides = Math.max(0, this.projects.length - Math.floor(this.slidesPerView));
                 const totalSlides = maxSlides + 1;
                 
-                // Recalcular indicadores se necessário
                 if (this.indicators && this.indicators.children.length !== totalSlides) {
                     this.renderIndicators();
                 }
@@ -1797,11 +1832,9 @@
             renderIndicators() {
                 if (!this.indicators || !this.projects.length) return;
                 
-                // CORREÇÃO: Criar indicadores baseados na lógica de janela deslizante
                 const maxSlides = Math.max(0, this.projects.length - Math.floor(this.slidesPerView));
                 const totalSlides = maxSlides + 1;
                 
-                // Só mostrar indicadores se realmente precisarmos navegar
                 if (totalSlides <= 1) {
                     this.indicators.innerHTML = '';
                     return;
@@ -1811,14 +1844,12 @@
                     `<button class="carousel-indicator ${i === 0 ? 'active' : ''}" data-slide="${i}"></button>`
                 ).join('');
                 
-                // Event listeners para indicadores
                 this.indicators.querySelectorAll('.carousel-indicator').forEach((indicator, index) => {
                     indicator.addEventListener('click', () => this.goToSlide(index));
                 });
             }
 
             nextSlide() {
-                // CORREÇÃO: Navegar card por card respeitando a janela
                 const maxSlides = Math.max(0, this.projects.length - Math.floor(this.slidesPerView));
                 if (this.currentSlide < maxSlides) {
                     this.currentSlide++;
@@ -1832,45 +1863,32 @@
                     this.updateCarousel();
                 }
             }
-            
-
 
             goToSlide(slideIndex) {
-                // CORREÇÃO: Navegar para posição específica respeitando limites
                 const maxSlides = Math.max(0, this.projects.length - Math.floor(this.slidesPerView));
                 this.currentSlide = Math.min(Math.max(slideIndex, 0), maxSlides);
                 this.updateCarousel();
             }
-        
         }
 
-        // Função para carregar projetos em destaque - CORRIGIDA
         async function loadFeaturedProjects() {
             const loading = document.getElementById('projectsLoading');
-            
             if (!loading) return;
-
             try {
-                // Mostrar loading
                 loading.style.display = 'block';
-
-                // Buscar projetos com todas as especificações
                 const response = await fetch('/api/projects');
                 const data = await response.json();
-
-                // Esconder loading
                 loading.style.display = 'none';
 
                 if (data.records && data.records.length > 0) {
-                    // Filtrar APENAS projetos em destaque
                     const featuredProjects = data.records.filter(project => project.featured === true);
-                    
                     if (featuredProjects.length > 0) {
-                        // Inicializar carrossel apenas com projetos em destaque
                         const carousel = new ProjectsCarousel();
                         carousel.loadProjects(featuredProjects);
+                        if (window.projectModal) {
+                            projectModal.attachCardListeners();
+                        }
                     } else {
-                        // Se não há projetos em destaque, mostrar mensagem específica
                         showNoFeaturedState();
                     }
                 } else {
@@ -1886,16 +1904,7 @@
         function showNoFeaturedState() {
             const container = document.getElementById('projectsCarouselContainer');
             if (container) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 3rem; color: #666;">
-                        <i class="fas fa-star" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; color: var(--primary-color);"></i>
-                        <h3>Nenhum projeto em destaque</h3>
-                        <p>Marque alguns projetos como "destaque" no painel administrativo para exibi-los aqui.</p>
-                        <a href="galeria.html" style="color: var(--primary-color); text-decoration: none; font-weight: bold; margin-top: 1rem; display: inline-block;">
-                            Ver todos os projetos →
-                        </a>
-                    </div>
-                `;
+                container.innerHTML = `<div style="text-align: center; padding: 3rem; color: #666;"><i class="fas fa-star" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; color: var(--primary-color);"></i><h3>Nenhum projeto em destaque</h3><p>Marque alguns projetos como "destaque" no painel administrativo para exibi-los aqui.</p><a href="galeria.html" style="color: var(--primary-color); text-decoration: none; font-weight: bold; margin-top: 1rem; display: inline-block;">Ver todos os projetos →</a></div>`;
                 container.style.display = 'block';
             }
         }
@@ -1903,13 +1912,7 @@
         function showEmptyState() {
             const container = document.getElementById('projectsCarouselContainer');
             if (container) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 3rem; color: #666;">
-                        <i class="fas fa-solar-panel" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
-                        <h3>Projetos em breve</h3>
-                        <p>Estamos preparando nossa galeria de projetos. Volte em breve!</p>
-                    </div>
-                `;
+                container.innerHTML = `<div style="text-align: center; padding: 3rem; color: #666;"><i class="fas fa-solar-panel" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i><h3>Projetos em breve</h3><p>Estamos preparando nossa galeria de projetos. Volte em breve!</p></div>`;
                 container.style.display = 'block';
             }
         }
@@ -1917,125 +1920,54 @@
         function showErrorState() {
             const container = document.getElementById('projectsCarouselContainer');
             if (container) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 3rem; color: #d32f2f;">
-                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
-                        <h3>Erro ao carregar projetos</h3>
-                        <p>Não foi possível conectar com o servidor. Tente novamente mais tarde.</p>
-                    </div>
-                `;
+                container.innerHTML = `<div style="text-align: center; padding: 3rem; color: #d32f2f;"><i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i><h3>Erro ao carregar projetos</h3><p>Não foi possível conectar com o servidor. Tente novamente mais tarde.</p></div>`;
                 container.style.display = 'block';
             }
         }
 
-        // Carregamento de projetos em destaque
-        document.addEventListener('DOMContentLoaded', function() {
-            loadFeaturedProjects();
-        });
-
-        // Sistema de Modal de Projetos
         class ProjectModal {
             constructor() {
                 this.modal = document.getElementById('projectModal');
                 this.modalContent = document.getElementById('modalContent');
                 this.modalLoading = document.getElementById('modalLoading');
                 this.closeBtn = document.querySelector('.project-modal-close');
-                
-                // Elementos da galeria de imagens
                 this.mainImage = document.getElementById('modalMainImage');
                 this.prevBtn = document.getElementById('modalImagePrev');
                 this.nextBtn = document.getElementById('modalImageNext');
                 this.thumbnailsContainer = document.getElementById('modalImageThumbnails');
-                
-                // Estado atual
                 this.currentProject = null;
                 this.currentImageIndex = 0;
                 this.images = [];
-                
                 this.init();
             }
             
             init() {
-                // Event listeners
                 this.closeBtn?.addEventListener('click', () => this.close());
-                this.modal?.addEventListener('click', (e) => {
-                    if (e.target === this.modal) this.close();
-                });
-                
-                // Navegação de imagens
+                this.modal?.addEventListener('click', (e) => { if (e.target === this.modal) this.close(); });
                 this.prevBtn?.addEventListener('click', () => this.prevImage());
                 this.nextBtn?.addEventListener('click', () => this.nextImage());
                 
-                // Atalhos do teclado
                 document.addEventListener('keydown', (e) => {
                     if (!this.isOpen()) return;
-                    
-                    switch(e.key) {
-                        case 'Escape':
-                            this.close();
-                            break;
-                        case 'ArrowLeft':
-                            this.prevImage();
-                            break;
-                        case 'ArrowRight':
-                            this.nextImage();
-                            break;
-                    }
+                    if (e.key === 'Escape') this.close();
+                    if (e.key === 'ArrowLeft') this.prevImage();
+                    if (e.key === 'ArrowRight') this.nextImage();
                 });
-                
-                // Adicionar event listeners aos cards existentes
                 this.attachCardListeners();
             }
             
             attachCardListeners() {
-                // Para cards do carrossel na página inicial
-                document.querySelectorAll('.carousel-project-card').forEach(card => {
+                document.querySelectorAll('.carousel-project-card, .project-card').forEach(card => {
                     card.addEventListener('click', (e) => {
                         e.preventDefault();
-                        const projectId = this.extractProjectId(card);
+                        const projectId = card.getAttribute('data-project-id');
                         if (projectId) this.open(projectId);
                     });
                 });
-                
-                // Para cards da galeria
-                document.querySelectorAll('.project-card').forEach(card => {
-                    card.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        const projectId = this.extractProjectId(card);
-                        if (projectId) this.open(projectId);
-                    });
-                });
-            }
-            
-            extractProjectId(element) {
-                // Tentar extrair ID do atributo data-id ou onclick
-                const dataId = element.getAttribute('data-project-id');
-                if (dataId) return dataId;
-                
-                // Buscar no onclick (método atual)
-                const onclick = element.getAttribute('onclick');
-                if (onclick) {
-                    const match = onclick.match(/openModal\((\d+)\)/);
-                    if (match) return match[1];
-                }
-                
-                // Buscar em elementos filhos
-                const titleElement = element.querySelector('.project-title, .carousel-project-title');
-                if (titleElement) {
-                    return titleElement.getAttribute('data-project-id');
-                }
-                
-                return null;
             }
             
             async open(projectId) {
-                console.log('Tentando abrir modal para o Projeto ID:', projectId);
-                if (!projectId) {
-                    console.error('ID do projeto não fornecido');
-                    return;
-                }
-                
-                // Mostrar modal e loading
+                if (!projectId) return;
                 this.modal.style.display = 'block';
                 this.modal.classList.add('opening');
                 this.modalLoading.style.display = 'flex';
@@ -2043,82 +1975,50 @@
                 document.body.style.overflow = 'hidden';
                 
                 try {
-                    // Buscar dados do projeto
-                    
                     const response = await fetch(`/api/projects.php?id=${projectId}`);
                     if (!response.ok) throw new Error('Projeto não encontrado');
-                    
                     const project = await response.json();
                     this.currentProject = project;
-                    
-                    // Renderizar conteúdo
                     this.renderProject(project);
-                    
-                    // Esconder loading e mostrar conteúdo
                     this.modalLoading.style.display = 'none';
                     this.modalContent.style.display = 'block';
-                    
                 } catch (error) {
                     console.error('Erro ao carregar projeto:', error);
-                    this.showError('Não foi possível carregar os detalhes do projeto. Tente novamente.');
+                    this.showError('Não foi possível carregar os detalhes do projeto.');
                 }
             }
             
             renderProject(project) {
-                // Categoria
-                const categoryEl = document.getElementById('modalCategory');
-                if (categoryEl) categoryEl.textContent = project.category?.name || 'Projeto';
-                
-                // Título
-                const titleEl = document.getElementById('modalTitle');
-                if (titleEl) titleEl.textContent = project.title || 'Sem título';
-                
-                // Descrição
-                const descEl = document.getElementById('modalDescription');
-                if (descEl) {
-                    const description = project.detailed_description || project.description || 'Sem descrição disponível.';
-                    descEl.innerHTML = description.replace(/\n/g, '<br>');
-                }
-                
-                // Imagens
+                document.getElementById('modalCategory').textContent = project.category?.name || 'Projeto';
+                document.getElementById('modalTitle').textContent = project.title || 'Sem título';
+                const description = project.detailed_description || project.description || 'Sem descrição.';
+                document.getElementById('modalDescription').innerHTML = description.replace(/\n/g, '<br>');
                 this.setupImages(project.images || []);
-                
-                // Especificações
                 this.renderSpecs(project.specifications || {});
-                
-                // Botão WhatsApp
                 this.setupWhatsAppButton(project);
             }
             
             setupImages(images) {
-                this.images = images.filter(img => img); // Remove imagens vazias
+                this.images = images.filter(img => img);
                 this.currentImageIndex = 0;
-                
                 if (this.images.length === 0) {
-                    // Sem imagens - mostrar placeholder
                     this.mainImage.innerHTML = '<div class="modal-image-placeholder">📸</div>';
                     this.mainImage.style.backgroundImage = '';
                     this.hideImageNavigation();
-                    return;
-                }
-                
-                // Uma imagem ou mais
-                this.showCurrentImage();
-                
-                if (this.images.length > 1) {
-                    this.showImageNavigation();
-                    this.renderThumbnails();
                 } else {
-                    this.hideImageNavigation();
+                    this.showCurrentImage();
+                    if (this.images.length > 1) {
+                        this.showImageNavigation();
+                        this.renderThumbnails();
+                    } else {
+                        this.hideImageNavigation();
+                    }
                 }
             }
             
             showCurrentImage() {
                 if (this.images.length === 0) return;
-                
-                const currentImage = this.images[this.currentImageIndex];
-                const imageUrl = `upload/images/projects/${currentImage}`;
-                
+                const imageUrl = `upload/images/projects/${this.images[this.currentImageIndex]}`;
                 this.mainImage.innerHTML = '';
                 this.mainImage.style.backgroundImage = `url('${imageUrl}')`;
             }
@@ -2136,43 +2036,33 @@
             }
             
             renderThumbnails() {
-                this.thumbnailsContainer.innerHTML = this.images.map((image, index) => {
-                    const imageUrl = `upload/images/projects/${image}`;
-                    const activeClass = index === this.currentImageIndex ? 'active' : '';
-                    return `
-                        <div class="modal-thumbnail ${activeClass}" 
-                            style="background-image: url('${imageUrl}')"
-                            data-index="${index}">
-                        </div>
-                    `;
-                }).join('');
+                this.thumbnailsContainer.innerHTML = this.images.map((image, index) => 
+                    `<div class="modal-thumbnail ${index === this.currentImageIndex ? 'active' : ''}" style="background-image: url('upload/images/projects/${image}')" data-index="${index}"></div>`
+                ).join('');
                 
-                // Event listeners para miniaturas
-                this.thumbnailsContainer.querySelectorAll('.modal-thumbnail').forEach((thumb, index) => {
-                    thumb.addEventListener('click', () => this.goToImage(index));
+                this.thumbnailsContainer.querySelectorAll('.modal-thumbnail').forEach(thumb => {
+                    thumb.addEventListener('click', () => this.goToImage(parseInt(thumb.dataset.index)));
                 });
             }
             
             prevImage() {
                 if (this.images.length <= 1) return;
-                this.currentImageIndex = this.currentImageIndex === 0 ? this.images.length - 1 : this.currentImageIndex - 1;
+                this.currentImageIndex = (this.currentImageIndex - 1 + this.images.length) % this.images.length;
                 this.showCurrentImage();
                 this.updateThumbnails();
             }
             
             nextImage() {
                 if (this.images.length <= 1) return;
-                this.currentImageIndex = this.currentImageIndex === this.images.length - 1 ? 0 : this.currentImageIndex + 1;
+                this.currentImageIndex = (this.currentImageIndex + 1) % this.images.length;
                 this.showCurrentImage();
                 this.updateThumbnails();
             }
             
             goToImage(index) {
-                if (index >= 0 && index < this.images.length) {
-                    this.currentImageIndex = index;
-                    this.showCurrentImage();
-                    this.updateThumbnails();
-                }
+                this.currentImageIndex = index;
+                this.showCurrentImage();
+                this.updateThumbnails();
             }
             
             updateThumbnails() {
@@ -2181,8 +2071,6 @@
                 });
             }
             
-            // Dentro da classe ProjectModal, substitua a função renderSpecs
-
             renderSpecs(specs) {
                 const specsContainer = document.getElementById('modalSpecs');
                 if (!specsContainer) return;
@@ -2200,23 +2088,12 @@
                     .filter(([key, value]) => value && specMapping[key])
                     .map(([key, value]) => {
                         const spec = specMapping[key];
-                        return `
-                            <li class="spec-item">
-                                <div class="spec-item-icon">
-                                    <i class="fas ${spec.icon}"></i>
-                                </div>
-                                <div class="spec-item-content">
-                                    <span class="spec-item-label">${spec.label}</span>
-                                    <span class="spec-item-value">${value}</span>
-                                </div>
-                            </li>
-                        `;
+                        return `<li class="spec-item"><div class="spec-item-icon"><i class="fas ${spec.icon}"></i></div><div class="spec-item-content"><span class="spec-item-label">${spec.label}</span><span class="spec-item-value">${value}</span></div></li>`;
                     });
                 
                 if (specItems.length === 0) {
                     specsContainer.innerHTML = '<p style="text-align: center; color: #666;">Especificações técnicas não disponíveis.</p>';
                 } else {
-                    // Envolve os itens em uma <ul>
                     specsContainer.innerHTML = `<ul class="specs-list">${specItems.join('')}</ul>`;
                 }
             }
@@ -2224,26 +2101,13 @@
             setupWhatsAppButton(project) {
                 const whatsappBtn = document.getElementById('modalWhatsappBtn');
                 if (!whatsappBtn) return;
-                
                 const message = `Olá! Tenho interesse no projeto "${project.title}". Gostaria de solicitar um orçamento similar.`;
-                const encodedMessage = encodeURIComponent(message);
-                const whatsappUrl = `https://wa.me/556436011000?text=${encodedMessage}`;
-                
-                whatsappBtn.href = whatsappUrl;
+                whatsappBtn.href = `https://wa.me/556436011000?text=${encodeURIComponent(message)}`;
                 whatsappBtn.target = '_blank';
             }
             
             showError(message) {
-                this.modalLoading.innerHTML = `
-                    <div style="text-align: center; color: #d32f2f;">
-                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
-                        <h3>Erro</h3>
-                        <p>${message}</p>
-                        <button onclick="projectModal.close()" style="margin-top: 1rem; padding: 10px 20px; background: #d32f2f; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                            Fechar
-                        </button>
-                    </div>
-                `;
+                this.modalLoading.innerHTML = `<div style="text-align: center; color: #d32f2f;"><i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i><h3>Erro</h3><p>${message}</p><button onclick="window.projectModal.close()" style="margin-top: 1rem; padding: 10px 20px; background: #d32f2f; color: white; border: none; border-radius: 5px; cursor: pointer;">Fechar</button></div>`;
             }
             
             close() {
@@ -2251,8 +2115,6 @@
                 this.modal.classList.remove('opening');
                 document.body.style.overflow = 'auto';
                 this.currentProject = null;
-                this.images = [];
-                this.currentImageIndex = 0;
             }
             
             isOpen() {
@@ -2260,73 +2122,19 @@
             }
         }
 
-        // ... (todo o código JS anterior) ...
-
-        // Inicializar modal quando a página carregar
-        let projectModal; // Mova a declaração para fora
+        // Inicialização
+        let projectModal;
         document.addEventListener('DOMContentLoaded', function() {
-            projectModal = new ProjectModal(); // Inicialize aqui
-            loadFeaturedProjects(); // Carregue os projetos
+            projectModal = new ProjectModal();
+            loadFeaturedProjects();
         });
 
-        // Função global para compatibilidade com onclick existente
+        // Função global para compatibilidade
         function openModal(projectId) {
             if (projectModal) {
                 projectModal.open(projectId);
             }
         }
-
-        // Função para carregar projetos em destaque - CORRIGIDA
-        async function loadFeaturedProjects() {
-            const loading = document.getElementById('projectsLoading');
-            if (!loading) return;
-
-            try {
-                loading.style.display = 'block';
-                const response = await fetch('/api/projects');
-                const data = await response.json();
-                loading.style.display = 'none';
-
-                if (data.records && data.records.length > 0) {
-                    const featuredProjects = data.records.filter(project => project.featured === true);
-                    
-                    if (featuredProjects.length > 0) {
-                        const carousel = new ProjectsCarousel();
-                        carousel.loadProjects(featuredProjects);
-
-                        // ADICIONE ESTA LINHA:
-                        // Reanexa os listeners do modal DEPOIS que o carrossel renderizou os cards
-                        if (projectModal) {
-                            projectModal.attachCardListeners();
-                        }
-
-                    } else {
-                        showNoFeaturedState();
-                    }
-                } else {
-                    showEmptyState();
-                }
-            } catch (error) {
-                console.error("Erro ao carregar projetos:", error);
-                loading.style.display = 'none';
-                showErrorState();
-            }
-        }
-
-        
-
-
-
-
-
-
-
-
-
-
-
-        
-
     </script>
 </body>
 </html>

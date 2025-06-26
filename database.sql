@@ -48,6 +48,8 @@ CREATE TABLE project_specs (
 );
 
 -- Criação da tabela de contatos/leads
+-- Criação da tabela de contatos/leads (VERSÃO MODIFICADA)
+
 CREATE TABLE contacts (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -57,9 +59,13 @@ CREATE TABLE contacts (
     consumption DECIMAL(10,2),
     message TEXT,
     source VARCHAR(50) DEFAULT 'website',
-    status VARCHAR(20) DEFAULT 'new',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    -- O status agora é um tipo ENUM para garantir a consistência dos dados
+    status VARCHAR(50) NOT NULL DEFAULT 'novo' CHECK (status IN ('novo', 'entramos em contato', 'vendido', 'perdido', 'lixeira')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    -- Nova coluna para controlar o tempo de exclusão da lixeira
+    deleted_at TIMESTAMP WITH TIME ZONE
 );
+
 
 -- Criação da tabela de usuários administrativos
 CREATE TABLE admin_users (

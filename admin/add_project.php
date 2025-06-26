@@ -19,23 +19,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Usar transação para garantir a integridade dos dados
     $db->beginTransaction();
     try {
-        // 1. Inserir na tabela `projects`
+        // 1. Inserir na tabela `projects` (sem detailed_description)
         $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $_POST['title'])));
-        $query = "INSERT INTO projects (title, slug, category_id, description, detailed_description, featured, status)
-                  VALUES (:title, :slug, :category_id, :description, :detailed_description, CAST(:featured AS BOOLEAN), 'active')";
+        $query = "INSERT INTO projects (title, slug, category_id, description, featured, status)
+                  VALUES (:title, :slug, :category_id, :description, CAST(:featured AS BOOLEAN), 'active')";
         $stmt = $db->prepare($query);
 
-        $featured = isset($_POST['featured']) ? 1 : 0; // CORREÇÃO: usar 1/0 ao invés de true/false
+        $featured = isset($_POST['featured']) ? 1 : 0;
         $stmt->bindParam(':title', $_POST['title']);
         $stmt->bindParam(':slug', $slug);
         $stmt->bindParam(':category_id', $_POST['category_id']);
         $stmt->bindParam(':description', $_POST['description']);
-        $stmt->bindParam(':detailed_description', $_POST['detailed_description']);
-        $stmt->bindParam(':featured', $featured, PDO::PARAM_INT); // CORREÇÃO: usar PDO::PARAM_INT
+        $stmt->bindParam(':featured', $featured, PDO::PARAM_INT);
         $stmt->execute();
         $project_id = $db->lastInsertId();
 
-        // 2. Inserir as especificações na tabela `project_specs`
+        // 2. Inserir as especificações com unidades formatadas
         $specs = [
             'power' => $_POST['power'], 'panels' => $_POST['panels'],
             'area' => $_POST['area'], 'savings' => $_POST['savings'],
@@ -46,15 +45,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         foreach ($specs as $name => $value) {
             if (!empty(trim($value))) {
+                $formatted_value = trim($value);
+                // Adiciona a unidade/prefixo se for um campo específico e numérico
+                if (is_numeric($formatted_value)) {
+                    switch ($name) {
+                        case 'power': $formatted_value .= ' kWp'; break;
+                        case 'panels': $formatted_value .= ' unidades'; break;
+                        case 'area': $formatted_value .= ' m²'; break;
+                        case 'savings': $formatted_value = 'R$ ' . number_format((float)$formatted_value, 2, ',', '.') . '/mês'; break;
+                    }
+                }
+                
                 $spec_stmt->execute([
                     ':project_id' => $project_id,
                     ':spec_name' => $name,
-                    ':spec_value' => trim($value)
+                    ':spec_value' => $formatted_value
                 ]);
             }
         }
 
-        // 3. Lógica de Upload de imagens
+        // 3. Lógica de Upload de imagens (inalterada do seu script original)
         if (isset($_FILES['images']) && !empty($_FILES['images']['name'][0])) {
             $upload_dir = '../upload/images/projects/';
             if (!file_exists($upload_dir)) {
@@ -72,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             $img_query = "INSERT INTO project_images (project_id, image_path, is_primary, order_position) 
                                           VALUES (:project_id, :image_path, CAST(:is_primary AS BOOLEAN), :order_position)";
                             $img_stmt = $db->prepare($img_query);
-                            $is_primary = ($key == 0) ? 1 : 0; // CORREÇÃO: usar 1/0 ao invés de true/false
+                            $is_primary = ($key == 0) ? 1 : 0;
                             $img_stmt->execute([
                                 ':project_id' => $project_id, 
                                 ':image_path' => $new_file_name,
@@ -219,8 +229,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+            gap: 1.5rem;
         }
+
+        /* NOVO: Estilos para input com unidade */
+        .input-with-unit { position: relative; display: flex; align-items: center; }
+        .input-with-unit input { text-align: left; padding-right: 85px; /* Mais espaço para 'unidades' */ }
+        .input-unit { position: absolute; right: 15px; color: #888; font-size: 15px; pointer-events: none; }
+        .input-with-prefix input { padding-left: 50px; text-align: left; }
+        .input-prefix { position: absolute; left: 15px; color: #888; font-size: 15px; pointer-events: none; }
+
 
         .checkbox-group {
             display: flex;
@@ -239,6 +257,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             padding: 2rem;
             text-align: center;
             transition: border-color 0.3s ease;
+            cursor: pointer;
         }
 
         .file-upload:hover {
@@ -253,16 +272,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         .file-upload input {
             display: none;
-        }
-
-        .file-upload-btn {
-            background: var(--primary-color);
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 1rem;
         }
 
         .file-preview {
@@ -296,6 +305,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             height: 20px;
             cursor: pointer;
             font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* Buttons */
@@ -327,7 +339,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(255,165,0,0.3);
         }
-
+        
         .btn-secondary {
             background: #6c757d;
             color: white;
@@ -342,42 +354,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 2rem;
+            border-left: 5px solid;
         }
 
         .message.success {
             background: #d4edda;
             color: #155724;
-            border-left: 4px solid var(--success-color);
+            border-color: var(--success-color);
         }
 
         .message.error {
             background: #f8d7da;
             color: #721c24;
-            border-left: 4px solid var(--danger-color);
+            border-color: var(--danger-color);
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .container {
-                padding: 0 1rem;
-            }
-
-            .page-title {
-                font-size: 2rem;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .btn-group {
-                flex-direction: column;
-            }
+            .header-content { flex-direction: column; gap: 1rem; }
+            .container { padding: 0 1rem; }
+            .page-title { font-size: 2rem; }
+            .form-row { grid-template-columns: 1fr; }
+            .btn-group { flex-direction: column; }
         }
     </style>
 </head>
@@ -424,37 +422,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <textarea id="description" name="description" placeholder="Descrição que aparece na galeria" required></textarea>
             </div>
 
-            <div class="form-group">
-                <label for="detailed_description">Descrição Detalhada</label>
-                <textarea id="detailed_description" name="detailed_description" placeholder="Descrição completa que aparece no modal" rows="4"></textarea>
-            </div>
-
             <div class="form-row">
                 <div class="form-group">
                     <label for="power">Potência</label>
-                    <input type="text" id="power" name="power" placeholder="ex: 500 kWp">
+                    <div class="input-with-unit">
+                        <input type="number" step="0.01" id="power" name="power" placeholder="Ex: 15.5">
+                        <span class="input-unit">kWp</span>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="panels">Número de Painéis</label>
-                    <input type="text" id="panels" name="panels" placeholder="ex: 1.250 unidades">
+                     <div class="input-with-unit">
+                        <input type="number" id="panels" name="panels" placeholder="Ex: 38">
+                        <span class="input-unit">unidades</span>
+                    </div>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label for="area">Área</label>
-                    <input type="text" id="area" name="area" placeholder="ex: 3.200 m²">
+                    <div class="input-with-unit">
+                        <input type="number" step="0.01" id="area" name="area" placeholder="Ex: 95">
+                        <span class="input-unit">m²</span>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="savings">Economia Mensal</label>
-                    <input type="text" id="savings" name="savings" placeholder="ex: R$ 45.000/mês">
+                    <div class="input-with-unit input-with-prefix">
+                        <span class="input-prefix">R$</span>
+                        <input type="number" step="0.01" id="savings" name="savings" placeholder="Ex: 850.00">
+                    </div>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label for="location">Localização</label>
-                    <input type="text" id="location" name="location" placeholder="ex: São Luís de Montes Belos - GO">
+                    <input type="text" id="location" name="location" placeholder="Ex: São Luís de Montes Belos - GO">
                 </div>
                 <div class="form-group">
                     <label for="year">Ano</label>

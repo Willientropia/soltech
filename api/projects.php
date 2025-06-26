@@ -1,34 +1,20 @@
 <?php
-error_reporting(0); // Adicione esta linha
-
+error_reporting(0);
 header('Content-Type: application/json; charset=UTF-8');
 header('Access-Control-Allow-Origin: *');
 
 include_once '../config/database.php';
 include_once '../models/Project.php';
 
-// ... resto do código
-
 $database = new Database();
 $db = $database->getConnection();
 
-// Função auxiliar para buscar especificações e imagens de um projeto
 function getProjectDetails($db, $project_id) {
-    // Buscar especificações
     $spec_stmt = $db->prepare("SELECT spec_name, spec_value FROM project_specs WHERE project_id = :id");
     $spec_stmt->execute([':id' => $project_id]);
     $specs = $spec_stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
-    // Buscar imagens - CORRIGIDO: Prioriza a imagem principal
-    $img_stmt = $db->prepare("
-        SELECT image_path 
-        FROM project_images 
-        WHERE project_id = :id 
-        ORDER BY 
-            CASE WHEN is_primary = true THEN 0 ELSE 1 END,
-            order_position ASC, 
-            id ASC
-    ");
+    $img_stmt = $db->prepare("SELECT image_path FROM project_images WHERE project_id = :id ORDER BY CASE WHEN is_primary = true THEN 0 ELSE 1 END, order_position ASC, id ASC");
     $img_stmt->execute([':id' => $project_id]);
     $images = $img_stmt->fetchAll(PDO::FETCH_COLUMN);
 
@@ -37,7 +23,6 @@ function getProjectDetails($db, $project_id) {
 
 $project = new Project($db);
 
-// Se um ID for passado via query parameter
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $project->id = $_GET['id'];
     $row = $project->readOne();
@@ -53,8 +38,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                 "name" => $row['category_name'], 
                 "slug" => $row['category_slug']
             ],
-            "description" => $row['description'], 
-            "detailed_description" => $row['detailed_description'],
+            "description" => $row['description'],
             "specifications" => $details['specifications'],
             "images" => $details['images'],
             "featured" => (bool)$row['featured']
@@ -65,7 +49,6 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         echo json_encode(["message" => "Projeto não encontrado."]);
     }
 } else {
-    // Buscar todos os projetos
     $category_slug = isset($_GET['category']) ? $_GET['category'] : null;
     $stmt = $project->read($category_slug);
     
