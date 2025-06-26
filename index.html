@@ -276,19 +276,41 @@
         .product-icon { font-size: 50px; margin-bottom: 1rem; color: var(--weg-blue); }
         .product-card h3 { color: var(--dark-color); margin-bottom: 0.5rem; }
 
-        /* Projects Section - VERSÃO MELHORADA */
+        /* Projects Section com Carrossel */
         #projects { background: var(--light-color); }
         .projects-intro {
             text-align: center;
             margin-bottom: 3rem;
         }
-        .projects-preview {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
+
+        /* Estilos do Carrossel de Projetos */
+        .projects-carousel-container {
+            position: relative;
+            margin: 3rem 0;
         }
-        .project-preview-card {
+
+        .carousel-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .carousel-container {
+            flex: 1;
+            overflow: hidden;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            gap: 2rem;
+        }
+
+        .carousel-project-card {
+            flex: 0 0 320px;
             background: white;
             border-radius: 20px;
             overflow: hidden;
@@ -299,40 +321,39 @@
             text-decoration: none;
             color: inherit;
         }
-        .project-preview-card:hover {
+
+        .carousel-project-card:hover {
             transform: translateY(-15px);
             box-shadow: 0 25px 50px rgba(0,0,0,0.2);
             text-decoration: none;
             color: inherit;
         }
-        .project-image {
-            height: 250px;
+
+        .carousel-project-image {
+            height: 220px;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             position: relative;
             overflow: hidden;
         }
-        
-        /* Quando há imagem real */
-        .project-image.has-image {
+
+        .carousel-project-image.has-image {
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
         }
-        
-        /* Placeholder apenas quando NÃO há imagem */
-        .project-image:not(.has-image)::before {
+
+        .carousel-project-image:not(.has-image)::before {
             content: '📸';
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 80px;
+            font-size: 60px;
             opacity: 0.7;
             color: rgba(255,255,255,0.8);
         }
-        
-        /* Overlay que aparece no hover */
-        .project-image::after {
+
+        .carousel-project-image::after {
             content: '';
             position: absolute;
             top: 0;
@@ -342,90 +363,143 @@
             background: linear-gradient(45deg, rgba(255,165,0,0.8), rgba(255,107,53,0.8));
             opacity: 0;
             transition: opacity 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
-        
-        .project-preview-card:hover .project-image::after {
+
+        .carousel-project-card:hover .carousel-project-image::after {
             opacity: 1;
         }
-        
-        /* Ícone de visualização no hover */
-        .project-view-icon {
+
+        .carousel-project-view-icon {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             color: white;
-            font-size: 3rem;
+            font-size: 2.5rem;
             opacity: 0;
             transition: all 0.3s ease;
             z-index: 2;
         }
-        
-        .project-preview-card:hover .project-view-icon {
+
+        .carousel-project-card:hover .carousel-project-view-icon {
             opacity: 1;
             transform: translate(-50%, -50%) scale(1.1);
         }
-        
-        .project-card-content {
-            padding: 2rem;
+
+        .carousel-project-content {
+            padding: 1.8rem;
             text-align: center;
         }
-        .project-type {
+
+        .carousel-project-type {
             display: inline-block;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 0.5rem 1.2rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
+            padding: 0.4rem 1rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
             font-weight: 600;
             margin-bottom: 1rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-        
-        .project-title {
-            font-size: 1.3rem;
+
+        .carousel-project-title {
+            font-size: 1.2rem;
             font-weight: 700;
             color: var(--dark-color);
             margin-bottom: 0.5rem;
             line-height: 1.4;
         }
-        
-        .project-description {
+
+        .carousel-project-description {
             color: #666;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             line-height: 1.6;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
         }
-        
-        /* Especificações nos cards de projeto */
-        .project-specs-preview {
+
+        .carousel-project-specs {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
+            gap: 0.6rem;
             margin-top: 1rem;
             padding-top: 1rem;
             border-top: 1px solid #eee;
         }
-        
-        .project-specs-preview .spec-item {
-            font-size: 0.85rem;
+
+        .carousel-project-specs .spec-item {
+            font-size: 0.8rem;
             color: #666;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.4rem;
         }
-        
-        .project-specs-preview .spec-item i {
+
+        .carousel-project-specs .spec-item i {
             color: var(--primary-color);
-            font-size: 0.9rem;
-            width: 14px;
+            font-size: 0.85rem;
+            width: 12px;
             flex-shrink: 0;
         }
-        
+
+        /* Botões de Navegação */
+        .carousel-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255,165,0,0.3);
+            z-index: 10;
+        }
+
+        .carousel-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(255,165,0,0.4);
+        }
+
+        .carousel-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 4px 15px rgba(255,165,0,0.2);
+        }
+
+        /* Indicadores */
+        .carousel-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 2rem;
+        }
+
+        .carousel-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ddd;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-indicator.active {
+            background: var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        .carousel-indicator:hover {
+            background: var(--secondary-color);
+        }
+
         .view-all-btn {
             display: inline-block;
             padding: 18px 45px;
@@ -561,26 +635,10 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Responsive Design */
-        @media (max-width: 1024px) {
-            .nav-links {
-                gap: 1.5rem;
-            }
-            
-            .hero h1 {
-                font-size: 3rem;
-            }
-            
-            .hero p {
-                font-size: 1.3rem;
-            }
-            
-            h2 {
-                font-size: 2.4rem;
-            }
-            
-            .projects-preview {
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        /* Responsivo para Carrossel */
+        @media (max-width: 1200px) {
+            .carousel-project-card {
+                flex: 0 0 300px;
             }
         }
 
@@ -607,13 +665,35 @@
             
             .services-grid { grid-template-columns: 1fr; }
             .products-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-            .projects-preview { grid-template-columns: 1fr; }
             
             .weg-logo-container img { max-width: 200px; }
             
             section { padding: 60px 0; }
             
             .container { padding: 0 1rem; }
+
+            .carousel-wrapper {
+                gap: 1rem;
+            }
+            
+            .carousel-project-card {
+                flex: 0 0 280px;
+            }
+            
+            .carousel-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+            
+            .carousel-project-content {
+                padding: 1.5rem;
+            }
+            
+            .carousel-project-specs {
+                grid-template-columns: 1fr;
+                gap: 0.4rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -634,9 +714,22 @@
             .location-info { padding: 1.5rem; }
             
             .whatsapp-float { width: 50px; height: 50px; font-size: 24px; }
+
+            .carousel-wrapper {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
             
-            .project-card-content { padding: 1.5rem; }
-            .project-specs-preview { grid-template-columns: 1fr; gap: 0.5rem; }
+            .carousel-project-card {
+                flex: 0 0 260px;
+            }
+            
+            .carousel-navigation {
+                order: -1;
+                display: flex;
+                gap: 1rem;
+                justify-content: center;
+            }
         }
 
         /* Animations */
@@ -786,10 +879,31 @@
                 <p>Carregando projetos...</p>
             </div>
             
-            <div class="projects-preview fade-in" id="projectsPreviewGrid">
+            <!-- Carrossel de Projetos -->
+            <div class="projects-carousel-container fade-in" id="projectsCarouselContainer" style="display: none;">
+                <div class="carousel-wrapper">
+                    <button class="carousel-btn carousel-prev" id="carouselPrev">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    
+                    <div class="carousel-container">
+                        <div class="carousel-track" id="carouselTrack">
+                            <!-- Projetos serão inseridos aqui via JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <button class="carousel-btn carousel-next" id="carouselNext">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                
+                <!-- Indicadores -->
+                <div class="carousel-indicators" id="carouselIndicators">
+                    <!-- Indicadores serão inseridos aqui via JavaScript -->
+                </div>
             </div>
             
-            <div style="text-align: center;">
+            <div style="text-align: center; margin-top: 3rem;">
                 <a href="galeria.html" class="view-all-btn">
                     <i class="fas fa-images" style="margin-right: 10px;"></i>
                     Ver Todos os Projetos
@@ -920,21 +1034,217 @@
             }
         }
 
-        // Carregamento de projetos em destaque - VERSÃO MELHORADA COM ESPECIFICAÇÕES
-        document.addEventListener('DOMContentLoaded', function() {
-            loadFeaturedProjects();
-        });
+        // Carrossel de Projetos - Funcionalidade JavaScript
+        class ProjectsCarousel {
+            constructor() {
+                this.currentSlide = 0;
+                this.projects = [];
+                this.slidesPerView = this.getSlidesPerView();
+                this.track = null;
+                this.prevBtn = null;
+                this.nextBtn = null;
+                this.indicators = null;
+                
+                this.init();
+                this.setupEventListeners();
+            }
+            
+            init() {
+                this.track = document.getElementById('carouselTrack');
+                this.prevBtn = document.getElementById('carouselPrev');
+                this.nextBtn = document.getElementById('carouselNext');
+                this.indicators = document.getElementById('carouselIndicators');
+            }
+            
+            setupEventListeners() {
+                this.prevBtn?.addEventListener('click', () => this.prevSlide());
+                this.nextBtn?.addEventListener('click', () => this.nextSlide());
+                
+                // Responsivo
+                window.addEventListener('resize', () => {
+                    this.slidesPerView = this.getSlidesPerView();
+                    this.updateCarousel();
+                });
+                
+                // Navegação por teclado
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') this.prevSlide();
+                    if (e.key === 'ArrowRight') this.nextSlide();
+                });
+                
+                // Touch/Swipe (básico)
+                let startX = 0;
+                this.track?.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                });
+                
+                this.track?.addEventListener('touchend', (e) => {
+                    const endX = e.changedTouches[0].clientX;
+                    const diff = startX - endX;
+                    
+                    if (Math.abs(diff) > 50) {
+                        if (diff > 0) this.nextSlide();
+                        else this.prevSlide();
+                    }
+                });
+            }
+            
 
+
+            getSlidesPerView() {
+                const width = window.innerWidth;
+                if (width < 480) return 1;
+                if (width < 768) return 1.2;
+                if (width < 1024) return 2;
+                if (width < 1200) return 2.5;
+                return 3;
+            }
+
+            loadProjects(projects) {
+                this.projects = projects;
+                this.renderProjects();
+                this.renderIndicators();
+                this.updateCarousel();
+                
+                // Mostrar carrossel
+                document.getElementById('projectsCarouselContainer').style.display = 'block';
+            }
+            
+            renderProjects() {
+                if (!this.track || !this.projects.length) return;
+                
+                this.track.innerHTML = this.projects.map(project => {
+                    const imageUrl = project.images && project.images.length > 0 ? `upload/images/projects/${project.images[0]}` : '';
+                    const hasImage = imageUrl ? 'has-image' : '';
+                    
+                    return `
+                    <a href="galeria.html" class="carousel-project-card">
+                        <div class="carousel-project-image ${hasImage}" style="${imageUrl ? `background-image: url('${imageUrl}');` : ''}">
+                            <div class="carousel-project-view-icon">
+                                <i class="fas fa-search-plus"></i>
+                            </div>
+                        </div>
+                        <div class="carousel-project-content">
+                            <span class="carousel-project-type">${project.category.name}</span>
+                            <h3 class="carousel-project-title">${project.title}</h3>
+                            <p class="carousel-project-description">${project.description.substring(0, 70)}...</p>
+                            
+                            <div class="carousel-project-specs">
+                                ${project.specifications.power ? `<div class="spec-item"><i class="fas fa-bolt"></i> ${project.specifications.power}</div>` : ''}
+                                ${project.specifications.savings ? `<div class="spec-item"><i class="fas fa-coins"></i> ${project.specifications.savings}</div>` : ''}
+                                ${project.specifications.location ? `<div class="spec-item"><i class="fas fa-map-marker-alt"></i> ${project.specifications.location}</div>` : ''}
+                                ${project.specifications.year ? `<div class="spec-item"><i class="fas fa-calendar"></i> ${project.specifications.year}</div>` : ''}
+                            </div>
+                        </div>
+                    </a>
+                    `;
+                }).join('');
+            }
+            
+            updateCarousel() {
+                if (!this.track || !this.projects.length) return;
+                
+                const slideWidth = 320 + 32; // largura do card + gap
+                const offset = this.currentSlide * slideWidth;
+                
+                this.track.style.transform = `translateX(-${offset}px)`;
+                
+                // Atualizar botões
+                this.updateButtons();
+                
+                // Atualizar indicadores
+                this.updateIndicators();
+            }
+            
+            updateButtons() {
+                // CORREÇÃO: Calcular máximo para sempre mostrar cards completos
+                // Se temos 5 cards e mostramos 3, podemos navegar até a posição 2
+                // Assim: pos 0 = cards 0,1,2 | pos 1 = cards 1,2,3 | pos 2 = cards 2,3,4
+                const maxSlides = Math.max(0, this.projects.length - Math.floor(this.slidesPerView));
+                
+                if (this.prevBtn) {
+                    this.prevBtn.disabled = this.currentSlide <= 0;
+                }
+                
+                if (this.nextBtn) {
+                    this.nextBtn.disabled = this.currentSlide >= maxSlides;
+                }
+            }
+            
+            updateIndicators() {
+                // CORREÇÃO: Indicadores baseados na navegação real
+                const maxSlides = Math.max(0, this.projects.length - Math.floor(this.slidesPerView));
+                const totalSlides = maxSlides + 1;
+                
+                // Recalcular indicadores se necessário
+                if (this.indicators && this.indicators.children.length !== totalSlides) {
+                    this.renderIndicators();
+                }
+                
+                this.indicators?.querySelectorAll('.carousel-indicator').forEach((indicator, index) => {
+                    indicator.classList.toggle('active', index === this.currentSlide);
+                });
+            }
+            
+            renderIndicators() {
+                if (!this.indicators || !this.projects.length) return;
+                
+                // CORREÇÃO: Criar indicadores baseados na lógica de janela deslizante
+                const maxSlides = Math.max(0, this.projects.length - Math.floor(this.slidesPerView));
+                const totalSlides = maxSlides + 1;
+                
+                // Só mostrar indicadores se realmente precisarmos navegar
+                if (totalSlides <= 1) {
+                    this.indicators.innerHTML = '';
+                    return;
+                }
+                
+                this.indicators.innerHTML = Array.from({length: totalSlides}, (_, i) => 
+                    `<button class="carousel-indicator ${i === 0 ? 'active' : ''}" data-slide="${i}"></button>`
+                ).join('');
+                
+                // Event listeners para indicadores
+                this.indicators.querySelectorAll('.carousel-indicator').forEach((indicator, index) => {
+                    indicator.addEventListener('click', () => this.goToSlide(index));
+                });
+            }
+
+            nextSlide() {
+                // CORREÇÃO: Navegar card por card respeitando a janela
+                const maxSlides = Math.max(0, this.projects.length - Math.floor(this.slidesPerView));
+                if (this.currentSlide < maxSlides) {
+                    this.currentSlide++;
+                    this.updateCarousel();
+                }
+            }
+            
+            prevSlide() {
+                if (this.currentSlide > 0) {
+                    this.currentSlide--;
+                    this.updateCarousel();
+                }
+            }
+            
+
+
+            goToSlide(slideIndex) {
+                // CORREÇÃO: Navegar para posição específica respeitando limites
+                const maxSlides = Math.max(0, this.projects.length - Math.floor(this.slidesPerView));
+                this.currentSlide = Math.min(Math.max(slideIndex, 0), maxSlides);
+                this.updateCarousel();
+            }
+        
+        }
+
+        // Função para carregar projetos em destaque - CORRIGIDA
         async function loadFeaturedProjects() {
-            const grid = document.getElementById('projectsPreviewGrid');
             const loading = document.getElementById('projectsLoading');
             
-            if (!grid) return;
+            if (!loading) return;
 
             try {
                 // Mostrar loading
                 loading.style.display = 'block';
-                grid.style.display = 'none';
 
                 // Buscar projetos com todas as especificações
                 const response = await fetch('/api/projects');
@@ -944,91 +1254,76 @@
                 loading.style.display = 'none';
 
                 if (data.records && data.records.length > 0) {
-                    // Filtrar apenas projetos em destaque e pegar os primeiros 4
-                    const featuredProjects = data.records.filter(project => project.featured).slice(0, 4);
+                    // Filtrar APENAS projetos em destaque
+                    const featuredProjects = data.records.filter(project => project.featured === true);
                     
                     if (featuredProjects.length > 0) {
-                        grid.innerHTML = featuredProjects.map(project => {
-                            const imageUrl = project.images && project.images.length > 0 ? `upload/images/projects/${project.images[0]}` : '';
-                            const hasImage = imageUrl ? 'has-image' : '';
-                            
-                            return `
-                            <a href="galeria.html" class="project-preview-card">
-                                <div class="project-image ${hasImage}" style="${imageUrl ? `background-image: url('${imageUrl}');` : ''}">
-                                    <div class="project-view-icon">
-                                        <i class="fas fa-search-plus"></i>
-                                    </div>
-                                </div>
-                                <div class="project-card-content">
-                                    <span class="project-type">${project.category.name}</span>
-                                    <h3 class="project-title">${project.title}</h3>
-                                    <p class="project-description">${project.description.substring(0, 80)}...</p>
-                                    
-                                    <div class="project-specs-preview">
-                                        ${project.specifications.power ? `<div class="spec-item"><i class="fas fa-bolt"></i> ${project.specifications.power}</div>` : ''}
-                                        ${project.specifications.savings ? `<div class="spec-item"><i class="fas fa-coins"></i> ${project.specifications.savings}</div>` : ''}
-                                        ${project.specifications.location ? `<div class="spec-item"><i class="fas fa-map-marker-alt"></i> ${project.specifications.location}</div>` : ''}
-                                        ${project.specifications.year ? `<div class="spec-item"><i class="fas fa-calendar"></i> ${project.specifications.year}</div>` : ''}
-                                    </div>
-                                </div>
-                            </a>
-                            `;
-                        }).join('');
+                        // Inicializar carrossel apenas com projetos em destaque
+                        const carousel = new ProjectsCarousel();
+                        carousel.loadProjects(featuredProjects);
                     } else {
-                        // Se não há projetos em destaque, mostrar os primeiros 4 projetos
-                        const firstProjects = data.records.slice(0, 4);
-                        grid.innerHTML = firstProjects.map(project => {
-                            const imageUrl = project.images && project.images.length > 0 ? `upload/images/projects/${project.images[0]}` : '';
-                            const hasImage = imageUrl ? 'has-image' : '';
-                            
-                            return `
-                            <a href="galeria.html" class="project-preview-card">
-                                <div class="project-image ${hasImage}" style="${imageUrl ? `background-image: url('${imageUrl}');` : ''}">
-                                    <div class="project-view-icon">
-                                        <i class="fas fa-search-plus"></i>
-                                    </div>
-                                </div>
-                                <div class="project-card-content">
-                                    <span class="project-type">${project.category.name}</span>
-                                    <h3 class="project-title">${project.title}</h3>
-                                    <p class="project-description">${project.description.substring(0, 80)}...</p>
-                                    
-                                    <div class="project-specs-preview">
-                                        ${project.specifications.power ? `<div class="spec-item"><i class="fas fa-bolt"></i> ${project.specifications.power}</div>` : ''}
-                                        ${project.specifications.savings ? `<div class="spec-item"><i class="fas fa-coins"></i> ${project.specifications.savings}</div>` : ''}
-                                        ${project.specifications.location ? `<div class="spec-item"><i class="fas fa-map-marker-alt"></i> ${project.specifications.location}</div>` : ''}
-                                        ${project.specifications.year ? `<div class="spec-item"><i class="fas fa-calendar"></i> ${project.specifications.year}</div>` : ''}
-                                    </div>
-                                </div>
-                            </a>
-                            `;
-                        }).join('');
+                        // Se não há projetos em destaque, mostrar mensagem específica
+                        showNoFeaturedState();
                     }
-                    
-                    grid.style.display = 'grid';
                 } else {
-                    grid.innerHTML = `
-                        <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #666;">
-                            <i class="fas fa-solar-panel" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
-                            <h3>Projetos em breve</h3>
-                            <p>Estamos preparando nossa galeria de projetos. Volte em breve!</p>
-                        </div>
-                    `;
-                    grid.style.display = 'grid';
+                    showEmptyState();
                 }
             } catch (error) {
-                console.error("Erro ao carregar projetos em destaque:", error);
+                console.error("Erro ao carregar projetos:", error);
                 loading.style.display = 'none';
-                grid.innerHTML = `
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #d32f2f;">
+                showErrorState();
+            }
+        }
+
+        function showNoFeaturedState() {
+            const container = document.getElementById('projectsCarouselContainer');
+            if (container) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: #666;">
+                        <i class="fas fa-star" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; color: var(--primary-color);"></i>
+                        <h3>Nenhum projeto em destaque</h3>
+                        <p>Marque alguns projetos como "destaque" no painel administrativo para exibi-los aqui.</p>
+                        <a href="galeria.html" style="color: var(--primary-color); text-decoration: none; font-weight: bold; margin-top: 1rem; display: inline-block;">
+                            Ver todos os projetos →
+                        </a>
+                    </div>
+                `;
+                container.style.display = 'block';
+            }
+        }
+
+        function showEmptyState() {
+            const container = document.getElementById('projectsCarouselContainer');
+            if (container) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: #666;">
+                        <i class="fas fa-solar-panel" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <h3>Projetos em breve</h3>
+                        <p>Estamos preparando nossa galeria de projetos. Volte em breve!</p>
+                    </div>
+                `;
+                container.style.display = 'block';
+            }
+        }
+
+        function showErrorState() {
+            const container = document.getElementById('projectsCarouselContainer');
+            if (container) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: #d32f2f;">
                         <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
                         <h3>Erro ao carregar projetos</h3>
                         <p>Não foi possível conectar com o servidor. Tente novamente mais tarde.</p>
                     </div>
                 `;
-                grid.style.display = 'grid';
+                container.style.display = 'block';
             }
         }
+
+        // Carregamento de projetos em destaque
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFeaturedProjects();
+        });
     </script>
 </body>
 </html>

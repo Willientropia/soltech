@@ -66,8 +66,15 @@ try {
             $specs = $spec_stmt->fetchAll(PDO::FETCH_KEY_PAIR);
             $proj = array_merge($proj, $specs);
 
-            // CORREÇÃO: Buscar a primeira imagem do projeto
-            $img_query = "SELECT image_path FROM project_images WHERE project_id = :project_id ORDER BY order_position ASC, id ASC LIMIT 1";
+            // CORREÇÃO: Buscar a imagem principal do projeto
+            $img_query = "SELECT image_path 
+                        FROM project_images 
+                        WHERE project_id = :project_id 
+                        ORDER BY 
+                            CASE WHEN is_primary = true THEN 0 ELSE 1 END,
+                            order_position ASC, 
+                            id ASC 
+                        LIMIT 1";
             $img_stmt = $db->prepare($img_query);
             $img_stmt->bindParam(':project_id', $proj['id']);
             $img_stmt->execute();

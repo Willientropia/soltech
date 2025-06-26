@@ -10,9 +10,19 @@ $database = new Database();
 $db = $database->getConnection();
 $project = new Project($db);
 
-// Função auxiliar para buscar detalhes (reutilizada de projects.php)
+// Função auxiliar para buscar detalhes - CORRIGIDA para priorizar imagem principal
 function getProjectDetails($db, $project_id) {
-    $img_stmt = $db->prepare("SELECT image_path FROM project_images WHERE project_id = :id ORDER BY order_position ASC, id ASC LIMIT 1");
+    // Buscar a imagem principal ou a primeira disponível
+    $img_stmt = $db->prepare("
+        SELECT image_path 
+        FROM project_images 
+        WHERE project_id = :id 
+        ORDER BY 
+            CASE WHEN is_primary = true THEN 0 ELSE 1 END,
+            order_position ASC, 
+            id ASC
+        LIMIT 1
+    ");
     $img_stmt->execute([':id' => $project_id]);
     $image = $img_stmt->fetch(PDO::FETCH_ASSOC);
     return ['image' => $image ? $image['image_path'] : null];

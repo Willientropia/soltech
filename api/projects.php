@@ -15,8 +15,16 @@ function getProjectDetails($db, $project_id) {
     $spec_stmt->execute([':id' => $project_id]);
     $specs = $spec_stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
-    // Buscar imagens
-    $img_stmt = $db->prepare("SELECT image_path FROM project_images WHERE project_id = :id ORDER BY id");
+    // Buscar imagens - CORRIGIDO: Prioriza a imagem principal
+    $img_stmt = $db->prepare("
+        SELECT image_path 
+        FROM project_images 
+        WHERE project_id = :id 
+        ORDER BY 
+            CASE WHEN is_primary = true THEN 0 ELSE 1 END,
+            order_position ASC, 
+            id ASC
+    ");
     $img_stmt->execute([':id' => $project_id]);
     $images = $img_stmt->fetchAll(PDO::FETCH_COLUMN);
 
