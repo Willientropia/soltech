@@ -14,7 +14,7 @@ class Database {
         $this->db_name = getenv('DB_NAME') ?: 'soltech';
         $this->username = getenv('DB_USER') ?: 'soltech';
         $this->password = getenv('DB_PASS') ?: 'Wapsol10!';
-        $this->port = getenv('DB_PORT') ?: '5432';
+        $this->port = getenv('DB_PORT') ?: '3306';
     }
 
     public function getConnection() {
