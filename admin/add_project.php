@@ -228,19 +228,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             transition: border-color 0.3s ease;
         }
 
-        /* Adicione este CSS dentro da sua tag <style> */
-
-        .image-item {
-            /* ... seus estilos existentes ... */
-            transition: transform 0.2s ease-in-out; /* Adiciona uma transição suave */
-        }
-
-        /* Este estilo será aplicado ao item que está sendo arrastado */
-        .image-item.dragging {
-            opacity: 0.5;
-            transform: scale(1.05); /* Levemente maior para dar destaque */
-}
-
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
@@ -259,13 +246,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             gap: 1.5rem;
         }
 
-        /* NOVO: Estilos para input com unidade */
+        /* Estilos para input com unidade */
         .input-with-unit { position: relative; display: flex; align-items: center; }
-        .input-with-unit input { text-align: left; padding-right: 85px; /* Mais espaço para 'unidades' */ }
+        .input-with-unit input { text-align: left; padding-right: 85px; }
         .input-unit { position: absolute; right: 15px; color: #888; font-size: 15px; pointer-events: none; }
         .input-with-prefix input { padding-left: 50px; text-align: left; }
         .input-prefix { position: absolute; left: 15px; color: #888; font-size: 15px; pointer-events: none; }
-
 
         .checkbox-group {
             display: flex;
@@ -277,47 +263,108 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             width: auto;
         }
 
-        /* File Upload */
+        /* File Upload with Drag & Drop */
         .file-upload {
             border: 2px dashed #ccc;
             border-radius: 8px;
             padding: 2rem;
             text-align: center;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
             cursor: pointer;
+            position: relative;
+            background: #fafafa;
         }
 
         .file-upload:hover {
             border-color: var(--primary-color);
+            background: rgba(255, 165, 0, 0.05);
+        }
+
+        .file-upload.drag-over {
+            border-color: var(--primary-color);
+            background: rgba(255, 165, 0, 0.1);
+            border-style: solid;
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(255, 165, 0, 0.2);
+        }
+
+        .file-upload.drag-over::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255, 165, 0, 0.1), rgba(255, 107, 53, 0.1));
+            border-radius: 6px;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
         }
 
         .file-upload-icon {
             font-size: 3rem;
             color: #ccc;
             margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .file-upload.drag-over .file-upload-icon {
+            color: var(--primary-color);
+            transform: scale(1.2);
         }
 
         .file-upload input {
             display: none;
         }
 
+        .file-upload-text {
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload.drag-over .file-upload-text {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
         .file-preview {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 10px;
-            margin-top: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
         }
 
         .preview-item {
             position: relative;
-            border-radius: 5px;
+            border-radius: 8px;
             overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            background: white;
         }
 
-        .preview-item img {
+        .preview-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .preview-item img,
+        .preview-item video {
             width: 100%;
-            height: 80px;
+            height: 90px;
             object-fit: cover;
+            display: block;
         }
 
         .remove-preview {
@@ -328,13 +375,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             color: white;
             border: none;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             cursor: pointer;
             font-size: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .remove-preview:hover {
+            background: #c82333;
+            transform: scale(1.1);
         }
 
         /* Buttons */
@@ -503,15 +557,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <div class="form-group">
                 <label>Imagens do Projeto</label>
-                <div class="file-upload" onclick="document.getElementById('images').click()">
+                <div class="file-upload" id="fileUploadArea">
                     <div class="file-upload-icon">
                         <i class="fas fa-cloud-upload-alt"></i>
                     </div>
-                    <p>Clique para selecionar imagens</p>
-                    <p style="font-size: 0.9rem; color: #666;">Formatos aceitos: JPG, PNG, GIF, WEBP, MP4, MOV (máx. 100MB)</p>
+                    <div class="file-upload-text">
+                        <p>Clique para selecionar imagens</p>
+                        <p><strong>ou arraste arquivos aqui</strong></p>
+                        <p style="font-size: 0.9rem; color: #666;">Formatos aceitos: JPG, PNG, GIF, WEBP, MP4, MOV (máx. 100MB)</p>
+                    </div>
                     <input type="file" id="images" name="images[]" multiple accept="image/*,video/*">
                 </div>
-                <div id="filePreview" class="file-preview"></div>
+                <div id="filePreview" class="file-preview" style="display: none;"></div>
             </div>
 
             <div class="btn-group">
@@ -527,142 +584,209 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-
-            // --- PARTE 1: PRÉ-VISUALIZAÇÃO DE NOVOS ARQUIVOS (código mantido) ---
+            // === FILE UPLOAD WITH DRAG & DROP ===
             const fileInput = document.getElementById('images');
+            const fileUploadArea = document.getElementById('fileUploadArea');
             const previewContainer = document.getElementById('filePreview');
+            let selectedFiles = [];
 
-            if (fileInput && previewContainer) {
-                fileInput.addEventListener('change', function(event) {
-                    previewContainer.innerHTML = '';
-                    const files = event.target.files;
-                    for (const file of files) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            let mediaElement;
-                            if (file.type.startsWith('image/')) {
-                                mediaElement = document.createElement('img');
-                            } else if (file.type.startsWith('video/')) {
-                                mediaElement = document.createElement('video');
-                                mediaElement.muted = true;
-                                mediaElement.autoplay = true;
-                                mediaElement.loop = true;
-                            }
-                            if (mediaElement) {
-                                mediaElement.src = e.target.result;
-                                mediaElement.style.cssText = 'width: 120px; height: 90px; object-fit: cover; border-radius: 5px; margin: 5px;';
-                                previewContainer.appendChild(mediaElement);
-                            }
-                        };
-                        reader.readAsDataURL(file);
-                    }
+            // Click to upload
+            fileUploadArea.addEventListener('click', (e) => {
+                if (e.target !== fileInput) {
+                    fileInput.click();
+                }
+            });
+
+            // File input change
+            fileInput.addEventListener('change', function(event) {
+                handleFiles(Array.from(event.target.files));
+            });
+
+            // Drag & Drop events
+            fileUploadArea.addEventListener('dragover', handleDragOver);
+            fileUploadArea.addEventListener('dragenter', handleDragEnter);
+            fileUploadArea.addEventListener('dragleave', handleDragLeave);
+            fileUploadArea.addEventListener('drop', handleDrop);
+
+            // Prevent default behavior for the entire document
+            document.addEventListener('dragover', preventDefaults);
+            document.addEventListener('drop', preventDefaults);
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            function handleDragEnter(e) {
+                preventDefaults(e);
+                fileUploadArea.classList.add('drag-over');
+            }
+
+            function handleDragOver(e) {
+                preventDefaults(e);
+                fileUploadArea.classList.add('drag-over');
+            }
+
+            function handleDragLeave(e) {
+                preventDefaults(e);
+                // Só remove se realmente saiu da área
+                if (!fileUploadArea.contains(e.relatedTarget)) {
+                    fileUploadArea.classList.remove('drag-over');
+                }
+            }
+
+            function handleDrop(e) {
+                preventDefaults(e);
+                fileUploadArea.classList.remove('drag-over');
+                
+                const files = Array.from(e.dataTransfer.files);
+                if (files.length > 0) {
+                    handleFiles(files);
+                }
+            }
+
+            function handleFiles(files) {
+                // Filtrar apenas arquivos de mídia válidos
+                const validFiles = files.filter(file => {
+                    const validTypes = [
+                        'image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp',
+                        'video/mp4', 'video/mov', 'video/webm'
+                    ];
+                    return validTypes.includes(file.type);
+                });
+
+                if (validFiles.length !== files.length) {
+                    showNotification('Alguns arquivos foram ignorados. Apenas imagens e vídeos são aceitos.', 'warning');
+                }
+
+                if (validFiles.length === 0) {
+                    showNotification('Nenhum arquivo válido selecionado.', 'error');
+                    return;
+                }
+
+                // Adicionar aos arquivos selecionados
+                selectedFiles = [...selectedFiles, ...validFiles];
+                
+                // Atualizar o input file
+                updateFileInput();
+                
+                // Mostrar preview
+                showPreview();
+                
+                showNotification(`${validFiles.length} arquivo(s) adicionado(s)!`, 'success');
+            }
+
+            function updateFileInput() {
+                // Criar novo FileList
+                const dt = new DataTransfer();
+                selectedFiles.forEach(file => dt.items.add(file));
+                fileInput.files = dt.files;
+            }
+
+            function showPreview() {
+                if (selectedFiles.length === 0) {
+                    previewContainer.style.display = 'none';
+                    return;
+                }
+
+                previewContainer.style.display = 'grid';
+                previewContainer.innerHTML = '';
+                
+                selectedFiles.forEach((file, index) => {
+                    const previewItem = document.createElement('div');
+                    previewItem.className = 'preview-item';
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        let mediaElement;
+                        if (file.type.startsWith('image/')) {
+                            mediaElement = document.createElement('img');
+                            mediaElement.src = e.target.result;
+                            mediaElement.alt = file.name;
+                        } else if (file.type.startsWith('video/')) {
+                            mediaElement = document.createElement('video');
+                            mediaElement.src = e.target.result;
+                            mediaElement.muted = true;
+                            mediaElement.title = file.name;
+                        }
+
+                        if (mediaElement) {
+                            previewItem.appendChild(mediaElement);
+                        }
+                    };
+                    reader.readAsDataURL(file);
+
+                    // Botão de remover
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'remove-preview';
+                    removeBtn.innerHTML = '×';
+                    removeBtn.type = 'button';
+                    removeBtn.title = 'Remover arquivo';
+                    removeBtn.onclick = () => removeFile(index);
+                    
+                    previewItem.appendChild(removeBtn);
+                    previewContainer.appendChild(previewItem);
                 });
             }
 
-            // --- PARTE 2: NOVA LÓGICA DE DRAG & DROP ---
-            const sortableContainer = document.getElementById('sortableImages');
-            if (sortableContainer) {
-                let draggedItem = null;
+            function removeFile(index) {
+                selectedFiles.splice(index, 1);
+                updateFileInput();
+                showPreview();
+                showNotification('Arquivo removido', 'info');
+            }
 
-                // Evento quando você começa a arrastar um item
-                sortableContainer.addEventListener('dragstart', e => {
-                    if (e.target.classList.contains('image-item')) {
-                        draggedItem = e.target;
-                        // Adiciona a classe 'dragging' para dar o efeito visual
-                        setTimeout(() => {
-                            draggedItem.classList.add('dragging');
-                        }, 0);
-                    }
-                });
+            function showNotification(message, type = 'info') {
+                // Remove notificação anterior
+                const existing = document.querySelector('.upload-notification');
+                if (existing) existing.remove();
 
-                // Evento quando você solta o item
-                sortableContainer.addEventListener('dragend', e => {
-                    if (draggedItem) {
-                        // Remove a classe e salva a nova ordem
-                        draggedItem.classList.remove('dragging');
-                        draggedItem = null;
-                        saveImageOrder();
-                    }
-                });
+                const notification = document.createElement('div');
+                notification.className = 'upload-notification';
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    color: white;
+                    font-weight: 500;
+                    z-index: 9999;
+                    max-width: 300px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                    transition: all 0.3s ease;
+                `;
 
-                // Evento principal: acontece enquanto você move o item sobre a área
-                sortableContainer.addEventListener('dragover', e => {
-                    e.preventDefault(); // Essencial para permitir o 'drop'
-                    
-                    const afterElement = getDragAfterElement(sortableContainer, e.clientX);
-                    
-                    // Move o item arrastado em tempo real
-                    if (draggedItem) {
-                        if (afterElement == null) {
-                            sortableContainer.appendChild(draggedItem);
-                        } else {
-                            sortableContainer.insertBefore(draggedItem, afterElement);
-                        }
+                switch(type) {
+                    case 'success':
+                        notification.style.background = '#28a745';
+                        notification.innerHTML = `<i class="fas fa-check"></i> ${message}`;
+                        break;
+                    case 'warning':
+                        notification.style.background = '#ffc107';
+                        notification.style.color = '#212529';
+                        notification.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`;
+                        break;
+                    case 'error':
+                        notification.style.background = '#dc3545';
+                        notification.innerHTML = `<i class="fas fa-times"></i> ${message}`;
+                        break;
+                    default:
+                        notification.style.background = '#007bff';
+                        notification.innerHTML = `<i class="fas fa-info"></i> ${message}`;
+                }
+
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.style.opacity = '0';
+                        notification.style.transform = 'translateY(-10px)';
+                        setTimeout(() => notification.remove(), 300);
                     }
-                });
+                }, 3000);
             }
         });
-
-        /**
-         * Função auxiliar que descobre qual elemento está logo a seguir
-         * ao cursor do rato, para saber onde inserir o item arrastado.
-         * @param {HTMLElement} container O container onde os itens estão.
-         * @param {number} x A posição horizontal do rato (clientX).
-         */
-        function getDragAfterElement(container, x) {
-            const draggableElements = [...container.querySelectorAll('.image-item:not(.dragging)')];
-
-            return draggableElements.reduce((closest, child) => {
-                const box = child.getBoundingClientRect();
-                const offset = x - box.left - box.width / 2;
-                if (offset < 0 && offset > closest.offset) {
-                    return { offset: offset, element: child };
-                } else {
-                    return closest;
-                }
-            }, { offset: Number.NEGATIVE_INFINITY }).element;
-        }
-
-        // --- PARTE 3: FUNÇÕES DE DELETAR E SALVAR (mantidas) ---
-        function deleteMedia(mediaId) {
-            if (confirm('Tem certeza que deseja remover esta mídia?')) {
-                window.location.href = `delete_media.php?id=${mediaId}&project_id=<?php echo $project_id; ?>`;
-            }
-        }
-
-        function saveImageOrder() {
-            const imageItems = document.querySelectorAll('#sortableImages .image-item');
-            const newOrder = Array.from(imageItems).map((item, index) => ({
-                image_id: parseInt(item.dataset.imageId),
-                order_position: index
-            }));
-            
-            fetch('update_image_order.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    project_id: <?php echo $project_id; ?>,
-                    order: newOrder
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Atualiza o badge "Principal" no primeiro item da lista
-                    document.querySelectorAll('.primary-badge').forEach(b => b.remove());
-                    const firstItem = document.querySelector('.image-item');
-                    if(firstItem) {
-                        const badge = document.createElement('div');
-                        badge.className = 'primary-badge';
-                        badge.textContent = 'Principal';
-                        firstItem.appendChild(badge);
-                    }
-                } else {
-                    throw new Error(data.message || 'Erro ao salvar a ordem.');
-                }
-            })
-            .catch(error => console.error('Erro ao salvar a ordem:', error));
-        }
     </script>
 </body>
 </html>

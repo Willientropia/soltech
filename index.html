@@ -63,7 +63,7 @@
             gap: 10px;
             transition: transform 0.3s ease;
         }
-        
+
         .logo-img {
             height: 55px;
             width: auto;
@@ -211,7 +211,6 @@
             border-radius: 2px;
         }
 
-
         .form-feedback {
             padding: 15px;
             margin-bottom: 1.5rem;
@@ -306,7 +305,7 @@
             margin-bottom: 3rem;
         }
 
-        /* Estilos do Carrossel de Projetos */
+        /* ===== ESTILOS DO CARROSSEL DE PROJETOS - CORRIGIDO ===== */
         .projects-carousel-container {
             position: relative;
             margin: 3rem 0;
@@ -352,6 +351,7 @@
             color: inherit;
         }
 
+        /* ===== CORREÇÃO PRINCIPAL: IMAGEM DO CARROSSEL ===== */
         .carousel-project-image {
             height: 220px;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
@@ -359,13 +359,8 @@
             overflow: hidden;
         }
 
-        .carousel-project-image.has-image {
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-
-        .carousel-project-image:not(.has-image)::before {
+        /* CORREÇÃO: Ícone de câmera APENAS quando NÃO há mídia */
+        .carousel-project-image:not(.has-media)::before {
             content: '📸';
             position: absolute;
             top: 50%;
@@ -376,6 +371,19 @@
             color: rgba(255,255,255,0.8);
         }
 
+        /* Para imagens e vídeos com mídia */
+        .carousel-project-image.has-media {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* Especial para vídeos - fundo mais escuro */
+        .carousel-project-image.has-media.is-video {
+            background-color: #222;
+        }
+
+        /* Overlay de hover - só aparece no hover */
         .carousel-project-image::after {
             content: '';
             position: absolute;
@@ -392,6 +400,7 @@
             opacity: 1;
         }
 
+        /* Ícone de visualização - aparece no hover */
         .carousel-project-view-icon {
             position: absolute;
             top: 50%;
@@ -407,6 +416,23 @@
         .carousel-project-card:hover .carousel-project-view-icon {
             opacity: 1;
             transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        /* Indicador de vídeo - sempre visível para vídeos */
+        .carousel-project-image.has-media.is-video .carousel-video-indicator {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .carousel-project-content {
@@ -618,7 +644,7 @@
             transition: all 0.3s ease; font-size: 24px;
         }
         .social-links a:hover { background: var(--secondary-color); transform: translateY(-5px); }
-        
+
         /* Floating WhatsApp */
         .whatsapp-float {
             position: fixed; bottom: 20px; right: 20px;
@@ -642,7 +668,7 @@
             padding: 2rem;
             display: none;
         }
-        
+
         .projects-loading .spinner {
             width: 40px;
             height: 40px;
@@ -652,7 +678,7 @@
             animation: spin 1s linear infinite;
             margin: 0 auto 1rem;
         }
-        
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -1621,6 +1647,7 @@
     </div>
 
     <script>
+
         function toggleMenu() {
             document.querySelector('.nav-links').classList.toggle('active');
         }
@@ -1641,7 +1668,7 @@
                 if (entry.isIntersecting) entry.target.classList.add('active');
             });
         }, { threshold: 0.1, rootMargin: '0px 0px -100px 0px' });
-        
+
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
         // ####################################################################
@@ -1703,7 +1730,7 @@
         }
 
         // ####################################################################
-        // ## TODO O RESTANTE DO SCRIPT (CARROSSEL E MODAL) ##
+        // ## CARROSSEL DE PROJETOS - FUNCIONALIDADE JAVASCRIPT CORRIGIDA ##
         // ####################################################################
 
         // Carrossel de Projetos - Funcionalidade JavaScript
@@ -1772,28 +1799,52 @@
                 document.getElementById('projectsCarouselContainer').style.display = 'block';
             }
             
-            // SUBSTITUA O MÉTODO renderProjects() DENTRO DA CLASSE ProjectsCarousel:
-           // Cole este código substituindo o método renderProjects() existente
+            // ===== MÉTODO CORRIGIDO: renderProjects() =====
             renderProjects() {
                 if (!this.track || !this.projects.length) return;
 
-                // Esta parte, que monta o HTML, permanece a mesma
                 this.track.innerHTML = this.projects.map(project => {
                     const primaryMedia = project.media && project.media.length > 0 ? project.media[0] : null;
                     const hasMedia = !!primaryMedia;
                     const isVideo = hasMedia && primaryMedia.media_type === 'video';
+                    const isImage = hasMedia && primaryMedia.media_type === 'image';
 
-                    const mediaPath = hasMedia ? `upload/images/projects/${primaryMedia.path}` : '';
-                    const mediaStyle = hasMedia && !isVideo ? `background-image: url('${mediaPath}');` : '';
-                    const mediaIcon = isVideo 
-                        ? '<div class="carousel-project-view-icon"><i class="fas fa-play"></i></div>' 
-                        : '<div class="carousel-project-view-icon"><i class="fas fa-search-plus"></i></div>';
+                    // Construir classes CSS
+                    let mediaClasses = 'carousel-project-image';
+                    let mediaStyle = '';
+                    let mediaIcon = '';
+                    let videoIndicator = '';
+
+                    if (hasMedia) {
+                        mediaClasses += ' has-media';
+                        
+                        if (isVideo) {
+                            mediaClasses += ' is-video';
+                            // Para vídeos: usar thumbnail se possível, senão fundo escuro
+                            const videoPath = `upload/images/projects/${primaryMedia.path}`;
+                            mediaStyle = `background-image: url('${videoPath}#t=1');`;
+                            
+                            // Ícone de hover
+                            mediaIcon = '<div class="carousel-project-view-icon"><i class="fas fa-play"></i></div>';
+                            
+                            // Indicador permanente de vídeo
+                            videoIndicator = '<div class="carousel-video-indicator"><i class="fas fa-video"></i> Vídeo</div>';
+                            
+                        } else if (isImage) {
+                            mediaClasses += ' is-image';
+                            mediaStyle = `background-image: url('upload/images/projects/${primaryMedia.path}');`;
+                            
+                            // Ícone de hover para imagens
+                            mediaIcon = '<div class="carousel-project-view-icon"><i class="fas fa-search-plus"></i></div>';
+                        }
+                    }
+                    // Se não há mídia, o CSS ::before vai mostrar o ícone de câmera automaticamente
 
                     return `
                     <div class="carousel-project-card" data-project-id="${project.id}">
-                        <div class="carousel-project-image ${hasMedia ? 'has-image' : ''}" style="${mediaStyle}">
-                            ${isVideo ? '<div class="carousel-project-image" style="background: #222;"></div>' : ''}
+                        <div class="${mediaClasses}" style="${mediaStyle}">
                             ${mediaIcon}
+                            ${videoIndicator}
                         </div>
                         <div class="carousel-project-content">
                             <span class="carousel-project-type">${project.category.name}</span>
@@ -1802,13 +1853,10 @@
                     </div>`;
                 }).join('');
 
-                // ===== CORREÇÃO APLICADA AQUI =====
-                // Removemos a chamada antiga e problemática para o modal.
-                // Agora, o próprio carrossel anexa os eventos de clique aos cards que ele criou.
+                // Reattach event listeners para os novos cards
                 this.track.querySelectorAll('.carousel-project-card').forEach(card => {
                     card.addEventListener('click', () => {
                         const projectId = card.dataset.projectId;
-                        // Se o card tem um ID e o modal existe, mandamos o modal abrir.
                         if (projectId && window.projectModal) {
                             window.projectModal.open(projectId);
                         }
@@ -1942,6 +1990,10 @@
             }
         }
 
+        // ####################################################################
+        // ## SISTEMA DE MODAL DE PROJETOS - CORRIGIDO ##
+        // ####################################################################
+
         class ProjectModal {
             constructor() {
                 this.modal = document.getElementById('projectModal');
@@ -1954,7 +2006,7 @@
                 this.thumbnailsContainer = document.getElementById('modalImageThumbnails');
                 this.currentProject = null;
                 this.currentImageIndex = 0;
-                this.images = [];
+                this.media = []; // Corrigido: usar 'media' em vez de 'images'
                 this.init();
             }
             
@@ -2010,14 +2062,14 @@
                 document.getElementById('modalTitle').textContent = project.title || 'Sem título';
                 const description = project.detailed_description || project.description || 'Sem descrição.';
                 document.getElementById('modalDescription').innerHTML = description.replace(/\n/g, '<br>');
-                this.setupMedia(project.media || []); // <-- Chamada corrigida
+                this.setupMedia(project.media || []); // Corrigido: usar 'media'
                 this.renderSpecs(project.specifications || {});
                 this.setupWhatsAppButton(project);
             }
             
-            // SUBSTITUA POR ISTO:
+            // ===== CORRIGIDO: setupMedia usando 'media' =====
             setupMedia(media) {
-                this.media = media.filter(m => m && m.path); // <-- Usa o novo array 'media'
+                this.media = media.filter(m => m && m.path);
                 this.currentMediaIndex = 0;
 
                 if (this.media.length === 0) {
@@ -2037,15 +2089,15 @@
                 }
             }
             
-            // SUBSTITUA POR ISTO:
+            // ===== CORRIGIDO: showCurrentImage usando 'media' =====
             showCurrentImage() {
                 if (this.media.length === 0) return;
 
-                const currentMedia = this.media[this.currentImageIndex];
+                const currentMedia = this.media[this.currentMediaIndex];
                 const mediaUrl = `upload/images/projects/${currentMedia.path}`;
 
-                this.mainImage.innerHTML = ''; // Limpa o container
-                this.mainImage.style.backgroundImage = 'none'; // Remove fundo antigo
+                this.mainImage.innerHTML = '';
+                this.mainImage.style.backgroundImage = 'none';
 
                 if (currentMedia.media_type === 'video') {
                     const videoElement = document.createElement('video');
@@ -2070,10 +2122,10 @@
                 this.thumbnailsContainer.style.display = 'none';
             }
             
-            // SUBSTITUA A FUNÇÃO 'renderThumbnails' INTEIRA POR ISTO:
+            // ===== CORRIGIDO: renderThumbnails usando 'media' =====
             renderThumbnails() {
                 this.thumbnailsContainer.innerHTML = this.media.map((item, index) => {
-                    const isActive = index === this.currentImageIndex ? 'active' : '';
+                    const isActive = index === this.currentMediaIndex ? 'active' : '';
                     const isVideo = item.media_type === 'video';
                     const thumbStyle = !isVideo 
                         ? `background-image: url('upload/images/projects/${item.path}')` 
@@ -2088,24 +2140,24 @@
                 });
             }
             
-            // SUBSTITUA AS 3 FUNÇÕES DE NAVEGAÇÃO POR ESTAS:
+            // ===== CORRIGIDAS: funções de navegação usando 'media' =====
             prevImage() {
                 if (this.media.length <= 1) return;
-                this.currentImageIndex = this.currentImageIndex === 0 ? this.media.length - 1 : this.currentImageIndex - 1;
+                this.currentMediaIndex = this.currentMediaIndex === 0 ? this.media.length - 1 : this.currentMediaIndex - 1;
                 this.showCurrentImage();
                 this.updateThumbnails();
             }
 
             nextImage() {
                 if (this.media.length <= 1) return;
-                this.currentImageIndex = this.currentImageIndex === this.media.length - 1 ? 0 : this.currentImageIndex + 1;
+                this.currentMediaIndex = this.currentMediaIndex === this.media.length - 1 ? 0 : this.currentMediaIndex + 1;
                 this.showCurrentImage();
                 this.updateThumbnails();
             }
 
             goToImage(index) {
                 if (index >= 0 && index < this.media.length) {
-                    this.currentImageIndex = index;
+                    this.currentMediaIndex = index;
                     this.showCurrentImage();
                     this.updateThumbnails();
                 }
@@ -2113,7 +2165,7 @@
             
             updateThumbnails() {
                 this.thumbnailsContainer.querySelectorAll('.modal-thumbnail').forEach((thumb, index) => {
-                    thumb.classList.toggle('active', index === this.currentImageIndex);
+                    thumb.classList.toggle('active', index === this.currentMediaIndex);
                 });
             }
             
@@ -2161,6 +2213,8 @@
                 this.modal.classList.remove('opening');
                 document.body.style.overflow = 'auto';
                 this.currentProject = null;
+                this.media = []; // Corrigido
+                this.currentMediaIndex = 0;
             }
             
             isOpen() {

@@ -180,13 +180,31 @@
             overflow: hidden;
         }
 
-        .project-image.has-image {
+        .project-image.has-media {
             background-size: cover;
             background-position: center;
-            background-repeat: no-repeat;
+            background-repeat: no-referrer;
+        }   
+
+        /* Especificações para vídeos */
+        .project-image.has-media.is-video {
+            background-color: #222;
         }
 
-        .project-image:not(.has-image)::before {
+        .project-image.has-media.is-video::after {
+            content: '▶';
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            z-index: 3;
+        }
+
+        .project-image:not(.has-media)::before {
             content: '📸';
             position: absolute;
             top: 50%;
@@ -909,26 +927,35 @@
         }
 
         function renderProjects(projectsToRender) {
-            // SUBSTITUA PELO CÓDIGO ABAIXO:
             ui.galleryGrid.innerHTML = projectsToRender.map(project => {
                 const primaryMedia = project.media && project.media.length > 0 ? project.media[0] : null;
                 const hasMedia = !!primaryMedia;
                 const isVideo = hasMedia && primaryMedia.media_type === 'video';
+                const isImage = hasMedia && primaryMedia.media_type === 'image';
 
-                const mediaPath = hasMedia ? `upload/images/projects/${primaryMedia.path}` : '';
-                // Define o fundo apenas se for uma imagem
-                const mediaStyle = hasMedia && !isVideo ? `background-image: url('${mediaPath}');` : '';
+                let mediaClasses = 'project-image';
+                let mediaStyle = '';
 
-                // Define o ícone de overlay
-                const mediaIcon = isVideo 
-                    ? '<i class="fas fa-play view-icon"></i>' 
-                    : '<i class="fas fa-search-plus view-icon"></i>';
+                if (hasMedia) {
+                    mediaClasses += ' has-media';
+                    
+                    if (isVideo) {
+                        mediaClasses += ' is-video';
+                        // Para vídeos, usar o primeiro frame como thumbnail
+                        const videoPath = `upload/images/projects/${primaryMedia.path}`;
+                        mediaStyle = `background-image: url('${videoPath}#t=1');`;
+                    } else {
+                        mediaClasses += ' is-image';
+                        mediaStyle = `background-image: url('upload/images/projects/${primaryMedia.path}');`;
+                    }
+                }
 
                 return `
                 <div class="project-card" data-project-id="${project.id}">
-                    <div class="project-image ${hasMedia ? 'has-image' : ''}" style="${mediaStyle}">
-                        ${isVideo ? '<div class="project-image" style="background: #222;"></div>' : ''}
-                        <div class="project-overlay">${mediaIcon}</div>
+                    <div class="${mediaClasses}" style="${mediaStyle}">
+                        <div class="project-overlay">
+                            <i class="fas fa-${isVideo ? 'play' : 'search-plus'} view-icon"></i>
+                        </div>
                     </div>
                     <div class="project-info">
                         <div class="project-category">${project.category.name}</div>
@@ -937,7 +964,6 @@
                 </div>
                 `;
             }).join('');
-                ui.galleryGrid.style.display = 'grid';
         }
 
         function setupFilterEventListeners() {
