@@ -66,6 +66,7 @@ try {
             $specs = $spec_stmt->fetchAll(PDO::FETCH_KEY_PAIR);
             $proj = array_merge($proj, $specs);
 
+            // CORREÇÃO: Buscar a primeira imagem do projeto
             $img_query = "SELECT image_path FROM project_images WHERE project_id = :project_id ORDER BY order_position ASC, id ASC LIMIT 1";
             $img_stmt = $db->prepare($img_query);
             $img_stmt->bindParam(':project_id', $proj['id']);
@@ -207,6 +208,21 @@ try {
             justify-content: center;
             font-size: 4rem;
             color: rgba(255,255,255,0.7);
+            overflow: hidden;
+        }
+
+        /* CORREÇÃO: Quando há imagem real */
+        .project-image.has-image {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* Placeholder apenas quando NÃO há imagem */
+        .project-image:not(.has-image)::before {
+            content: '📸';
+            font-size: 4rem;
+            color: rgba(255,255,255,0.7);
         }
 
         .project-content {
@@ -263,7 +279,7 @@ try {
             display: flex;
             gap: 0.5rem;
             flex-wrap: wrap;
-            margin-top: auto; /* Alinha no final */
+            margin-top: auto;
         }
 
         .btn {
@@ -377,18 +393,21 @@ try {
             <div class="projects-grid">
                 <?php foreach ($projects as $proj): ?>
                     <div class="project-card">
-                        <div class="project-image">
+                        <?php 
+                        $imageClass = $proj['image_path'] ? 'has-image' : '';
+                        $imageStyle = $proj['image_path'] ? 'background-image: url(../upload/images/projects/' . htmlspecialchars($proj['image_path']) . ');' : '';
+                        ?>
+                        <div class="project-image <?php echo $imageClass; ?>" style="<?php echo $imageStyle; ?>">
                             <?php if ($proj['featured']): ?>
                                 <div class="featured-badge">
                                     <i class="fas fa-star"></i> Destaque
                                 </div>
                             <?php endif; ?>
-                            <i class="fas fa-solar-panel"></i>
                         </div>
                         <div class="project-content">
                             <div class="project-category"><?php echo htmlspecialchars($proj['category_name']); ?></div>
                             <div class="project-title"><?php echo htmlspecialchars($proj['title']); ?></div>
-                            <div class="project-description"><?php echo htmlspecialchars(substr($proj['description'], 0, 100)); ?>...</div>
+                            <div class="project-description"><?php echo htmlspecialchars(substr($proj['description'], 0, 100)); ?></div>
                             
                             <div class="project-specs">
                                 <div class="spec-item"><i class="fas fa-bolt"></i> <?php echo htmlspecialchars($proj['power'] ?? 'N/A'); ?></div>

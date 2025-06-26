@@ -276,7 +276,7 @@
         .product-icon { font-size: 50px; margin-bottom: 1rem; color: var(--weg-blue); }
         .product-card h3 { color: var(--dark-color); margin-bottom: 0.5rem; }
 
-        /* Projects Section */
+        /* Projects Section - VERSÃO MELHORADA */
         #projects { background: var(--light-color); }
         .projects-intro {
             text-align: center;
@@ -284,62 +284,183 @@
         }
         .projects-preview {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2rem;
             margin-bottom: 3rem;
         }
         .project-preview-card {
             background: white;
-            border-radius: 15px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            text-decoration: none;
+            color: inherit;
         }
         .project-preview-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            transform: translateY(-15px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            text-decoration: none;
+            color: inherit;
         }
         .project-image {
-            height: 200px;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            height: 250px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             position: relative;
             overflow: hidden;
         }
-        .project-image::before {
+        
+        /* Quando há imagem real */
+        .project-image.has-image {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        /* Placeholder apenas quando NÃO há imagem */
+        .project-image:not(.has-image)::before {
             content: '📸';
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 60px;
+            font-size: 80px;
             opacity: 0.7;
+            color: rgba(255,255,255,0.8);
         }
+        
+        /* Overlay que aparece no hover */
+        .project-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,165,0,0.8), rgba(255,107,53,0.8));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .project-preview-card:hover .project-image::after {
+            opacity: 1;
+        }
+        
+        /* Ícone de visualização no hover */
+        .project-view-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 3rem;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+        
+        .project-preview-card:hover .project-view-icon {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+        
         .project-card-content {
-            padding: 1.5rem;
+            padding: 2rem;
+            text-align: center;
         }
         .project-type {
             display: inline-block;
-            background: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
             margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
+        
+        .project-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+        
+        .project-description {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Especificações nos cards de projeto */
+        .project-specs-preview {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .project-specs-preview .spec-item {
+            font-size: 0.85rem;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .project-specs-preview .spec-item i {
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            width: 14px;
+            flex-shrink: 0;
+        }
+        
         .view-all-btn {
             display: inline-block;
-            padding: 15px 40px;
+            padding: 18px 45px;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
             text-decoration: none;
             border-radius: 50px;
             font-weight: bold;
+            font-size: 1.1rem;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(255,165,0,0.3);
+            box-shadow: 0 8px 25px rgba(255,165,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .view-all-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .view-all-btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
         .view-all-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(255,165,0,0.5);
+            box-shadow: 0 15px 35px rgba(255,165,0,0.4);
+            text-decoration: none;
+            color: white;
         }
 
         /* Location Section */
@@ -418,6 +539,28 @@
             100% { box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); }
         }
 
+        /* Loading spinner para projetos */
+        .projects-loading {
+            text-align: center;
+            padding: 2rem;
+            display: none;
+        }
+        
+        .projects-loading .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         /* Responsive Design */
         @media (max-width: 1024px) {
             .nav-links {
@@ -434,6 +577,10 @@
             
             h2 {
                 font-size: 2.4rem;
+            }
+            
+            .projects-preview {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             }
         }
 
@@ -487,6 +634,9 @@
             .location-info { padding: 1.5rem; }
             
             .whatsapp-float { width: 50px; height: 50px; font-size: 24px; }
+            
+            .project-card-content { padding: 1.5rem; }
+            .project-specs-preview { grid-template-columns: 1fr; gap: 0.5rem; }
         }
 
         /* Animations */
@@ -631,8 +781,13 @@
                 </p>
             </div>
             
+            <div class="projects-loading" id="projectsLoading">
+                <div class="spinner"></div>
+                <p>Carregando projetos...</p>
+            </div>
+            
             <div class="projects-preview fade-in" id="projectsPreviewGrid">
-                </div>
+            </div>
             
             <div style="text-align: center;">
                 <a href="galeria.html" class="view-all-btn">
@@ -765,44 +920,115 @@
             }
         }
 
-        // --- ADICIONAR ESTE NOVO BLOCO DE CÓDIGO ---
+        // Carregamento de projetos em destaque - VERSÃO MELHORADA COM ESPECIFICAÇÕES
         document.addEventListener('DOMContentLoaded', function() {
             loadFeaturedProjects();
         });
 
         async function loadFeaturedProjects() {
             const grid = document.getElementById('projectsPreviewGrid');
+            const loading = document.getElementById('projectsLoading');
+            
             if (!grid) return;
 
             try {
-                const response = await fetch('/api/featured.php');
+                // Mostrar loading
+                loading.style.display = 'block';
+                grid.style.display = 'none';
+
+                // Buscar projetos com todas as especificações
+                const response = await fetch('/api/projects');
                 const data = await response.json();
 
+                // Esconder loading
+                loading.style.display = 'none';
+
                 if (data.records && data.records.length > 0) {
-                    grid.innerHTML = data.records.map(project => {
-                        const imageUrl = project.image ? `upload/images/projects/${project.image}` : '';
-                        return `
-                        <a href="galeria.html" class="project-preview-card">
-                            <div class="project-image" style="background-image: url('${imageUrl}'); background-size: cover; background-position: center;">
-                                ${!imageUrl ? '📸' : ''}
-                            </div>
-                            <div class="project-card-content">
-                                <span class="project-type">${project.category_name}</span>
-                                <h3>${project.title}</h3>
-                            </div>
-                        </a>
-                        `;
-                    }).join('');
+                    // Filtrar apenas projetos em destaque e pegar os primeiros 4
+                    const featuredProjects = data.records.filter(project => project.featured).slice(0, 4);
+                    
+                    if (featuredProjects.length > 0) {
+                        grid.innerHTML = featuredProjects.map(project => {
+                            const imageUrl = project.images && project.images.length > 0 ? `upload/images/projects/${project.images[0]}` : '';
+                            const hasImage = imageUrl ? 'has-image' : '';
+                            
+                            return `
+                            <a href="galeria.html" class="project-preview-card">
+                                <div class="project-image ${hasImage}" style="${imageUrl ? `background-image: url('${imageUrl}');` : ''}">
+                                    <div class="project-view-icon">
+                                        <i class="fas fa-search-plus"></i>
+                                    </div>
+                                </div>
+                                <div class="project-card-content">
+                                    <span class="project-type">${project.category.name}</span>
+                                    <h3 class="project-title">${project.title}</h3>
+                                    <p class="project-description">${project.description.substring(0, 80)}...</p>
+                                    
+                                    <div class="project-specs-preview">
+                                        ${project.specifications.power ? `<div class="spec-item"><i class="fas fa-bolt"></i> ${project.specifications.power}</div>` : ''}
+                                        ${project.specifications.savings ? `<div class="spec-item"><i class="fas fa-coins"></i> ${project.specifications.savings}</div>` : ''}
+                                        ${project.specifications.location ? `<div class="spec-item"><i class="fas fa-map-marker-alt"></i> ${project.specifications.location}</div>` : ''}
+                                        ${project.specifications.year ? `<div class="spec-item"><i class="fas fa-calendar"></i> ${project.specifications.year}</div>` : ''}
+                                    </div>
+                                </div>
+                            </a>
+                            `;
+                        }).join('');
+                    } else {
+                        // Se não há projetos em destaque, mostrar os primeiros 4 projetos
+                        const firstProjects = data.records.slice(0, 4);
+                        grid.innerHTML = firstProjects.map(project => {
+                            const imageUrl = project.images && project.images.length > 0 ? `upload/images/projects/${project.images[0]}` : '';
+                            const hasImage = imageUrl ? 'has-image' : '';
+                            
+                            return `
+                            <a href="galeria.html" class="project-preview-card">
+                                <div class="project-image ${hasImage}" style="${imageUrl ? `background-image: url('${imageUrl}');` : ''}">
+                                    <div class="project-view-icon">
+                                        <i class="fas fa-search-plus"></i>
+                                    </div>
+                                </div>
+                                <div class="project-card-content">
+                                    <span class="project-type">${project.category.name}</span>
+                                    <h3 class="project-title">${project.title}</h3>
+                                    <p class="project-description">${project.description.substring(0, 80)}...</p>
+                                    
+                                    <div class="project-specs-preview">
+                                        ${project.specifications.power ? `<div class="spec-item"><i class="fas fa-bolt"></i> ${project.specifications.power}</div>` : ''}
+                                        ${project.specifications.savings ? `<div class="spec-item"><i class="fas fa-coins"></i> ${project.specifications.savings}</div>` : ''}
+                                        ${project.specifications.location ? `<div class="spec-item"><i class="fas fa-map-marker-alt"></i> ${project.specifications.location}</div>` : ''}
+                                        ${project.specifications.year ? `<div class="spec-item"><i class="fas fa-calendar"></i> ${project.specifications.year}</div>` : ''}
+                                    </div>
+                                </div>
+                            </a>
+                            `;
+                        }).join('');
+                    }
+                    
+                    grid.style.display = 'grid';
                 } else {
-                    grid.innerHTML = "<p>Nenhum projeto em destaque no momento.</p>";
+                    grid.innerHTML = `
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #666;">
+                            <i class="fas fa-solar-panel" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                            <h3>Projetos em breve</h3>
+                            <p>Estamos preparando nossa galeria de projetos. Volte em breve!</p>
+                        </div>
+                    `;
+                    grid.style.display = 'grid';
                 }
             } catch (error) {
                 console.error("Erro ao carregar projetos em destaque:", error);
-                grid.innerHTML = "<p>Não foi possível carregar os projetos. Tente novamente mais tarde.</p>";
+                loading.style.display = 'none';
+                grid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #d32f2f;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <h3>Erro ao carregar projetos</h3>
+                        <p>Não foi possível conectar com o servidor. Tente novamente mais tarde.</p>
+                    </div>
+                `;
+                grid.style.display = 'grid';
             }
         }
-        // --- FIM DO NOVO BLOCO ---
-
     </script>
 </body>
 </html>

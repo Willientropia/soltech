@@ -154,29 +154,48 @@
         /* Gallery Grid */
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 2rem;
         }
 
         .project-card {
             background: white;
-            border-radius: 15px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
             cursor: pointer;
+            position: relative;
         }
 
         .project-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
 
         .project-image {
             height: 250px;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             position: relative;
             overflow: hidden;
+        }
+
+        /* CORREÇÃO: Quando há imagem real */
+        .project-image.has-image {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* Placeholder apenas quando NÃO há imagem */
+        .project-image:not(.has-image)::before {
+            content: '📸';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 80px;
+            color: rgba(255,255,255,0.7);
         }
 
         .project-image img {
@@ -211,35 +230,64 @@
 
         .view-icon {
             color: white;
-            font-size: 2rem;
+            font-size: 3rem;
         }
 
         .project-info {
-            padding: 1.5rem;
+            padding: 2rem;
             text-align: center;
         }
 
         .project-category {
             display: inline-block;
-            background: var(--light-color);
-            color: var(--primary-color);
-            font-weight: bold;
-            padding: 0.5rem 1rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            font-weight: 600;
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
             margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .project-title {
-            font-size: 1.3rem;
-            font-weight: bold;
+            font-size: 1.4rem;
+            font-weight: 700;
             margin-bottom: 0.5rem;
             color: var(--dark-color);
+            line-height: 1.4;
         }
 
         .project-description {
             color: #666;
             line-height: 1.6;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Especificações nos cards de projeto */
+        .project-specs-preview {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .project-specs-preview .spec-item {
+            font-size: 0.85rem;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .project-specs-preview .spec-item i {
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            width: 14px;
+            flex-shrink: 0;
         }
 
         /* Modal */
@@ -370,7 +418,7 @@
             text-align: center;
             padding: 4rem 2rem;
             color: #666;
-            display: none; /* Hidden by default */
+            display: none;
         }
 
         .info-message i {
@@ -397,12 +445,14 @@
             .modal-content { width: 95%; margin: 5% auto; }
             .modal-title { font-size: 1.5rem; }
             .modal-specs { grid-template-columns: 1fr 1fr; }
+            .project-specs-preview { grid-template-columns: 1fr; gap: 0.5rem; }
         }
 
         @media (max-width: 480px) {
             .container { padding: 2rem 1rem; }
             .filters { flex-direction: column; align-items: stretch; text-align: center; }
             .modal-specs { grid-template-columns: 1fr; }
+            .project-specs-preview { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -427,14 +477,14 @@
 
         <div class="filters" id="filters">
             <button class="filter-btn active" data-filter="all">Todos os Projetos</button>
-            </div>
+        </div>
 
         <div class="loading" id="loading">
             <div class="spinner"></div>
         </div>
 
         <div class="gallery-grid" id="galleryGrid" style="display: none;">
-            </div>
+        </div>
 
         <div class="info-message" id="noResults">
             <i class="fas fa-search"></i>
@@ -540,28 +590,34 @@
             }
         }
 
-        // Renderiza os cards dos projetos
+        // Renderiza os cards dos projetos - VERSÃO CORRIGIDA COM ESPECIFICAÇÕES
         function renderProjects(projectsToRender) {
             ui.galleryGrid.innerHTML = projectsToRender.map(project => {
-                // --- MUDANÇA PRINCIPAL AQUI ---
-                // Pega a primeira imagem da lista de imagens do projeto
                 const imageUrl = project.images && project.images.length > 0
                     ? `upload/images/projects/${project.images[0]}`
-                    : ''; // Se não houver imagem, a string fica vazia
+                    : '';
+                const hasImage = imageUrl ? 'has-image' : '';
+                const imageStyle = imageUrl ? `background-image: url('${imageUrl}');` : '';
 
                 return `
                 <div class="project-card" onclick="openModal(${project.id})">
-                    <div class="project-image" style="background-image: url('${imageUrl}');">
-                         ${!imageUrl ? '📸' : ''}
+                    <div class="project-image ${hasImage}" style="${imageStyle}">
                         <div class="project-overlay"><i class="fas fa-search-plus view-icon"></i></div>
                     </div>
                     <div class="project-info">
                         <div class="project-category">${project.category.name}</div>
                         <div class="project-title">${project.title}</div>
+                        <div class="project-description">${project.description}</div>
+                        
+                        <div class="project-specs-preview">
+                            ${project.specifications.power ? `<div class="spec-item"><i class="fas fa-bolt"></i> ${project.specifications.power}</div>` : ''}
+                            ${project.specifications.savings ? `<div class="spec-item"><i class="fas fa-coins"></i> ${project.specifications.savings}</div>` : ''}
+                            ${project.specifications.location ? `<div class="spec-item"><i class="fas fa-map-marker-alt"></i> ${project.specifications.location}</div>` : ''}
+                            ${project.specifications.year ? `<div class="spec-item"><i class="fas fa-calendar"></i> ${project.specifications.year}</div>` : ''}
+                        </div>
                     </div>
                 </div>
-                `
-                // --- FIM DA MUDANÇA ---
+                `;
             }).join('');
         }
 
@@ -579,8 +635,13 @@
                     : '';
 
                 modalImage.className = 'modal-image';
-                modalImage.style.backgroundImage = imageUrl ? `url('${imageUrl}')` : '';
-                modalImage.innerHTML = !imageUrl ? '📸' : '';
+                if (imageUrl) {
+                    modalImage.style.backgroundImage = `url('${imageUrl}')`;
+                    modalImage.innerHTML = '';
+                } else {
+                    modalImage.style.backgroundImage = '';
+                    modalImage.innerHTML = '📸';
+                }
 
                 document.getElementById('modalTitle').textContent = project.title;
                 document.getElementById('modalCategory').className = 'modal-category';
@@ -595,7 +656,7 @@
                     { label: 'Localização', value: project.specifications.location, icon: 'fa-map-marker-alt' },
                     { label: 'Ano', value: project.specifications.year, icon: 'fa-calendar' }
                 ]
-                .filter(spec => spec.value) // Mostra apenas especificações que existem
+                .filter(spec => spec.value)
                 .map(spec => `
                     <div class="spec-card">
                         <div class="spec-icon"><i class="fas ${spec.icon}"></i></div>
