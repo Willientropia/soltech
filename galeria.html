@@ -180,14 +180,12 @@
             overflow: hidden;
         }
 
-        /* CORREÇÃO: Quando há imagem real */
         .project-image.has-image {
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
         }
 
-        /* Placeholder apenas quando NÃO há imagem */
         .project-image:not(.has-image)::before {
             content: '📸';
             position: absolute;
@@ -196,17 +194,6 @@
             transform: translate(-50%, -50%);
             font-size: 80px;
             color: rgba(255,255,255,0.7);
-        }
-
-        .project-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-        
-        .project-card:hover .project-image img {
-            transform: scale(1.05);
         }
 
         .project-overlay {
@@ -266,7 +253,6 @@
             margin-bottom: 1.5rem;
         }
         
-        /* Especificações nos cards de projeto */
         .project-specs-preview {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -288,129 +274,6 @@
             font-size: 0.9rem;
             width: 14px;
             flex-shrink: 0;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.9);
-            animation: fadeIn 0.3s ease;
-            overflow-y: auto;
-            padding: 20px 0;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-content {
-            position: relative;
-            margin: 2% auto;
-            padding: 0;
-            width: 90%;
-            max-width: 900px;
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        
-        .close {
-            position: absolute;
-            top: 1rem;
-            right: 1.5rem;
-            color: white;
-            font-size: 2.5rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            z-index: 10;
-        }
-
-        .close:hover {
-            transform: scale(1.1) rotate(90deg);
-        }
-        
-        .modal-image {
-            height: 400px;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            background-size: cover;
-            background-position: center;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: rgba(255,255,255,0.7);
-            font-size: 150px;
-        }
-
-        .modal-body {
-            padding: 2rem;
-        }
-
-        .modal-title {
-            font-size: 2rem;
-            color: var(--dark-color);
-            margin-bottom: 1rem;
-        }
-
-        .modal-category {
-            display: inline-block;
-            background: var(--primary-color);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 15px;
-            margin-bottom: 1.5rem;
-        }
-
-        .modal-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            margin-bottom: 2rem;
-            color: #555;
-        }
-
-        .modal-specs {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .spec-card {
-            background: var(--light-color);
-            padding: 1.5rem;
-            border-radius: 10px;
-            text-align: center;
-            border-left: 4px solid var(--primary-color);
-        }
-
-        .spec-icon {
-            font-size: 2rem;
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
-        }
-
-        .spec-label {
-            font-weight: bold;
-            color: var(--dark-color);
-            font-size: 1rem;
-        }
-
-        .spec-value {
-            color: #666;
-            font-size: 0.9rem;
         }
 
         /* No Results / Error */
@@ -435,28 +298,443 @@
             color: #d32f2f;
         }
 
-        /* Responsive */
+        /* Modal de Projeto */
+        .project-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            animation: modalFadeIn 0.3s ease;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .project-modal-content {
+            position: relative;
+            margin: 2% auto;
+            width: 90%;
+            max-width: 1000px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            animation: modalSlideIn 0.4s ease;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+
+        @keyframes modalSlideIn {
+            from { 
+                transform: translateY(-50px) scale(0.9); 
+                opacity: 0; 
+            }
+            to { 
+                transform: translateY(0) scale(1); 
+                opacity: 1; 
+            }
+        }
+
+        .project-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: white;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10;
+            width: 45px;
+            height: 45px;
+            background: rgba(0,0,0,0.7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .project-modal-close:hover {
+            background: #f44336;
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        .modal-image-gallery {
+            position: relative;
+            height: 450px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            overflow: hidden;
+        }
+
+        .modal-image-main {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: all 0.5s ease;
+            position: relative;
+        }
+
+        .modal-image-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            font-size: 150px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .modal-image-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.7);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .modal-image-nav:hover {
+            background: rgba(0,0,0,0.9);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .modal-image-prev { left: 20px; }
+        .modal-image-next { right: 20px; }
+
+        .modal-image-thumbnails {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            max-width: 80%;
+            overflow-x: auto;
+            padding: 10px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 25px;
+            display: none;
+        }
+
+        .modal-thumbnail {
+            width: 60px;
+            height: 40px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            flex-shrink: 0;
+        }
+
+        .modal-thumbnail:hover,
+        .modal-thumbnail.active {
+            opacity: 1;
+            border-color: white;
+            transform: scale(1.1);
+        }
+
+        .project-modal-body {
+            padding: 2.5rem;
+        }
+
+        .modal-project-header {
+            margin-bottom: 2rem;
+        }
+
+        .modal-project-category {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-project-title {
+            font-size: 2.2rem;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .modal-project-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 2.5rem;
+        }
+
+        .modal-project-specs {
+            display: block; /* Remove o grid layout */
+            margin-bottom: 2.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .specs-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            column-count: 2; /* Cria duas colunas */
+            column-gap: 2rem;
+        }
+       .spec-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f5f5f5;
+            break-inside: avoid-column; /* Evita que um item quebre entre colunas */
+        }
+        .spec-item:last-child {
+            border-bottom: none;
+        }
+        .spec-item-icon {
+            font-size: 1.5rem; /* Ícone um pouco menor */
+            color: var(--primary-color);
+            background-color: rgba(255, 165, 0, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .spec-item-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        .spec-item-label {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .spec-item-value {
+            font-size: 1.1rem;
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+
+
+        /* Esconder botão "Ver Mais Projetos" APENAS na galeria */
+        .page-gallery .modal-action-secondary {
+            display: none;
+        }
+
+
+
+
+
+
+
+
+        .modal-spec-card {
+            background: var(--light-color);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            border-left: 4px solid var(--primary-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-spec-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .modal-spec-card:hover::before { opacity: 0.1; }
+        .modal-spec-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .modal-spec-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.8rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .modal-spec-label {
+            font-weight: 600;
+            color: var(--dark-color);
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .modal-spec-value {
+            color: #666;
+            font-size: 1.1rem;
+            font-weight: 500;
+            position: relative;
+            z-index: 2;
+        }
+
+        .modal-project-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #eee;
+        }
+
+        .modal-action-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+        }
+
+        .modal-action-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .modal-action-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255,165,0,0.4);
+            color: white;
+            text-decoration: none;
+        }
+
+        .modal-action-secondary {
+            background: white;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .modal-action-secondary:hover {
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+        }
+
+        .modal-loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            flex-direction: column;
+            gap: 1rem;
+            background: white;
+            border-radius: 20px;
+        }
+
+        .modal-loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: modalSpin 1s linear infinite;
+        }
+
+        @keyframes modalSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .specs-list {
+                column-count: 1; /* Uma coluna em telas menores */
+            }
+        }
+
+
+
+        /* Responsivo */
         @media (max-width: 768px) {
             .page-header h1 { font-size: 2.5rem; }
             .filters { gap: 0.5rem; }
             .filter-btn { padding: 10px 20px; font-size: 0.9rem; }
             .gallery-grid { grid-template-columns: 1fr; gap: 1.5rem; }
             .project-info { padding: 1.5rem; }
-            .modal-content { width: 95%; margin: 5% auto; }
-            .modal-title { font-size: 1.5rem; }
-            .modal-specs { grid-template-columns: 1fr 1fr; }
+            .project-modal-content { width: 95%; margin: 5% auto; }
+            .modal-image-gallery { height: 300px; }
+            .project-modal-body { padding: 1.5rem; }
+            .modal-project-title { font-size: 1.8rem; }
+            .modal-project-specs { grid-template-columns: 1fr 1fr; gap: 1rem; }
+            .modal-spec-card { padding: 1rem; }
+            .modal-spec-icon { font-size: 2rem; }
+            .modal-action-btn { padding: 10px 20px; font-size: 0.9rem; }
+            .modal-project-actions { flex-direction: column; align-items: stretch; }
             .project-specs-preview { grid-template-columns: 1fr; gap: 0.5rem; }
         }
 
         @media (max-width: 480px) {
             .container { padding: 2rem 1rem; }
             .filters { flex-direction: column; align-items: stretch; text-align: center; }
-            .modal-specs { grid-template-columns: 1fr; }
+            .modal-project-specs { grid-template-columns: 1fr; }
             .project-specs-preview { grid-template-columns: 1fr; }
+            .modal-image-gallery { height: 250px; }
+            .modal-project-title { font-size: 1.5rem; }
+        }
+
+        .project-modal.opening .project-modal-content {
+            animation: modalSlideInMobile 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes modalSlideInMobile {
+            0% { 
+                transform: translateY(100px) scale(0.9); 
+                opacity: 0; 
+            }
+            100% { 
+                transform: translateY(0) scale(1); 
+                opacity: 1; 
+            }
         }
     </style>
 </head>
-<body>
+<body class="page-gallery">
     <header>
         <nav>
             <a href="index.html" class="logo">
@@ -499,15 +777,54 @@
         </div>
     </div>
 
-    <div id="projectModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="modalImage"></div>
-            <div class="modal-body">
-                <div id="modalCategory"></div>
-                <h2 id="modalTitle"></h2>
-                <p id="modalDescription"></p>
-                <div id="modalSpecs"></div>
+    <!-- Modal de Projeto -->
+    <div id="projectModal" class="project-modal">
+        <div class="project-modal-content">
+            <span class="project-modal-close">&times;</span>
+            
+            <div class="modal-image-gallery">
+                <div class="modal-image-main" id="modalMainImage">
+                    <div class="modal-image-placeholder">📸</div>
+                </div>
+                
+                <button class="modal-image-nav modal-image-prev" id="modalImagePrev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="modal-image-nav modal-image-next" id="modalImageNext">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                
+                <div class="modal-image-thumbnails" id="modalImageThumbnails">
+                </div>
+            </div>
+            
+            <div class="project-modal-body">
+                <div class="modal-loading" id="modalLoading">
+                    <div class="modal-loading-spinner"></div>
+                    <p>Carregando detalhes do projeto...</p>
+                </div>
+                
+                <div id="modalContent" style="display: none;">
+                    <div class="modal-project-header">
+                        <div class="modal-project-category" id="modalCategory"></div>
+                        <h2 class="modal-project-title" id="modalTitle"></h2>
+                        <div class="modal-project-description" id="modalDescription"></div>
+                    </div>
+                    
+                    <div class="modal-project-specs" id="modalSpecs">
+                    </div>
+                    
+                    <div class="modal-project-actions">
+                        <a href="#" class="modal-action-btn modal-action-primary" id="modalWhatsappBtn">
+                            <i class="fab fa-whatsapp"></i>
+                            Solicitar Orçamento
+                        </a>
+                        <a href="galeria.html" class="modal-action-btn modal-action-secondary">
+                            <i class="fas fa-images"></i>
+                            Ver Mais Projetos
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -517,7 +834,6 @@
         let projects = [];
         let categories = [];
 
-        // Funções de UI
         const ui = {
             loading: document.getElementById('loading'),
             galleryGrid: document.getElementById('galleryGrid'),
@@ -530,7 +846,6 @@
             showGallery: () => { ui.galleryGrid.style.display = 'grid'; }
         };
 
-        // Carrega categorias dos filtros
         async function loadCategories() {
             try {
                 const response = await fetch(`${API_BASE_URL}/categories`);
@@ -545,7 +860,6 @@
             }
         }
 
-        // Renderiza os botões de filtro
         function renderFilters() {
             const filtersContainer = document.getElementById('filters');
             const allButton = filtersContainer.querySelector('[data-filter="all"]');
@@ -562,7 +876,6 @@
             setupFilterEventListeners();
         }
 
-        // Carrega os projetos da API
         async function loadProjects(categoryFilter = 'all') {
             try {
                 ui.showLoading();
@@ -580,6 +893,11 @@
                     projects = data.records;
                     renderProjects(projects);
                     ui.showGallery();
+                    
+                    // IMPORTANTE: Reativar os event listeners após renderizar
+                    if (window.projectModal) {
+                        window.projectModal.attachCardListeners();
+                    }
                 } else {
                     ui.showNoResults();
                 }
@@ -590,7 +908,6 @@
             }
         }
 
-        // Renderiza os cards dos projetos - VERSÃO CORRIGIDA COM ESPECIFICAÇÕES
         function renderProjects(projectsToRender) {
             ui.galleryGrid.innerHTML = projectsToRender.map(project => {
                 const imageUrl = project.images && project.images.length > 0
@@ -600,7 +917,7 @@
                 const imageStyle = imageUrl ? `background-image: url('${imageUrl}');` : '';
 
                 return `
-                <div class="project-card" onclick="openModal(${project.id})">
+                <div class="project-card" data-project-id="${project.id}">
                     <div class="project-image ${hasImage}" style="${imageStyle}">
                         <div class="project-overlay"><i class="fas fa-search-plus view-icon"></i></div>
                     </div>
@@ -621,66 +938,6 @@
             }).join('');
         }
 
-        // Abre o modal com detalhes do projeto
-        async function openModal(projectId) {
-            try {
-                const response = await fetch(`${API_BASE_URL}/projects/${projectId}`);
-                if (!response.ok) throw new Error('Projeto não encontrado');
-                const project = await response.json();
-
-                const modal = document.getElementById('projectModal');
-                const modalImage = document.getElementById('modalImage');
-                const imageUrl = project.images && project.images.length > 0
-                    ? `upload/images/projects/${project.images[0]}`
-                    : '';
-
-                modalImage.className = 'modal-image';
-                if (imageUrl) {
-                    modalImage.style.backgroundImage = `url('${imageUrl}')`;
-                    modalImage.innerHTML = '';
-                } else {
-                    modalImage.style.backgroundImage = '';
-                    modalImage.innerHTML = '📸';
-                }
-
-                document.getElementById('modalTitle').textContent = project.title;
-                document.getElementById('modalCategory').className = 'modal-category';
-                document.getElementById('modalCategory').textContent = project.category.name;
-                document.getElementById('modalDescription').innerHTML = project.detailed_description || project.description;
-
-                document.getElementById('modalSpecs').innerHTML = [
-                    { label: 'Potência', value: project.specifications.power, icon: 'fa-bolt' },
-                    { label: 'Painéis', value: project.specifications.panels, icon: 'fa-solar-panel' },
-                    { label: 'Área', value: project.specifications.area, icon: 'fa-expand-arrows-alt' },
-                    { label: 'Economia', value: project.specifications.savings, icon: 'fa-coins' },
-                    { label: 'Localização', value: project.specifications.location, icon: 'fa-map-marker-alt' },
-                    { label: 'Ano', value: project.specifications.year, icon: 'fa-calendar' }
-                ]
-                .filter(spec => spec.value)
-                .map(spec => `
-                    <div class="spec-card">
-                        <div class="spec-icon"><i class="fas ${spec.icon}"></i></div>
-                        <div class="spec-label">${spec.label}</div>
-                        <div class="spec-value">${spec.value}</div>
-                    </div>
-                `).join('');
-
-                modal.style.display = 'block';
-                document.body.style.overflow = 'hidden';
-            } catch (error) {
-                console.error('Erro ao abrir modal:', error);
-                alert('Não foi possível carregar os detalhes do projeto.');
-            }
-        }
-
-        // Fecha o modal
-        function closeModal() {
-            const modal = document.getElementById('projectModal');
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        // Adiciona eventos aos filtros
         function setupFilterEventListeners() {
             const filterBtns = document.querySelectorAll('.filter-btn');
             filterBtns.forEach(btn => {
@@ -692,14 +949,319 @@
             });
         }
 
-        // Inicialização da página
+        // Sistema de Modal de Projetos
+        class ProjectModal {
+            constructor() {
+                this.modal = document.getElementById('projectModal');
+                this.modalContent = document.getElementById('modalContent');
+                this.modalLoading = document.getElementById('modalLoading');
+                this.closeBtn = document.querySelector('.project-modal-close');
+                
+                this.mainImage = document.getElementById('modalMainImage');
+                this.prevBtn = document.getElementById('modalImagePrev');
+                this.nextBtn = document.getElementById('modalImageNext');
+                this.thumbnailsContainer = document.getElementById('modalImageThumbnails');
+                
+                this.currentProject = null;
+                this.currentImageIndex = 0;
+                this.images = [];
+                
+                this.init();
+            }
+            
+            init() {
+                this.closeBtn?.addEventListener('click', () => this.close());
+                this.modal?.addEventListener('click', (e) => {
+                    if (e.target === this.modal) this.close();
+                });
+                
+                this.prevBtn?.addEventListener('click', () => this.prevImage());
+                this.nextBtn?.addEventListener('click', () => this.nextImage());
+                
+                document.addEventListener('keydown', (e) => {
+                    if (!this.isOpen()) return;
+                    
+                    switch(e.key) {
+                        case 'Escape':
+                            this.close();
+                            break;
+                        case 'ArrowLeft':
+                            this.prevImage();
+                            break;
+                        case 'ArrowRight':
+                            this.nextImage();
+                            break;
+                    }
+                });
+                
+                this.attachCardListeners();
+            }
+            
+
+
+            attachCardListeners() {
+                const grid = document.getElementById('galleryGrid');
+                if (!grid) return;
+
+                // Remove listener antigo para evitar duplicação
+                // (Você precisaria armazenar a referência da função se fizesse isso)
+                
+                grid.addEventListener('click', (e) => {
+                    // Encontra o card que foi clicado, subindo na árvore do DOM a partir do alvo do clique
+                    const card = e.target.closest('.project-card');
+                    if (card) {
+                        e.preventDefault();
+                        const projectId = card.getAttribute('data-project-id');
+                        if (projectId) {
+                            this.open(projectId);
+                        }
+                    }
+                });
+            }
+
+
+
+            async open(projectId) {
+                console.log('Tentando abrir modal para o Projeto ID:', projectId);
+                console.log('Abrindo modal para projeto:', projectId);
+                
+                if (!projectId) {
+                    console.error('ID do projeto não fornecido');
+                    return;
+                }
+                
+                this.modal.style.display = 'block';
+                this.modal.classList.add('opening');
+                this.modalLoading.style.display = 'flex';
+                this.modalContent.style.display = 'none';
+                document.body.style.overflow = 'hidden';
+                
+                try {
+                    
+                    const response = await fetch(`${API_BASE_URL}/projects.php?id=${projectId}`);
+                    console.log('Resposta da API:', response.status);
+                    
+                    if (!response.ok) throw new Error('Projeto não encontrado');
+                    
+                    const project = await response.json();
+                    console.log('Dados do projeto:', project);
+                    this.currentProject = project;
+                    
+                    this.renderProject(project);
+                    
+                    this.modalLoading.style.display = 'none';
+                    this.modalContent.style.display = 'block';
+                    
+                } catch (error) {
+                    console.error('Erro ao carregar projeto:', error);
+                    this.showError('Não foi possível carregar os detalhes do projeto. Tente novamente.');
+                }
+            }
+            
+            renderProject(project) {
+                const categoryEl = document.getElementById('modalCategory');
+                if (categoryEl) categoryEl.textContent = project.category?.name || 'Projeto';
+                
+                const titleEl = document.getElementById('modalTitle');
+                if (titleEl) titleEl.textContent = project.title || 'Sem título';
+                
+                const descEl = document.getElementById('modalDescription');
+                if (descEl) {
+                    const description = project.detailed_description || project.description || 'Sem descrição disponível.';
+                    descEl.innerHTML = description.replace(/\n/g, '<br>');
+                }
+                
+                this.setupImages(project.images || []);
+                this.renderSpecs(project.specifications || {});
+                this.setupWhatsAppButton(project);
+            }
+            
+            setupImages(images) {
+                this.images = images.filter(img => img);
+                this.currentImageIndex = 0;
+                
+                if (this.images.length === 0) {
+                    this.mainImage.innerHTML = '<div class="modal-image-placeholder">📸</div>';
+                    this.mainImage.style.backgroundImage = '';
+                    this.hideImageNavigation();
+                    return;
+                }
+                
+                this.showCurrentImage();
+                
+                if (this.images.length > 1) {
+                    this.showImageNavigation();
+                    this.renderThumbnails();
+                } else {
+                    this.hideImageNavigation();
+                }
+            }
+            
+            showCurrentImage() {
+                if (this.images.length === 0) return;
+                
+                const currentImage = this.images[this.currentImageIndex];
+                const imageUrl = `upload/images/projects/${currentImage}`;
+                
+                this.mainImage.innerHTML = '';
+                this.mainImage.style.backgroundImage = `url('${imageUrl}')`;
+            }
+            
+            showImageNavigation() {
+                this.prevBtn.style.display = 'block';
+                this.nextBtn.style.display = 'block';
+                this.thumbnailsContainer.style.display = 'flex';
+            }
+            
+            hideImageNavigation() {
+                this.prevBtn.style.display = 'none';
+                this.nextBtn.style.display = 'none';
+                this.thumbnailsContainer.style.display = 'none';
+            }
+            
+            renderThumbnails() {
+                this.thumbnailsContainer.innerHTML = this.images.map((image, index) => {
+                    const imageUrl = `upload/images/projects/${image}`;
+                    const activeClass = index === this.currentImageIndex ? 'active' : '';
+                    return `
+                        <div class="modal-thumbnail ${activeClass}" 
+                            style="background-image: url('${imageUrl}')"
+                            data-index="${index}">
+                        </div>
+                    `;
+                }).join('');
+                
+                this.thumbnailsContainer.querySelectorAll('.modal-thumbnail').forEach((thumb, index) => {
+                    thumb.addEventListener('click', () => this.goToImage(index));
+                });
+            }
+            
+            prevImage() {
+                if (this.images.length <= 1) return;
+                this.currentImageIndex = this.currentImageIndex === 0 ? this.images.length - 1 : this.currentImageIndex - 1;
+                this.showCurrentImage();
+                this.updateThumbnails();
+            }
+            
+            nextImage() {
+                if (this.images.length <= 1) return;
+                this.currentImageIndex = this.currentImageIndex === this.images.length - 1 ? 0 : this.currentImageIndex + 1;
+                this.showCurrentImage();
+                this.updateThumbnails();
+            }
+            
+            goToImage(index) {
+                if (index >= 0 && index < this.images.length) {
+                    this.currentImageIndex = index;
+                    this.showCurrentImage();
+                    this.updateThumbnails();
+                }
+            }
+            
+            updateThumbnails() {
+                this.thumbnailsContainer.querySelectorAll('.modal-thumbnail').forEach((thumb, index) => {
+                    thumb.classList.toggle('active', index === this.currentImageIndex);
+                });
+            }
+            
+            // Dentro da classe ProjectModal, substitua a função renderSpecs
+
+            renderSpecs(specs) {
+                const specsContainer = document.getElementById('modalSpecs');
+                if (!specsContainer) return;
+
+                const specMapping = {
+                    power: { label: 'Potência', icon: 'fa-bolt' },
+                    panels: { label: 'Painéis', icon: 'fa-solar-panel' },
+                    area: { label: 'Área', icon: 'fa-expand-arrows-alt' },
+                    savings: { label: 'Economia Mensal', icon: 'fa-coins' },
+                    location: { label: 'Localização', icon: 'fa-map-marker-alt' },
+                    year: { label: 'Ano', icon: 'fa-calendar' }
+                };
+
+                const specItems = Object.entries(specs)
+                    .filter(([key, value]) => value && specMapping[key])
+                    .map(([key, value]) => {
+                        const spec = specMapping[key];
+                        return `
+                            <li class="spec-item">
+                                <div class="spec-item-icon">
+                                    <i class="fas ${spec.icon}"></i>
+                                </div>
+                                <div class="spec-item-content">
+                                    <span class="spec-item-label">${spec.label}</span>
+                                    <span class="spec-item-value">${value}</span>
+                                </div>
+                            </li>
+                        `;
+                    });
+                
+                if (specItems.length === 0) {
+                    specsContainer.innerHTML = '<p style="text-align: center; color: #666;">Especificações técnicas não disponíveis.</p>';
+                } else {
+                    // Envolve os itens em uma <ul>
+                    specsContainer.innerHTML = `<ul class="specs-list">${specItems.join('')}</ul>`;
+                }
+            }
+            
+            
+            setupWhatsAppButton(project) {
+                const whatsappBtn = document.getElementById('modalWhatsappBtn');
+                if (!whatsappBtn) return;
+                
+                const message = `Olá! Tenho interesse no projeto "${project.title}". Gostaria de solicitar um orçamento similar.`;
+                const encodedMessage = encodeURIComponent(message);
+                const whatsappUrl = `https://wa.me/556436011000?text=${encodedMessage}`;
+                
+                whatsappBtn.href = whatsappUrl;
+                whatsappBtn.target = '_blank';
+            }
+            
+            showError(message) {
+                this.modalLoading.innerHTML = `
+                    <div style="text-align: center; color: #d32f2f;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <h3>Erro</h3>
+                        <p>${message}</p>
+                        <button onclick="window.projectModal.close()" style="margin-top: 1rem; padding: 10px 20px; background: #d32f2f; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            Fechar
+                        </button>
+                    </div>
+                `;
+            }
+            
+            close() {
+                this.modal.style.display = 'none';
+                this.modal.classList.remove('opening');
+                document.body.style.overflow = 'auto';
+                this.currentProject = null;
+                this.images = [];
+                this.currentImageIndex = 0;
+            }
+            
+            isOpen() {
+                return this.modal && this.modal.style.display === 'block';
+            }
+        }
+
+        // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('Página carregada, inicializando...');
+            
+            // Inicializar modal
+            window.projectModal = new ProjectModal();
+            
+            // Carregar dados
             loadCategories();
             loadProjects();
-            document.querySelector('.close').addEventListener('click', closeModal);
-            window.addEventListener('click', e => { if (e.target == document.getElementById('projectModal')) closeModal(); });
-            document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
         });
+
+        // Função global para compatibilidade
+        function openModal(projectId) {
+            if (window.projectModal) {
+                window.projectModal.open(projectId);
+            }
+        }
     </script>
 </body>
 </html>

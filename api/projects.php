@@ -1,9 +1,13 @@
 <?php
+error_reporting(0); // Adicione esta linha
+
 header('Content-Type: application/json; charset=UTF-8');
 header('Access-Control-Allow-Origin: *');
 
 include_once '../config/database.php';
 include_once '../models/Project.php';
+
+// ... resto do código
 
 $database = new Database();
 $db = $database->getConnection();
@@ -33,17 +37,24 @@ function getProjectDetails($db, $project_id) {
 
 $project = new Project($db);
 
-// Se um ID for passado, busca um único projeto (para o modal)
-if (isset($_GET['id'])) {
+// Se um ID for passado via query parameter
+if (isset($_GET['id']) && !empty($_GET['id'])) {
     $project->id = $_GET['id'];
     $row = $project->readOne();
 
     if ($row) {
         $details = getProjectDetails($db, $row['id']);
         $project_item = [
-            "id" => $row['id'], "title" => $row['title'], "slug" => $row['slug'],
-            "category" => ["id" => $row['category_id'], "name" => $row['category_name'], "slug" => $row['category_slug']],
-            "description" => $row['description'], "detailed_description" => $row['detailed_description'],
+            "id" => $row['id'], 
+            "title" => $row['title'], 
+            "slug" => $row['slug'],
+            "category" => [
+                "id" => $row['category_id'], 
+                "name" => $row['category_name'], 
+                "slug" => $row['category_slug']
+            ],
+            "description" => $row['description'], 
+            "detailed_description" => $row['detailed_description'],
             "specifications" => $details['specifications'],
             "images" => $details['images'],
             "featured" => (bool)$row['featured']
@@ -54,7 +65,7 @@ if (isset($_GET['id'])) {
         echo json_encode(["message" => "Projeto não encontrado."]);
     }
 } else {
-    // Se não houver ID, busca todos os projetos (para a galeria)
+    // Buscar todos os projetos
     $category_slug = isset($_GET['category']) ? $_GET['category'] : null;
     $stmt = $project->read($category_slug);
     
@@ -62,8 +73,14 @@ if (isset($_GET['id'])) {
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $details = getProjectDetails($db, $row['id']);
         $project_item = [
-            "id" => $row['id'], "title" => $row['title'], "slug" => $row['slug'],
-            "category" => ["id" => $row['category_id'], "name" => $row['category_name'], "slug" => $row['category_slug']],
+            "id" => $row['id'], 
+            "title" => $row['title'], 
+            "slug" => $row['slug'],
+            "category" => [
+                "id" => $row['category_id'], 
+                "name" => $row['category_name'], 
+                "slug" => $row['category_slug']
+            ],
             "description" => $row['description'],
             "specifications" => $details['specifications'],
             "images" => $details['images'],

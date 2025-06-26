@@ -426,7 +426,7 @@ try {
                         <div class="project-content">
                             <div class="project-category"><?php echo htmlspecialchars($proj['category_name']); ?></div>
                             <div class="project-title"><?php echo htmlspecialchars($proj['title']); ?></div>
-                            <div class="project-description"><?php echo htmlspecialchars(substr($proj['description'], 0, 100)); ?>...</div>
+                            <div class="project-description"><?php echo htmlspecialchars(substr($proj['description'], 0, 100)); ?></div>
                             
                             <div class="project-specs">
                                 <div class="spec-item"><i class="fas fa-bolt"></i> <?php echo htmlspecialchars($proj['power'] ?? 'N/A'); ?></div>

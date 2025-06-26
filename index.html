@@ -744,6 +744,531 @@
             grid-template-columns: 1fr 1fr;
             gap: 1rem;
         }
+
+        /* Modal de Projeto */
+        .project-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            animation: modalFadeIn 0.3s ease;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .project-modal-content {
+            position: relative;
+            margin: 2% auto;
+            width: 90%;
+            max-width: 1000px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            animation: modalSlideIn 0.4s ease;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+
+        @keyframes modalSlideIn {
+            from { 
+                transform: translateY(-50px) scale(0.9); 
+                opacity: 0; 
+            }
+            to { 
+                transform: translateY(0) scale(1); 
+                opacity: 1; 
+            }
+        }
+
+        .project-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: white;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10;
+            width: 45px;
+            height: 45px;
+            background: rgba(0,0,0,0.7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .project-modal-close:hover {
+            background: var(--danger-color, #f44336);
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        /* Header da Modal com Galeria de Imagens */
+        .modal-image-gallery {
+            position: relative;
+            height: 450px;
+            background: linear-gradient(45deg, var(--primary-color, #FFA500), var(--secondary-color, #FF6B35));
+            overflow: hidden;
+        }
+
+        .modal-image-main {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+        }
+
+        .modal-image-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            font-size: 150px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* Navegação de Imagens */
+        .modal-image-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.7);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            display: none; /* Só aparece se houver múltiplas imagens */
+        }
+
+        .modal-image-nav:hover {
+            background: rgba(0,0,0,0.9);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .modal-image-prev {
+            left: 20px;
+        }
+
+        .modal-image-next {
+            right: 20px;
+        }
+
+        /* Miniaturas das Imagens */
+        .modal-image-thumbnails {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            max-width: 80%;
+            overflow-x: auto;
+            padding: 10px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 25px;
+            display: none; /* Só aparece se houver múltiplas imagens */
+        }
+
+        .modal-thumbnail {
+            width: 60px;
+            height: 40px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            flex-shrink: 0;
+        }
+
+        .modal-thumbnail:hover,
+        .modal-thumbnail.active {
+            opacity: 1;
+            border-color: white;
+            transform: scale(1.1);
+        }
+
+        /* Conteúdo da Modal */
+        .project-modal-body {
+            padding: 2.5rem;
+        }
+
+        .modal-project-header {
+            margin-bottom: 2rem;
+        }
+
+        .modal-project-category {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color, #FFA500), var(--secondary-color, #FF6B35));
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-project-title {
+            font-size: 2.2rem;
+            color: var(--dark-color, #1a1a1a);
+            margin-bottom: 1rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .modal-project-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 2.5rem;
+        }
+
+
+
+
+
+
+        .modal-project-specs {
+            display: block; /* Remove o grid layout */
+            margin-bottom: 2.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .specs-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            column-count: 2; /* Cria duas colunas */
+            column-gap: 2rem;
+        }
+       .spec-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f5f5f5;
+            break-inside: avoid-column; /* Evita que um item quebre entre colunas */
+        }
+        .spec-item:last-child {
+            border-bottom: none;
+        }
+        .spec-item-icon {
+            font-size: 1.5rem; /* Ícone um pouco menor */
+            color: var(--primary-color);
+            background-color: rgba(255, 165, 0, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .spec-item-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        .spec-item-label {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .spec-item-value {
+            font-size: 1.1rem;
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+
+
+
+
+
+
+
+
+
+
+        .modal-spec-card {
+            background: var(--light-color, #f5f5f5);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            border-left: 4px solid var(--primary-color, #FFA500);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-spec-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color, #FFA500), var(--secondary-color, #FF6B35));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .modal-spec-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .modal-spec-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .modal-spec-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color, #FFA500);
+            margin-bottom: 0.8rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .modal-spec-label {
+            font-weight: 600;
+            color: var(--dark-color, #1a1a1a);
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .modal-spec-value {
+            color: #666;
+            font-size: 1.1rem;
+            font-weight: 500;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Botões de Ação */
+        .modal-project-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #eee;
+        }
+
+        .modal-action-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+        }
+
+        .modal-action-primary {
+            background: linear-gradient(135deg, var(--primary-color, #FFA500), var(--secondary-color, #FF6B35));
+            color: white;
+        }
+
+        .modal-action-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255,165,0,0.4);
+            color: white;
+            text-decoration: none;
+        }
+
+        .modal-action-secondary {
+            background: white;
+            color: var(--primary-color, #FFA500);
+            border: 2px solid var(--primary-color, #FFA500);
+        }
+
+        .modal-action-secondary:hover {
+            background: var(--primary-color, #FFA500);
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Loading State */
+        .modal-loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            flex-direction: column;
+            gap: 1rem;
+            background: white;
+            border-radius: 20px;
+        }
+
+        .modal-loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color, #FFA500);
+            border-radius: 50%;
+            animation: modalSpin 1s linear infinite;
+        }
+
+        @keyframes modalSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+
+
+        @media (max-width: 768px) {
+            .specs-list {
+                column-count: 1; /* Uma coluna em telas menores */
+            }
+        }
+
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .project-modal-content {
+                width: 95%;
+                margin: 5% auto;
+            }
+            
+            .modal-image-gallery {
+                height: 300px;
+            }
+            
+            .project-modal-body {
+                padding: 1.5rem;
+            }
+            
+            .modal-project-title {
+                font-size: 1.8rem;
+            }
+            
+            .modal-project-specs {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+            
+            .modal-spec-card {
+                padding: 1rem;
+            }
+            
+            .modal-spec-icon {
+                font-size: 2rem;
+            }
+            
+            .modal-action-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .modal-project-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal-project-specs {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-image-gallery {
+                height: 250px;
+            }
+            
+            .modal-project-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Animações de entrada mais suaves */
+        .project-modal.opening .project-modal-content {
+            animation: modalSlideInMobile 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes modalSlideInMobile {
+            0% { 
+                transform: translateY(100px) scale(0.9); 
+                opacity: 0; 
+            }
+            100% { 
+                transform: translateY(0) scale(1); 
+                opacity: 1; 
+            }
+        }
+
+        /* Cursor pointer nos cards */
+        .project-card,
+        .carousel-project-card {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* Efeito de hover mais pronunciado */
+        .project-card:hover,
+        .carousel-project-card:hover {
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        /* Loading melhorado */
+        .modal-loading {
+            background: white;
+            border-radius: 20px;
+        }
+
+        /* Transição suave para imagens */
+        .modal-image-main {
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Scroll suave para thumbnails */
+        .modal-image-thumbnails {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.5) transparent;
+        }
+
+        .modal-image-thumbnails::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .modal-image-thumbnails::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+        }
+
+        .modal-image-thumbnails::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.5);
+            border-radius: 2px;
+        }
     </style>
 </head>
 <body>
@@ -983,6 +1508,69 @@
     <a href="https://wa.me/556436011000" class="whatsapp-float" target="_blank" title="Fale conosco no WhatsApp">
         <i class="fab fa-whatsapp"></i>
     </a>
+    
+    <!-- Modal de Projeto - Adicionar antes do </body> -->
+    <div id="projectModal" class="project-modal">
+        <div class="project-modal-content">
+            <span class="project-modal-close">&times;</span>
+            
+            <!-- Galeria de Imagens -->
+            <div class="modal-image-gallery">
+                <div class="modal-image-main" id="modalMainImage">
+                    <div class="modal-image-placeholder">📸</div>
+                </div>
+                
+                <!-- Navegação de Imagens (só aparece se houver múltiplas) -->
+                <button class="modal-image-nav modal-image-prev" id="modalImagePrev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="modal-image-nav modal-image-next" id="modalImageNext">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                
+                <!-- Miniaturas (só aparece se houver múltiplas) -->
+                <div class="modal-image-thumbnails" id="modalImageThumbnails">
+                    <!-- Miniaturas serão inseridas aqui via JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Conteúdo -->
+            <div class="project-modal-body">
+                <!-- Loading State -->
+                <div class="modal-loading" id="modalLoading">
+                    <div class="modal-loading-spinner"></div>
+                    <p>Carregando detalhes do projeto...</p>
+                </div>
+                
+                <!-- Conteúdo do Projeto -->
+                <div id="modalContent" style="display: none;">
+                    <div class="modal-project-header">
+                        <div class="modal-project-category" id="modalCategory"></div>
+                        <h2 class="modal-project-title" id="modalTitle"></h2>
+                        <div class="modal-project-description" id="modalDescription"></div>
+                    </div>
+                    
+                    <!-- Especificações -->
+                    <div class="modal-project-specs" id="modalSpecs">
+                        <!-- Especificações serão inseridas aqui via JavaScript -->
+                    </div>
+                    
+                    <!-- Botões de Ação -->
+                    <div class="modal-project-actions">
+                        <a href="#" class="modal-action-btn modal-action-primary" id="modalWhatsappBtn">
+                            <i class="fab fa-whatsapp"></i>
+                            Solicitar Orçamento
+                        </a>
+                        <a href="galeria.html" class="modal-action-btn modal-action-secondary">
+                            <i class="fas fa-images"></i>
+                            Ver Mais Projetos
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         function toggleMenu() {
@@ -1109,6 +1697,18 @@
                 // Mostrar carrossel
                 document.getElementById('projectsCarouselContainer').style.display = 'block';
             }
+
+
+
+
+
+
+
+
+
+
+
+
             
             renderProjects() {
                 if (!this.track || !this.projects.length) return;
@@ -1118,7 +1718,7 @@
                     const hasImage = imageUrl ? 'has-image' : '';
                     
                     return `
-                    <a href="galeria.html" class="carousel-project-card">
+                    <div class="carousel-project-card" data-project-id="${project.id}">
                         <div class="carousel-project-image ${hasImage}" style="${imageUrl ? `background-image: url('${imageUrl}');` : ''}">
                             <div class="carousel-project-view-icon">
                                 <i class="fas fa-search-plus"></i>
@@ -1136,10 +1736,18 @@
                                 ${project.specifications.year ? `<div class="spec-item"><i class="fas fa-calendar"></i> ${project.specifications.year}</div>` : ''}
                             </div>
                         </div>
-                    </a>
+                    </div>
                     `;
                 }).join('');
             }
+
+
+
+
+
+
+
+
             
             updateCarousel() {
                 if (!this.track || !this.projects.length) return;
@@ -1324,6 +1932,401 @@
         document.addEventListener('DOMContentLoaded', function() {
             loadFeaturedProjects();
         });
+
+        // Sistema de Modal de Projetos
+        class ProjectModal {
+            constructor() {
+                this.modal = document.getElementById('projectModal');
+                this.modalContent = document.getElementById('modalContent');
+                this.modalLoading = document.getElementById('modalLoading');
+                this.closeBtn = document.querySelector('.project-modal-close');
+                
+                // Elementos da galeria de imagens
+                this.mainImage = document.getElementById('modalMainImage');
+                this.prevBtn = document.getElementById('modalImagePrev');
+                this.nextBtn = document.getElementById('modalImageNext');
+                this.thumbnailsContainer = document.getElementById('modalImageThumbnails');
+                
+                // Estado atual
+                this.currentProject = null;
+                this.currentImageIndex = 0;
+                this.images = [];
+                
+                this.init();
+            }
+            
+            init() {
+                // Event listeners
+                this.closeBtn?.addEventListener('click', () => this.close());
+                this.modal?.addEventListener('click', (e) => {
+                    if (e.target === this.modal) this.close();
+                });
+                
+                // Navegação de imagens
+                this.prevBtn?.addEventListener('click', () => this.prevImage());
+                this.nextBtn?.addEventListener('click', () => this.nextImage());
+                
+                // Atalhos do teclado
+                document.addEventListener('keydown', (e) => {
+                    if (!this.isOpen()) return;
+                    
+                    switch(e.key) {
+                        case 'Escape':
+                            this.close();
+                            break;
+                        case 'ArrowLeft':
+                            this.prevImage();
+                            break;
+                        case 'ArrowRight':
+                            this.nextImage();
+                            break;
+                    }
+                });
+                
+                // Adicionar event listeners aos cards existentes
+                this.attachCardListeners();
+            }
+            
+            attachCardListeners() {
+                // Para cards do carrossel na página inicial
+                document.querySelectorAll('.carousel-project-card').forEach(card => {
+                    card.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const projectId = this.extractProjectId(card);
+                        if (projectId) this.open(projectId);
+                    });
+                });
+                
+                // Para cards da galeria
+                document.querySelectorAll('.project-card').forEach(card => {
+                    card.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const projectId = this.extractProjectId(card);
+                        if (projectId) this.open(projectId);
+                    });
+                });
+            }
+            
+            extractProjectId(element) {
+                // Tentar extrair ID do atributo data-id ou onclick
+                const dataId = element.getAttribute('data-project-id');
+                if (dataId) return dataId;
+                
+                // Buscar no onclick (método atual)
+                const onclick = element.getAttribute('onclick');
+                if (onclick) {
+                    const match = onclick.match(/openModal\((\d+)\)/);
+                    if (match) return match[1];
+                }
+                
+                // Buscar em elementos filhos
+                const titleElement = element.querySelector('.project-title, .carousel-project-title');
+                if (titleElement) {
+                    return titleElement.getAttribute('data-project-id');
+                }
+                
+                return null;
+            }
+            
+            async open(projectId) {
+                console.log('Tentando abrir modal para o Projeto ID:', projectId);
+                if (!projectId) {
+                    console.error('ID do projeto não fornecido');
+                    return;
+                }
+                
+                // Mostrar modal e loading
+                this.modal.style.display = 'block';
+                this.modal.classList.add('opening');
+                this.modalLoading.style.display = 'flex';
+                this.modalContent.style.display = 'none';
+                document.body.style.overflow = 'hidden';
+                
+                try {
+                    // Buscar dados do projeto
+                    
+                    const response = await fetch(`/api/projects.php?id=${projectId}`);
+                    if (!response.ok) throw new Error('Projeto não encontrado');
+                    
+                    const project = await response.json();
+                    this.currentProject = project;
+                    
+                    // Renderizar conteúdo
+                    this.renderProject(project);
+                    
+                    // Esconder loading e mostrar conteúdo
+                    this.modalLoading.style.display = 'none';
+                    this.modalContent.style.display = 'block';
+                    
+                } catch (error) {
+                    console.error('Erro ao carregar projeto:', error);
+                    this.showError('Não foi possível carregar os detalhes do projeto. Tente novamente.');
+                }
+            }
+            
+            renderProject(project) {
+                // Categoria
+                const categoryEl = document.getElementById('modalCategory');
+                if (categoryEl) categoryEl.textContent = project.category?.name || 'Projeto';
+                
+                // Título
+                const titleEl = document.getElementById('modalTitle');
+                if (titleEl) titleEl.textContent = project.title || 'Sem título';
+                
+                // Descrição
+                const descEl = document.getElementById('modalDescription');
+                if (descEl) {
+                    const description = project.detailed_description || project.description || 'Sem descrição disponível.';
+                    descEl.innerHTML = description.replace(/\n/g, '<br>');
+                }
+                
+                // Imagens
+                this.setupImages(project.images || []);
+                
+                // Especificações
+                this.renderSpecs(project.specifications || {});
+                
+                // Botão WhatsApp
+                this.setupWhatsAppButton(project);
+            }
+            
+            setupImages(images) {
+                this.images = images.filter(img => img); // Remove imagens vazias
+                this.currentImageIndex = 0;
+                
+                if (this.images.length === 0) {
+                    // Sem imagens - mostrar placeholder
+                    this.mainImage.innerHTML = '<div class="modal-image-placeholder">📸</div>';
+                    this.mainImage.style.backgroundImage = '';
+                    this.hideImageNavigation();
+                    return;
+                }
+                
+                // Uma imagem ou mais
+                this.showCurrentImage();
+                
+                if (this.images.length > 1) {
+                    this.showImageNavigation();
+                    this.renderThumbnails();
+                } else {
+                    this.hideImageNavigation();
+                }
+            }
+            
+            showCurrentImage() {
+                if (this.images.length === 0) return;
+                
+                const currentImage = this.images[this.currentImageIndex];
+                const imageUrl = `upload/images/projects/${currentImage}`;
+                
+                this.mainImage.innerHTML = '';
+                this.mainImage.style.backgroundImage = `url('${imageUrl}')`;
+            }
+            
+            showImageNavigation() {
+                this.prevBtn.style.display = 'block';
+                this.nextBtn.style.display = 'block';
+                this.thumbnailsContainer.style.display = 'flex';
+            }
+            
+            hideImageNavigation() {
+                this.prevBtn.style.display = 'none';
+                this.nextBtn.style.display = 'none';
+                this.thumbnailsContainer.style.display = 'none';
+            }
+            
+            renderThumbnails() {
+                this.thumbnailsContainer.innerHTML = this.images.map((image, index) => {
+                    const imageUrl = `upload/images/projects/${image}`;
+                    const activeClass = index === this.currentImageIndex ? 'active' : '';
+                    return `
+                        <div class="modal-thumbnail ${activeClass}" 
+                            style="background-image: url('${imageUrl}')"
+                            data-index="${index}">
+                        </div>
+                    `;
+                }).join('');
+                
+                // Event listeners para miniaturas
+                this.thumbnailsContainer.querySelectorAll('.modal-thumbnail').forEach((thumb, index) => {
+                    thumb.addEventListener('click', () => this.goToImage(index));
+                });
+            }
+            
+            prevImage() {
+                if (this.images.length <= 1) return;
+                this.currentImageIndex = this.currentImageIndex === 0 ? this.images.length - 1 : this.currentImageIndex - 1;
+                this.showCurrentImage();
+                this.updateThumbnails();
+            }
+            
+            nextImage() {
+                if (this.images.length <= 1) return;
+                this.currentImageIndex = this.currentImageIndex === this.images.length - 1 ? 0 : this.currentImageIndex + 1;
+                this.showCurrentImage();
+                this.updateThumbnails();
+            }
+            
+            goToImage(index) {
+                if (index >= 0 && index < this.images.length) {
+                    this.currentImageIndex = index;
+                    this.showCurrentImage();
+                    this.updateThumbnails();
+                }
+            }
+            
+            updateThumbnails() {
+                this.thumbnailsContainer.querySelectorAll('.modal-thumbnail').forEach((thumb, index) => {
+                    thumb.classList.toggle('active', index === this.currentImageIndex);
+                });
+            }
+            
+            // Dentro da classe ProjectModal, substitua a função renderSpecs
+
+            renderSpecs(specs) {
+                const specsContainer = document.getElementById('modalSpecs');
+                if (!specsContainer) return;
+
+                const specMapping = {
+                    power: { label: 'Potência', icon: 'fa-bolt' },
+                    panels: { label: 'Painéis', icon: 'fa-solar-panel' },
+                    area: { label: 'Área', icon: 'fa-expand-arrows-alt' },
+                    savings: { label: 'Economia Mensal', icon: 'fa-coins' },
+                    location: { label: 'Localização', icon: 'fa-map-marker-alt' },
+                    year: { label: 'Ano', icon: 'fa-calendar' }
+                };
+
+                const specItems = Object.entries(specs)
+                    .filter(([key, value]) => value && specMapping[key])
+                    .map(([key, value]) => {
+                        const spec = specMapping[key];
+                        return `
+                            <li class="spec-item">
+                                <div class="spec-item-icon">
+                                    <i class="fas ${spec.icon}"></i>
+                                </div>
+                                <div class="spec-item-content">
+                                    <span class="spec-item-label">${spec.label}</span>
+                                    <span class="spec-item-value">${value}</span>
+                                </div>
+                            </li>
+                        `;
+                    });
+                
+                if (specItems.length === 0) {
+                    specsContainer.innerHTML = '<p style="text-align: center; color: #666;">Especificações técnicas não disponíveis.</p>';
+                } else {
+                    // Envolve os itens em uma <ul>
+                    specsContainer.innerHTML = `<ul class="specs-list">${specItems.join('')}</ul>`;
+                }
+            }
+            
+            setupWhatsAppButton(project) {
+                const whatsappBtn = document.getElementById('modalWhatsappBtn');
+                if (!whatsappBtn) return;
+                
+                const message = `Olá! Tenho interesse no projeto "${project.title}". Gostaria de solicitar um orçamento similar.`;
+                const encodedMessage = encodeURIComponent(message);
+                const whatsappUrl = `https://wa.me/556436011000?text=${encodedMessage}`;
+                
+                whatsappBtn.href = whatsappUrl;
+                whatsappBtn.target = '_blank';
+            }
+            
+            showError(message) {
+                this.modalLoading.innerHTML = `
+                    <div style="text-align: center; color: #d32f2f;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <h3>Erro</h3>
+                        <p>${message}</p>
+                        <button onclick="projectModal.close()" style="margin-top: 1rem; padding: 10px 20px; background: #d32f2f; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            Fechar
+                        </button>
+                    </div>
+                `;
+            }
+            
+            close() {
+                this.modal.style.display = 'none';
+                this.modal.classList.remove('opening');
+                document.body.style.overflow = 'auto';
+                this.currentProject = null;
+                this.images = [];
+                this.currentImageIndex = 0;
+            }
+            
+            isOpen() {
+                return this.modal && this.modal.style.display === 'block';
+            }
+        }
+
+        // ... (todo o código JS anterior) ...
+
+        // Inicializar modal quando a página carregar
+        let projectModal; // Mova a declaração para fora
+        document.addEventListener('DOMContentLoaded', function() {
+            projectModal = new ProjectModal(); // Inicialize aqui
+            loadFeaturedProjects(); // Carregue os projetos
+        });
+
+        // Função global para compatibilidade com onclick existente
+        function openModal(projectId) {
+            if (projectModal) {
+                projectModal.open(projectId);
+            }
+        }
+
+        // Função para carregar projetos em destaque - CORRIGIDA
+        async function loadFeaturedProjects() {
+            const loading = document.getElementById('projectsLoading');
+            if (!loading) return;
+
+            try {
+                loading.style.display = 'block';
+                const response = await fetch('/api/projects');
+                const data = await response.json();
+                loading.style.display = 'none';
+
+                if (data.records && data.records.length > 0) {
+                    const featuredProjects = data.records.filter(project => project.featured === true);
+                    
+                    if (featuredProjects.length > 0) {
+                        const carousel = new ProjectsCarousel();
+                        carousel.loadProjects(featuredProjects);
+
+                        // ADICIONE ESTA LINHA:
+                        // Reanexa os listeners do modal DEPOIS que o carrossel renderizou os cards
+                        if (projectModal) {
+                            projectModal.attachCardListeners();
+                        }
+
+                    } else {
+                        showNoFeaturedState();
+                    }
+                } else {
+                    showEmptyState();
+                }
+            } catch (error) {
+                console.error("Erro ao carregar projetos:", error);
+                loading.style.display = 'none';
+                showErrorState();
+            }
+        }
+
+        
+
+
+
+
+
+
+
+
+
+
+
+        
+
     </script>
 </body>
 </html>
