@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOL TECH ENERGIA SOLAR - Soluções em Energia Solar e Parceria WEG</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #FFA500;
+            --secondary-color: #FF6B35;
+            --dark-color: #1a1a1a;
+            --light-color: #f5f5f5;
+            --text-color: #333;
+            --weg-blue: #005cb8;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            overflow-x: hidden;
+            background-color: var(--light-color);
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--dark-color) 0%, #2a2a2a 100%);
+            color: white;
+            padding: 0.5rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            background-color: rgba(26, 26, 26, 0.95);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-img {
+            height: 55px;
+            width: auto;
+            border-radius: 50%;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 5px 0;
+            font-weight: 500;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover, .nav-links a:focus {
+            color: var(--primary-color);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23FFA500"/><stop offset="100%" style="stop-color:%23FF6B35"/></linearGradient></defs><rect width="1200" height="800" fill="url(%23g)"/><circle cx="200" cy="200" r="150" fill="rgba(255,255,255,0.1)"/><circle cx="1000" cy="600" r="200" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 2rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255,165,0,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 0; height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .cta-button:hover::before { width: 300px; height: 300px; }
+        .cta-button:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(255,165,0,0.5); }
+
+        /* Sections */
+        section { padding: 80px 0; position: relative; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        h2 {
+            font-size: 2.8rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+            color: var(--dark-color);
+            font-weight: 700;
+        }
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+        }
+
+        /* About Section */
+        #about { background: white; }
+        .about-content { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin-top: 3rem; }
+        .about-text h3 { color: var(--primary-color); font-size: 1.8rem; margin-bottom: 1rem; }
+        .about-image {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            height: 400px; border-radius: 20px; position: relative;
+            overflow: hidden; box-shadow: var(--shadow);
+            animation: fadeInRight 1s ease;
+        }
+        .about-image::before {
+            content: '☀️'; position: absolute; font-size: 200px;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            opacity: 0.3; animation: rotate 20s linear infinite;
+        }
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Services Section */
+        #services { background: var(--light-color); }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .service-card {
+            background: white; padding: 2.5rem; border-radius: 20px;
+            text-align: center; transition: all 0.3s ease;
+            position: relative; overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        .service-card::before {
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 100%; height: 5px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            transform: scaleX(0); transform-origin: left; transition: transform 0.3s ease;
+        }
+        .service-card:hover::before { transform: scaleX(1); }
+        .service-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0,0,0,0.15); }
+        .service-icon {
+            font-size: 50px; margin-bottom: 1rem; display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .service-card h3 { font-size: 1.5rem; margin-bottom: 1rem; }
+
+        /* WEG Section */
+        #weg { background: white; overflow: hidden; }
+        .weg-logo-container { text-align: center; margin-bottom: 2rem; }
+        .weg-logo-container img { max-width: 250px; height: auto; }
+        .weg-badge {
+            display: inline-block; padding: 15px 30px;
+            background: linear-gradient(135deg, var(--weg-blue), #0074d9);
+            color: white; font-size: 1.5rem; font-weight: bold;
+            border-radius: 15px; margin: 1rem 0 2rem 0;
+            box-shadow: 0 10px 30px rgba(0,92,184,0.3);
+        }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .product-card {
+            background: white; border-radius: 15px; padding: 2rem;
+            text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease; border-top: 4px solid var(--weg-blue);
+        }
+        .product-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0,92,184,0.2); }
+        .product-icon { font-size: 50px; margin-bottom: 1rem; color: var(--weg-blue); }
+        .product-card h3 { color: var(--dark-color); margin-bottom: 0.5rem; }
+
+        /* Projects Section */
+        #projects { background: var(--light-color); }
+        .projects-intro {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .projects-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .project-preview-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .project-preview-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+        .project-image {
+            height: 200px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            position: relative;
+            overflow: hidden;
+        }
+        .project-image::before {
+            content: '📸';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 60px;
+            opacity: 0.7;
+        }
+        .project-card-content {
+            padding: 1.5rem;
+        }
+        .project-type {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+        .view-all-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255,165,0,0.3);
+        }
+        .view-all-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255,165,0,0.5);
+        }
+
+        /* Location Section */
+        #location { background: white; }
+        .location-content { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin-top: 3rem; }
+        .location-info { background: var(--light-color); padding: 2rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        .location-info h3 { color: var(--primary-color); margin-bottom: 1rem; font-size: 1.5rem; }
+        .location-info p { margin-bottom: 0.5rem; display: flex; align-items: center; gap: 10px; }
+        .map-container { height: 400px; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+
+        /* Contact Section */
+        #contact { background: linear-gradient(135deg, var(--dark-color) 0%, #2a2a2a 100%); color: white; text-align: center; }
+        #contact h2 { color: white; }
+        .contact-form {
+            background: white; color: var(--text-color);
+            padding: 2.5rem; border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin: 3rem auto; max-width: 800px; text-align: left;
+        }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 12px 15px;
+            border: 2px solid #e1e1e1; border-radius: 8px;
+            font-size: 16px; transition: border-color 0.3s ease;
+        }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--primary-color); }
+        .form-group textarea { resize: vertical; min-height: 120px; }
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white; padding: 15px 40px; border: none;
+            border-radius: 50px; font-size: 1.1rem; font-weight: bold;
+            cursor: pointer; transition: all 0.3s ease; width: 100%;
+        }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(255,165,0,0.3); }
+        .contact-buttons { display: flex; gap: 2rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap; }
+        .contact-button {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 15px 30px; background: white; color: var(--dark-color);
+            text-decoration: none; border-radius: 50px; font-weight: bold;
+            transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(255,255,255,0.2);
+        }
+        .contact-button:hover {
+            transform: translateY(-5px); box-shadow: 0 10px 25px rgba(255,255,255,0.3);
+            background: var(--primary-color); color: white;
+        }
+
+        /* Footer */
+        footer { background: #111; color: white; padding: 3rem 0 2rem; text-align: center; }
+        .footer-content { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        .company-info { margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid #333; }
+        .company-info h3 { color: var(--primary-color); margin-bottom: 1rem; }
+        .social-links { display: flex; gap: 1rem; justify-content: center; margin-top: 1rem; margin-bottom: 2rem; }
+        .social-links a {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 50px; height: 50px; background: var(--primary-color);
+            color: white; border-radius: 50%; text-decoration: none;
+            transition: all 0.3s ease; font-size: 24px;
+        }
+        .social-links a:hover { background: var(--secondary-color); transform: translateY(-5px); }
+        
+        /* Floating WhatsApp */
+        .whatsapp-float {
+            position: fixed; bottom: 20px; right: 20px;
+            background: #25D366; color: white; width: 60px; height: 60px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 30px; text-decoration: none;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            z-index: 1000; transition: all 0.3s ease;
+            animation: pulse-whatsapp 2s infinite;
+        }
+        .whatsapp-float:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6); }
+        @keyframes pulse-whatsapp {
+            0% { box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); }
+            50% { box-shadow: 0 4px 15px rgba(37, 211, 102, 0.8); }
+            100% { box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .nav-links {
+                gap: 1.5rem;
+            }
+            
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .hero p {
+                font-size: 1.3rem;
+            }
+            
+            h2 {
+                font-size: 2.4rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed; left: -100%; top: 70px;
+                flex-direction: column; background: rgba(26, 26, 26, 0.98);
+                width: 100%; text-align: center; transition: 0.3s;
+                padding: 2rem 0; backdrop-filter: blur(10px);
+            }
+            .nav-links.active { left: 0; }
+            .menu-toggle { display: flex; }
+            
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1.2rem; }
+            
+            .about-content, .location-content { grid-template-columns: 1fr; }
+            
+            .contact-buttons { flex-direction: column; align-items: center; }
+            
+            h2 { font-size: 2.2rem; }
+            
+            .contact-form .form-row { grid-template-columns: 1fr !important; }
+            
+            .services-grid { grid-template-columns: 1fr; }
+            .products-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+            .projects-preview { grid-template-columns: 1fr; }
+            
+            .weg-logo-container img { max-width: 200px; }
+            
+            section { padding: 60px 0; }
+            
+            .container { padding: 0 1rem; }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1.1rem; }
+            
+            .logo { font-size: 1.2rem; }
+            .logo-img { height: 45px; }
+            
+            .cta-button { padding: 12px 30px; font-size: 1rem; }
+            
+            h2 { font-size: 1.8rem; }
+            
+            .service-card, .product-card { padding: 1.5rem; }
+            
+            .contact-form { padding: 1.5rem; margin: 2rem auto; }
+            
+            .location-info { padding: 1.5rem; }
+            
+            .whatsapp-float { width: 50px; height: 50px; font-size: 24px; }
+        }
+
+        /* Animations */
+        @keyframes fadeInLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes fadeInRight { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+        .fade-in { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+        .fade-in.active { opacity: 1; transform: translateY(0); }
+
+        /* Form responsive grid */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#home" class="logo">
+                <img src="logo.png" alt="SOL TECH Logo" class="logo-img">
+                SOL TECH
+            </a>
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Início</a></li>
+                <li><a href="#about">Sobre</a></li>
+                <li><a href="#services">Áreas de Atuação</a></li>
+                <li><a href="#weg">Soluções WEG</a></li>
+                <li><a href="#projects">Nossos Projetos</a></li>
+                <li><a href="#location">Localização</a></li>
+                <li><a href="#contact">Contato</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="hero-content fade-in">
+            <h1>SOL TECH ENERGIA SOLAR</h1>
+            <p>Transformando luz solar em economia e sustentabilidade com a força WEG</p>
+            <a href="https://wa.me/556436011000" class="cta-button" target="_blank">
+                Solicite um Orçamento
+            </a>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <h2>Sobre a SOL TECH</h2>
+            <div class="about-content fade-in">
+                <div class="about-text">
+                    <h3>Energia limpa e renovável para seu futuro</h3>
+                    <p>A SOL TECH ENERGIA SOLAR é líder em soluções de energia fotovoltaica em São Luís de Montes Belos e região. Com anos de experiência e centenas de projetos realizados, oferecemos as melhores e mais completas soluções em energia solar.</p>
+                    <p>Nossa missão é tornar a energia solar acessível, proporcionando economia real na conta de luz e contribuindo para um futuro mais sustentável para todos.</p>
+                    <p><strong>CNPJ:</strong> 10.619.680/0001-80</p>
+                </div>
+                <div class="about-image"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="services">
+        <div class="container">
+            <h2>Nossas Áreas de Atuação</h2>
+            <div class="services-grid fade-in">
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-home"></i></div>
+                    <h3>Residencial e Comercial</h3>
+                    <p>Reduza a conta de luz da sua casa, condomínio ou empresa. Soluções completas com a confiabilidade WEG para máxima economia e valorização do seu imóvel.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-industry"></i></div>
+                    <h3>Industrial e Grandes Usinas</h3>
+                    <p>Projetos de alta performance para fábricas e indústrias. Otimize seus custos de produção e invista em sustentabilidade com sistemas robustos e eficientes.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-tractor"></i></div>
+                    <h3>Agronegócio</h3>
+                    <p>Energia para o campo não parar. Desenvolvemos projetos para pivôs de irrigação, granjas, e outras operações rurais, garantindo sua produtividade com energia limpa.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="weg" class="weg-section">
+        <div class="container">
+            <div class="weg-logo-container">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/WEG_logo.svg/2560px-WEG_logo.svg.png" alt="WEG Logo">
+            </div>
+            <h2>Integradores Autorizados WEG Solar</h2>
+            <div class="weg-content fade-in" style="text-align: center;">
+                <div class="weg-badge">
+                    <i class="fas fa-certificate" style="margin-right: 10px;"></i>
+                    Integradores Autorizados WEG
+                </div>
+                 <p style="font-size: 1.1rem; max-width: 800px; margin: 0 auto 3rem auto; line-height: 1.8;">
+                    Como <strong>Integradores Autorizados</strong>, combinamos a tradição e a tecnologia de ponta da WEG com nossa expertise local. Oferecemos soluções completas com a garantia de uma das marcas mais respeitadas do mundo, assegurando máxima performance e tranquilidade para seu investimento.
+                </p>
+
+                <h3 style="text-align: center; margin: 3rem 0 2rem 0; color: var(--dark-color); font-size: 1.8rem;">
+                    <i class="fas fa-solar-panel" style="margin-right: 10px; color: var(--primary-color);"></i>
+                    Linha Completa de Soluções WEG
+                </h3>
+                
+                <div class="products-grid">
+                    <div class="product-card">
+                        <div class="product-icon"><i class="fas fa-solar-panel"></i></div>
+                        <h3>Módulos e Inversores</h3>
+                        <p>Trabalhamos com os mais avançados painéis solares e inversores WEG, garantindo máxima geração de energia e durabilidade para o seu sistema.</p>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-icon"><i class="fas fa-battery-full"></i></div>
+                        <h3>Sistemas de Baterias</h3>
+                        <p>Garanta energia mesmo durante quedas da rede. Com as baterias WEG, sua casa ou empresa fica protegida, armazenando energia para usar quando mais precisar.</p>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-icon"><i class="fas fa-charging-station"></i></div>
+                        <h3>Recarga Veicular WEMOB</h3>
+                        <p>Prepare-se para o futuro da mobilidade. Oferecemos a linha completa de estações de recarga WEMOB da WEG para sua residência, condomínio ou negócio.</p>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-icon"><i class="fas fa-cubes"></i></div>
+                        <h3>Grandes Aplicações (BESS)</h3>
+                        <p>Soluções de armazenamento de energia em larga escala (BESS) para indústrias e usinas, garantindo estabilidade, segurança e otimização de custos.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2>Nossos Projetos</h2>
+            <div class="projects-intro fade-in">
+                <p style="font-size: 1.1rem; max-width: 700px; margin: 0 auto 2rem;">
+                    Conheça alguns dos nossos projetos realizados em diferentes tipos de instalação. 
+                    Cada projeto é desenvolvido com excelência técnica e atenção aos detalhes.
+                </p>
+            </div>
+            
+            <div class="projects-preview fade-in" id="projectsPreviewGrid">
+                </div>
+            
+            <div style="text-align: center;">
+                <a href="galeria.html" class="view-all-btn">
+                    <i class="fas fa-images" style="margin-right: 10px;"></i>
+                    Ver Todos os Projetos
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="location" class="location">
+        <div class="container">
+            <h2>Nossa Localização</h2>
+            <div class="location-content fade-in">
+                <div class="location-info">
+                    <h3>Visite Nossa Sede</h3>
+                    <p><i class="fas fa-map-marker-alt" style="color: var(--primary-color);"></i> São Luís de Montes Belos - GO, Nº 2223</p>
+                    <p><i class="fas fa-phone" style="color: var(--primary-color);"></i> (64) 3601-1000</p>
+                    <p><i class="fab fa-whatsapp" style="color: var(--primary-color);"></i> WhatsApp: (64) 3601-1000</p>
+                    <p><i class="fas fa-clock" style="color: var(--primary-color);"></i> Segunda a Sexta: 8h às 18h</p>
+                    <p><i class="fas fa-clock" style="color: var(--primary-color);"></i> Sábado: 8h às 12h</p>
+                </div>
+                <div class="map-container">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3824.270928578717!2d-50.379206685135!3d-16.51261598859943!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x936171a938c3a1b1%3A0x6b8c9f7a3f303a2a!2sSOL%20TECH%20ENERGIA%20SOLAR!5e0!3m2!1spt-BR!2sbr!4v1678886432123!5m2!1spt-BR!2sbr" 
+                        width="100%" height="100%" style="border:0;" 
+                        allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Entre em Contato</h2>
+            <p style="max-width: 600px; margin: 0 auto 2rem auto;">Faça parte da revolução solar! Entre em contato conosco e descubra como podemos transformar seu custo com energia em um grande investimento.</p>
+            
+            <div class="contact-form fade-in">
+                <h3 style="color: var(--text-color); margin-bottom: 1.5rem; text-align: center;">Solicite seu Orçamento Gratuito</h3>
+                <form id="contactForm" onsubmit="handleSubmit(event)">
+                    <div class="form-row">
+                        <div class="form-group"><label for="name">Nome Completo *</label><input type="text" id="name" name="name" required></div>
+                        <div class="form-group"><label for="email">E-mail *</label><input type="email" id="email" name="email" required></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label for="phone">Telefone/WhatsApp *</label><input type="tel" id="phone" name="phone" required></div>
+                        <div class="form-group"><label for="city">Cidade</label><input type="text" id="city" name="city"></div>
+                    </div>
+                    <div class="form-group"><label for="consumption">Valor médio da conta de luz (R$)</label><input type="number" id="consumption" name="consumption" placeholder="Ex: 350"></div>
+                    <div class="form-group"><label for="message">Mensagem</label><textarea id="message" name="message" placeholder="Conte-nos sobre seu projeto ou dúvidas..."></textarea></div>
+                    <button type="submit" class="submit-btn"><i class="fas fa-paper-plane" style="margin-right: 10px;"></i> Enviar Solicitação</button>
+                </form>
+            </div>
+            
+            <div class="contact-buttons">
+                <a href="https://wa.me/556436011000" class="contact-button" target="_blank"><i class="fab fa-whatsapp"></i> Chamar no WhatsApp</a>
+                <a href="https://www.instagram.com/sol_tech_ofc/" class="contact-button" target="_blank"><i class="fab fa-instagram"></i> Seguir no Instagram</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="company-info">
+                <h3>SOL TECH ENERGIA SOLAR</h3>
+                <p>CNPJ: 10.619.680/0001-80</p>
+                <p>São Luís de Montes Belos - GO, Nº 2223</p>
+            </div>
+            <div class="social-links">
+                <a href="https://www.instagram.com/sol_tech_ofc/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/556436011000" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            </div>
+            <p>© 2024 SOL TECH ENERGIA SOLAR. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/556436011000" class="whatsapp-float" target="_blank" title="Fale conosco no WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        function toggleMenu() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        }
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    document.querySelector('.nav-links').classList.remove('active');
+                }
+            });
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -100px 0px' });
+        
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        async function handleSubmit(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch('/api/contact.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    alert('Solicitação enviada com sucesso! Entraremos em contato em breve.');
+                    form.reset();
+                } else {
+                    const errorData = await response.json();
+                    alert('Erro ao enviar: ' + (errorData.message || 'Tente novamente mais tarde.'));
+                }
+            } catch (error) {
+                console.error('Erro no envio do formulário:', error);
+                alert('Ocorreu um erro de conexão. Verifique sua internet ou tente mais tarde.');
+            }
+        }
+
+        // --- ADICIONAR ESTE NOVO BLOCO DE CÓDIGO ---
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFeaturedProjects();
+        });
+
+        async function loadFeaturedProjects() {
+            const grid = document.getElementById('projectsPreviewGrid');
+            if (!grid) return;
+
+            try {
+                const response = await fetch('/api/featured.php');
+                const data = await response.json();
+
+                if (data.records && data.records.length > 0) {
+                    grid.innerHTML = data.records.map(project => {
+                        const imageUrl = project.image ? `upload/images/projects/${project.image}` : '';
+                        return `
+                        <a href="galeria.html" class="project-preview-card">
+                            <div class="project-image" style="background-image: url('${imageUrl}'); background-size: cover; background-position: center;">
+                                ${!imageUrl ? '📸' : ''}
+                            </div>
+                            <div class="project-card-content">
+                                <span class="project-type">${project.category_name}</span>
+                                <h3>${project.title}</h3>
+                            </div>
+                        </a>
+                        `;
+                    }).join('');
+                } else {
+                    grid.innerHTML = "<p>Nenhum projeto em destaque no momento.</p>";
+                }
+            } catch (error) {
+                console.error("Erro ao carregar projetos em destaque:", error);
+                grid.innerHTML = "<p>Não foi possível carregar os projetos. Tente novamente mais tarde.</p>";
+            }
+        }
+        // --- FIM DO NOVO BLOCO ---
+
+    </script>
+</body>
+</html>

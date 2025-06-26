@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeria de Projetos - SOL TECH ENERGIA SOLAR</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #FFA500;
+            --secondary-color: #FF6B35;
+            --dark-color: #1a1a1a;
+            --light-color: #f5f5f5;
+            --text-color: #333;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-color);
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--dark-color) 0%, #2a2a2a 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-img {
+            height: 50px;
+            width: auto;
+            border-radius: 50%;
+        }
+
+        .back-btn {
+            background: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        /* Loading Spinner */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .filter-btn {
+            padding: 12px 24px;
+            border: 2px solid var(--primary-color);
+            background: white;
+            color: var(--primary-color);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            outline: none;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 165, 0, 0.3);
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .project-image {
+            height: 250px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .project-card:hover .project-image img {
+            transform: scale(1.05);
+        }
+
+        .project-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 2;
+        }
+
+        .project-card:hover .project-overlay {
+            opacity: 1;
+        }
+
+        .view-icon {
+            color: white;
+            font-size: 2rem;
+        }
+
+        .project-info {
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .project-category {
+            display: inline-block;
+            background: var(--light-color);
+            color: var(--primary-color);
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+
+        .project-description {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            animation: fadeIn 0.3s ease;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            position: relative;
+            margin: 2% auto;
+            padding: 0;
+            width: 90%;
+            max-width: 900px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .close {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .close:hover {
+            transform: scale(1.1) rotate(90deg);
+        }
+        
+        .modal-image {
+            height: 400px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: rgba(255,255,255,0.7);
+            font-size: 150px;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+        }
+
+        .modal-category {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            color: #555;
+        }
+
+        .modal-specs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .spec-card {
+            background: var(--light-color);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .spec-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .spec-label {
+            font-weight: bold;
+            color: var(--dark-color);
+            font-size: 1rem;
+        }
+
+        .spec-value {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* No Results / Error */
+        .info-message {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #666;
+            display: none; /* Hidden by default */
+        }
+
+        .info-message i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #ccc;
+        }
+
+        #errorMessage {
+            color: #d32f2f;
+        }
+        
+        #errorMessage i {
+            color: #d32f2f;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header h1 { font-size: 2.5rem; }
+            .filters { gap: 0.5rem; }
+            .filter-btn { padding: 10px 20px; font-size: 0.9rem; }
+            .gallery-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+            .project-info { padding: 1.5rem; }
+            .modal-content { width: 95%; margin: 5% auto; }
+            .modal-title { font-size: 1.5rem; }
+            .modal-specs { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 2rem 1rem; }
+            .filters { flex-direction: column; align-items: stretch; text-align: center; }
+            .modal-specs { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <img src="logo.png" alt="SOL TECH Logo" class="logo-img">
+                SOL TECH
+            </a>
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Voltar ao Site
+            </a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Nossos Projetos</h1>
+            <p>Conheça nossa expertise em diferentes tipos de instalação fotovoltaica. Cada projeto é único e desenvolvido com a máxima qualidade técnica.</p>
+        </div>
+
+        <div class="filters" id="filters">
+            <button class="filter-btn active" data-filter="all">Todos os Projetos</button>
+            </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+        </div>
+
+        <div class="gallery-grid" id="galleryGrid" style="display: none;">
+            </div>
+
+        <div class="info-message" id="noResults">
+            <i class="fas fa-search"></i>
+            <h3>Nenhum projeto encontrado</h3>
+            <p>Tente selecionar outro filtro para ver mais projetos.</p>
+        </div>
+
+        <div class="info-message" id="errorMessage">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>Erro ao carregar projetos</h3>
+            <p>Não foi possível conectar com o servidor. Tente novamente mais tarde.</p>
+        </div>
+    </div>
+
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalImage"></div>
+            <div class="modal-body">
+                <div id="modalCategory"></div>
+                <h2 id="modalTitle"></h2>
+                <p id="modalDescription"></p>
+                <div id="modalSpecs"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = '/api';
+        let projects = [];
+        let categories = [];
+
+        // Funções de UI
+        const ui = {
+            loading: document.getElementById('loading'),
+            galleryGrid: document.getElementById('galleryGrid'),
+            noResults: document.getElementById('noResults'),
+            errorMessage: document.getElementById('errorMessage'),
+            showLoading: () => { ui.loading.style.display = 'flex'; ui.galleryGrid.style.display = 'none'; ui.noResults.style.display = 'none'; ui.errorMessage.style.display = 'none'; },
+            hideLoading: () => { ui.loading.style.display = 'none'; },
+            showNoResults: () => { ui.galleryGrid.style.display = 'none'; ui.noResults.style.display = 'block'; },
+            showError: () => { ui.galleryGrid.style.display = 'none'; ui.errorMessage.style.display = 'block'; },
+            showGallery: () => { ui.galleryGrid.style.display = 'grid'; }
+        };
+
+        // Carrega categorias dos filtros
+        async function loadCategories() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/categories`);
+                if (!response.ok) throw new Error('API de categorias falhou');
+                const data = await response.json();
+                if (data.records) {
+                    categories = data.records;
+                    renderFilters();
+                }
+            } catch (error) {
+                console.error('Erro ao carregar categorias:', error);
+            }
+        }
+
+        // Renderiza os botões de filtro
+        function renderFilters() {
+            const filtersContainer = document.getElementById('filters');
+            const allButton = filtersContainer.querySelector('[data-filter="all"]');
+            filtersContainer.innerHTML = '';
+            filtersContainer.appendChild(allButton);
+
+            categories.forEach(category => {
+                const button = document.createElement('button');
+                button.className = 'filter-btn';
+                button.setAttribute('data-filter', category.slug);
+                button.textContent = category.name;
+                filtersContainer.appendChild(button);
+            });
+            setupFilterEventListeners();
+        }
+
+        // Carrega os projetos da API
+        async function loadProjects(categoryFilter = 'all') {
+            try {
+                ui.showLoading();
+                let url = `${API_BASE_URL}/projects`;
+                if (categoryFilter !== 'all') {
+                    url += `?category=${categoryFilter}`;
+                }
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('API de projetos falhou');
+                const data = await response.json();
+                
+                ui.hideLoading();
+
+                if (data.records && data.records.length > 0) {
+                    projects = data.records;
+                    renderProjects(projects);
+                    ui.showGallery();
+                } else {
+                    ui.showNoResults();
+                }
+            } catch (error) {
+                console.error('Erro ao carregar projetos:', error);
+                ui.hideLoading();
+                ui.showError();
+            }
+        }
+
+        // Renderiza os cards dos projetos
+        function renderProjects(projectsToRender) {
+            ui.galleryGrid.innerHTML = projectsToRender.map(project => {
+                // --- MUDANÇA PRINCIPAL AQUI ---
+                // Pega a primeira imagem da lista de imagens do projeto
+                const imageUrl = project.images && project.images.length > 0
+                    ? `upload/images/projects/${project.images[0]}`
+                    : ''; // Se não houver imagem, a string fica vazia
+
+                return `
+                <div class="project-card" onclick="openModal(${project.id})">
+                    <div class="project-image" style="background-image: url('${imageUrl}');">
+                         ${!imageUrl ? '📸' : ''}
+                        <div class="project-overlay"><i class="fas fa-search-plus view-icon"></i></div>
+                    </div>
+                    <div class="project-info">
+                        <div class="project-category">${project.category.name}</div>
+                        <div class="project-title">${project.title}</div>
+                    </div>
+                </div>
+                `
+                // --- FIM DA MUDANÇA ---
+            }).join('');
+        }
+
+        // Abre o modal com detalhes do projeto
+        async function openModal(projectId) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/projects/${projectId}`);
+                if (!response.ok) throw new Error('Projeto não encontrado');
+                const project = await response.json();
+
+                const modal = document.getElementById('projectModal');
+                const modalImage = document.getElementById('modalImage');
+                const imageUrl = project.images && project.images.length > 0
+                    ? `upload/images/projects/${project.images[0]}`
+                    : '';
+
+                modalImage.className = 'modal-image';
+                modalImage.style.backgroundImage = imageUrl ? `url('${imageUrl}')` : '';
+                modalImage.innerHTML = !imageUrl ? '📸' : '';
+
+                document.getElementById('modalTitle').textContent = project.title;
+                document.getElementById('modalCategory').className = 'modal-category';
+                document.getElementById('modalCategory').textContent = project.category.name;
+                document.getElementById('modalDescription').innerHTML = project.detailed_description || project.description;
+
+                document.getElementById('modalSpecs').innerHTML = [
+                    { label: 'Potência', value: project.specifications.power, icon: 'fa-bolt' },
+                    { label: 'Painéis', value: project.specifications.panels, icon: 'fa-solar-panel' },
+                    { label: 'Área', value: project.specifications.area, icon: 'fa-expand-arrows-alt' },
+                    { label: 'Economia', value: project.specifications.savings, icon: 'fa-coins' },
+                    { label: 'Localização', value: project.specifications.location, icon: 'fa-map-marker-alt' },
+                    { label: 'Ano', value: project.specifications.year, icon: 'fa-calendar' }
+                ]
+                .filter(spec => spec.value) // Mostra apenas especificações que existem
+                .map(spec => `
+                    <div class="spec-card">
+                        <div class="spec-icon"><i class="fas ${spec.icon}"></i></div>
+                        <div class="spec-label">${spec.label}</div>
+                        <div class="spec-value">${spec.value}</div>
+                    </div>
+                `).join('');
+
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            } catch (error) {
+                console.error('Erro ao abrir modal:', error);
+                alert('Não foi possível carregar os detalhes do projeto.');
+            }
+        }
+
+        // Fecha o modal
+        function closeModal() {
+            const modal = document.getElementById('projectModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Adiciona eventos aos filtros
+        function setupFilterEventListeners() {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    loadProjects(this.getAttribute('data-filter'));
+                });
+            });
+        }
+
+        // Inicialização da página
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCategories();
+            loadProjects();
+            document.querySelector('.close').addEventListener('click', closeModal);
+            window.addEventListener('click', e => { if (e.target == document.getElementById('projectModal')) closeModal(); });
+            document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+        });
+    </script>
+</body>
+</html>

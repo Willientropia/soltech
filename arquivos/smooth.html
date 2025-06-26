@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOL TECH ENERGIA SOLAR - Soluções em Energia Solar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #FFA500;
+            --secondary-color: #FF6B35;
+            --dark-color: #1a1a1a;
+            --light-color: #f5f5f5;
+            --text-color: #333;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--dark-color) 0%, #2a2a2a 100%);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            background-color: rgba(26, 26, 26, 0.95);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23FFA500"/><stop offset="100%" style="stop-color:%23FF6B35"/></linearGradient></defs><rect width="1200" height="800" fill="url(%23g)"/><circle cx="200" cy="200" r="150" fill="rgba(255,255,255,0.1)"/><circle cx="1000" cy="600" r="200" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 2rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255,165,0,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255,165,0,0.5);
+        }
+
+        /* Sections */
+        section {
+            padding: 80px 0;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+            color: var(--dark-color);
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+        }
+
+        /* About Section */
+        .about {
+            background: var(--light-color);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-top: 3rem;
+        }
+
+        .about-text {
+            animation: fadeInLeft 1s ease;
+        }
+
+        .about-image {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            height: 400px;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            animation: fadeInRight 1s ease;
+        }
+
+        .about-image::before {
+            content: '☀️';
+            position: absolute;
+            font-size: 200px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.3;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* WEG Section */
+        .weg-section {
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .weg-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,165,0,0.05) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .weg-content {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .weg-badge {
+            display: inline-block;
+            padding: 20px 40px;
+            background: linear-gradient(135deg, #005cb8, #0074d9);
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 15px;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0,92,184,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .weg-badge::after {
+            content: 'WEG';
+            position: absolute;
+            font-size: 80px;
+            opacity: 0.1;
+            right: -20px;
+            top: -20px;
+            font-weight: 900;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,165,0,0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+
+        .product-card:hover::before {
+            opacity: 1;
+            animation: shimmer 0.5s ease;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .product-icon {
+            font-size: 60px;
+            margin-bottom: 1rem;
+        }
+
+        /* Contact Form */
+        .contact-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255,165,0,0.3);
+        }
+
+        /* Floating WhatsApp Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            animation: pulse-whatsapp 2s infinite;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+        }
+
+        @keyframes pulse-whatsapp {
+            0% {
+                box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            }
+            50% {
+                box-shadow: 0 4px 15px rgba(37, 211, 102, 0.8);
+            }
+            100% {
+                box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            }
+        }
+
+        /* Services */
+        .services {
+            background: var(--light-color);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .service-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .service-icon {
+            font-size: 50px;
+            margin-bottom: 1rem;
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Location */
+        .location {
+            background: white;
+        }
+
+        .location-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-top: 3rem;
+        }
+
+        .location-info {
+            background: var(--light-color);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .location-info h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .location-info p {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .map-container {
+            height: 400px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        /* Contact */
+        .contact {
+            background: linear-gradient(135deg, var(--dark-color) 0%, #2a2a2a 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .contact h2 {
+            color: white;
+        }
+
+        .contact-buttons {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 30px;
+            background: white;
+            color: var(--dark-color);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255,255,255,0.2);
+        }
+
+        .contact-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255,255,255,0.3);
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            background: #111;
+            color: white;
+            padding: 3rem 0 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .company-info {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #333;
+        }
+
+        .company-info h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 24px;
+        }
+
+        .social-links a:hover {
+            background: var(--secondary-color);
+            transform: translateY(-5px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background: rgba(26, 26, 26, 0.98);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                padding: 2rem 0;
+                backdrop-filter: blur(10px);
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+            }
+
+            .about-content,
+            .location-content {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            .contact-form {
+                margin-bottom: 2rem;
+            }
+
+            .contact-form > div[style*="grid-template-columns"] {
+                grid-template-columns: 1fr !important;
+            }
+
+            /* WEG Section Mobile */
+            .weg-content div[style*="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))"] {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
+                gap: 1rem !important;
+            }
+
+            .weg-content div[style*="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr))"] {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+
+            .weg-content div[style*="padding: 2rem"] {
+                padding: 1.5rem !important;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="#home" class="logo">
+                <div class="logo-icon">☀️</div>
+                SOL TECH
+            </a>
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Início</a></li>
+                <li><a href="#about">Sobre</a></li>
+                <li><a href="#services">Serviços</a></li>
+                <li><a href="#weg">Produtos WEG</a></li>
+                <li><a href="#location">Localização</a></li>
+                <li><a href="#contact">Contato</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>SOL TECH ENERGIA SOLAR</h1>
+            <p>Transformando luz solar em economia e sustentabilidade</p>
+            <a href="https://wa.me/556436011000" class="cta-button" target="_blank">
+                Solicite um Orçamento
+            </a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2>Sobre a SOL TECH</h2>
+            <div class="about-content fade-in">
+                <div class="about-text">
+                    <h3>Energia limpa e renovável para seu futuro</h3>
+                    <p>A SOL TECH ENERGIA SOLAR é líder em soluções de energia fotovoltaica em São Luís de Montes Belos e região. Com anos de experiência e centenas de projetos realizados, oferecemos as melhores soluções em energia solar.</p>
+                    <p>Nossa missão é tornar a energia solar acessível, proporcionando economia na conta de luz e contribuindo para um futuro mais sustentável.</p>
+                    <p><strong>CNPJ:</strong> 10.619.680/0001-80</p>
+                </div>
+                <div class="about-image"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WEG Section -->
+    <section id="weg" class="weg-section">
+        <div class="container">
+            <h2>Parceiros Oficiais WEG Solar</h2>
+            <div class="weg-content fade-in">
+                <div class="weg-badge">
+                    <i class="fas fa-certificate" style="margin-right: 10px;"></i>
+                    Integradores Oficiais WEG Solar
+                </div>
+                
+                <div style="text-align: center; margin: 2rem 0;">
+                    <h3 style="color: var(--primary-color); margin-bottom: 1rem;">A WEG: Gigante Brasileira da Energia</h3>
+                    <p style="font-size: 1.1rem; max-width: 800px; margin: 0 auto; line-height: 1.8;">
+                        Fundada em 1961 em Jaraguá do Sul-SC, a <strong>WEG</strong> é uma das maiores fabricantes de equipamentos elétricos do mundo, presente em mais de <strong>40 países</strong> e com mais de <strong>45.000 colaboradores</strong> globalmente. Com mais de <strong>60 anos de inovação</strong>, a WEG transformou energia em soluções sustentáveis para o planeta.
+                    </p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin: 3rem 0; text-align: center;">
+                    <div style="background: white; padding: 1.5rem; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                        <div style="font-size: 2rem; font-weight: bold; color: var(--primary-color);">+3GW</div>
+                        <div style="color: var(--text-color); font-size: 0.9rem;">Equipamentos Fotovoltaicos Distribuídos</div>
+                    </div>
+                    <div style="background: white; padding: 1.5rem; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                        <div style="font-size: 2rem; font-weight: bold; color: var(--primary-color);">+2GW</div>
+                        <div style="color: var(--text-color); font-size: 0.9rem;">Usinas Solares Construídas</div>
+                    </div>
+                    <div style="background: white; padding: 1.5rem; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                        <div style="font-size: 2rem; font-weight: bold; color: var(--primary-color);">25 Anos</div>
+                        <div style="color: var(--text-color); font-size: 0.9rem;">Garantia de Performance</div>
+                    </div>
+                    <div style="background: white; padding: 1.5rem; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                        <div style="font-size: 2rem; font-weight: bold; color: var(--primary-color);">100%</div>
+                        <div style="color: var(--text-color); font-size: 0.9rem;">Tecnologia Nacional</div>
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #005cb8, #0074d9); color: white; padding: 2rem; border-radius: 20px; margin: 3rem 0;">
+                    <h3 style="text-align: center; margin-bottom: 1.5rem; color: white;">
+                        <i class="fas fa-award" style="margin-right: 10px;"></i>
+                        Por que Escolher WEG Solar?
+                    </h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                        <div style="display: flex; align-items: start; gap: 15px;">
+                            <i class="fas fa-industry" style="font-size: 24px; color: #FFD700; margin-top: 5px;"></i>
+                            <div>
+                                <h4 style="margin-bottom: 0.5rem; color: white;">Líder Mundial</h4>
+                                <p style="margin: 0; font-size: 0.9rem; opacity: 0.9;">Empresa presente em 5 continentes com tecnologia reconhecida globalmente</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: start; gap: 15px;">
+                            <i class="fas fa-leaf" style="font-size: 24px; color: #FFD700; margin-top: 5px;"></i>
+                            <div>
+                                <h4 style="margin-bottom: 0.5rem; color: white;">Sustentabilidade</h4>
+                                <p style="margin: 0; font-size: 0.9rem; opacity: 0.9;">Comprometida com os Objetivos de Desenvolvimento Sustentável da ONU</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: start; gap: 15px;">
+                            <i class="fas fa-cogs" style="font-size: 24px; color: #FFD700; margin-top: 5px;"></i>
+                            <div>
+                                <h4 style="margin-bottom: 0.5rem; color: white;">Inovação Constante</h4>
+                                <p style="margin: 0; font-size: 0.9rem; opacity: 0.9;">Mais de 4.700 engenheiros dedicados ao desenvolvimento de soluções</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: start; gap: 15px;">
+                            <i class="fas fa-handshake" style="font-size: 24px; color: #FFD700; margin-top: 5px;"></i>
+                            <div>
+                                <h4 style="margin-bottom: 0.5rem; color: white;">Confiabilidade</h4>
+                                <p style="margin: 0; font-size: 0.9rem; opacity: 0.9;">Mais de 60 anos de experiência e tradição no mercado brasileiro</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="text-align: center; margin: 3rem 0 2rem 0; color: var(--dark-color);">
+                    <i class="fas fa-solar-panel" style="margin-right: 10px; color: var(--primary-color);"></i>
+                    Linha Completa WEG Solar
+                </h3>
+                
+                <div class="products-grid">
+                    <div class="product-card">
+                        <div class="product-icon"><i class="fas fa-solar-panel"></i></div>
+                        <h3>Módulos Fotovoltaicos</h3>
+                        <p>Painéis solares com eficiência superior a 20% e garantia de performance de 25 anos</p>
+                        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee; font-size: 0.9rem; color: #666;">
+                            <strong>Tecnologia:</strong> Monocristalino PERC<br>
+                            <strong>Potência:</strong> 540W - 665W
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-icon"><i class="fas fa-bolt"></i></div>
+                        <h3>Inversores Grid-Tie</h3>
+                        <p>Inversores de alta eficiência com tecnologia MPPT e monitoramento em tempo real</p>
+                        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee; font-size: 0.9rem; color: #666;">
+                            <strong>Eficiência:</strong> Até 98,5%<br>
+                            <strong>Potência:</strong> 1kW - 125kW
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-icon"><i class="fas fa-shield-alt"></i></div>
+                        <h3>String Box</h3>
+                        <p>Proteção completa com fusíveis, DPS e chaves seccionadoras certificadas</p>
+                        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee; font-size: 0.9rem; color: #666;">
+                            <strong>Certificação:</strong> INMETRO<br>
+                            <strong>Proteção:</strong> IP65
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-icon"><i class="fas fa-chart-line"></i></div>
+                        <h3>Monitoramento WEG</h3>
+                        <p>Plataforma completa para acompanhar performance e diagnósticos remotos</p>
+                        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee; font-size: 0.9rem; color: #666;">
+                            <strong>Acesso:</strong> App Mobile & Web<br>
+                            <strong>Dados:</strong> Tempo Real 24/7
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 3rem; padding: 2rem; background: var(--light-color); border-radius: 15px;">
+                    <h4 style="color: var(--primary-color); margin-bottom: 1rem;">
+                        <i class="fas fa-star" style="margin-right: 10px;"></i>
+                        SOL TECH + WEG: Parceria de Excelência
+                    </h4>
+                    <p style="font-size: 1.1rem; max-width: 700px; margin: 0 auto; color: var(--text-color);">
+                        Como <strong>Integradores Oficiais WEG Solar</strong>, combinamos a tradição e qualidade WEG com nossa expertise local. Oferecemos soluções completas com a garantia de uma das marcas mais respeitadas do mundo, assegurando máxima performance e tranquilidade para seu investimento em energia solar.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2>Nossos Serviços</h2>
+            <div class="services-grid fade-in">
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-home"></i></div>
+                    <h3>Residencial</h3>
+                    <p>Sistemas personalizados para sua casa, com economia de até 95% na conta de luz</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-building"></i></div>
+                    <h3>Comercial</h3>
+                    <p>Soluções para empresas que buscam reduzir custos e aumentar competitividade</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-industry"></i></div>
+                    <h3>Industrial</h3>
+                    <p>Projetos de grande porte com retorno garantido do investimento</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location Section -->
+    <section id="location" class="location">
+        <div class="container">
+            <h2>Nossa Localização</h2>
+            <div class="location-content fade-in">
+                <div class="location-info">
+                    <h3>Visite Nossa Sede</h3>
+                    <p><i class="fas fa-map-marker-alt" style="color: var(--primary-color); margin-right: 10px;"></i> São Luís de Montes Belos - GO, Nº 2223</p>
+                    <p><i class="fas fa-phone" style="color: var(--primary-color); margin-right: 10px;"></i> (64) 3601-1000</p>
+                    <p><i class="fab fa-whatsapp" style="color: var(--primary-color); margin-right: 10px;"></i> WhatsApp: (64) 3601-1000</p>
+                    <p><i class="fas fa-clock" style="color: var(--primary-color); margin-right: 10px;"></i> Segunda a Sexta: 8h às 18h</p>
+                    <p><i class="fas fa-clock" style="color: var(--primary-color); margin-right: 10px;"></i> Sábado: 8h às 12h</p>
+                </div>
+                <div class="map-container">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3821.234567890123!2d-50.37234567890123!3d-16.52345678901234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTbCsDMxJzI0LjQiUyA1MMKwMjInMjAuNCJX!5e0!3m2!1spt-BR!2sbr!4v1234567890123!5m2!1spt-BR!2sbr" 
+                        width="100%" 
+                        height="100%" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Entre em Contato</h2>
+            
+            <!-- Contact Form -->
+            <div class="contact-form fade-in">
+                <h3 style="color: var(--text-color); margin-bottom: 1.5rem; text-align: center;">Solicite seu Orçamento</h3>
+                <form id="contactForm" onsubmit="handleSubmit(event)">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label for="name">Nome Completo *</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-mail *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label for="phone">Telefone/WhatsApp *</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="city">Cidade</label>
+                            <input type="text" id="city" name="city">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="consumption">Valor médio da conta de luz (R$)</label>
+                        <input type="number" id="consumption" name="consumption" placeholder="Ex: 250">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Mensagem</label>
+                        <textarea id="message" name="message" placeholder="Conte-nos sobre seu projeto ou dúvidas..."></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane" style="margin-right: 10px;"></i>
+                        Enviar Solicitação
+                    </button>
+                </form>
+            </div>
+            
+            <p>Faça parte da revolução solar! Entre em contato conosco e descubra como economizar.</p>
+            <div class="contact-buttons">
+                <a href="https://wa.me/556436011000" class="contact-button" target="_blank">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </a>
+                <a href="https://www.instagram.com/sol_tech_ofc/" class="contact-button" target="_blank">
+                    <i class="fab fa-instagram"></i> Instagram
+                </a>
+                <a href="https://maps.app.goo.gl/st6rHcQ28Zr2iX8f8" class="contact-button" target="_blank">
+                    <i class="fas fa-map-marker-alt"></i> Como Chegar
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="company-info">
+                <h3>SOL TECH ENERGIA SOLAR</h3>
+                <p>CNPJ: 10.619.680/0001-80</p>
+                <p>São Luís de Montes Belos - GO, Nº 2223</p>
+            </div>
+            <div class="social-links">
+                <a href="https://www.instagram.com/sol_tech_ofc/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/556436011000" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://maps.app.goo.gl/st6rHcQ28Zr2iX8f8" target="_blank"><i class="fas fa-map-marker-alt"></i></a>
+            </div>
+            <p>&copy; 2024 SOL TECH ENERGIA SOLAR. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/556436011000" class="whatsapp-float" target="_blank" title="Fale conosco no WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        // Mobile menu toggle
+        function toggleMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('active');
+        }
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Close mobile menu if open
+                    document.querySelector('.nav-links').classList.remove('active');
+                }
+            });
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Header background on scroll
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.backgroundColor = 'rgba(26, 26, 26, 0.98)';
+            } else {
+                header.style.backgroundColor = 'rgba(26, 26, 26, 0.95)';
+            }
+        });
+
+        // Parallax effect for hero section
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+        });
+
+        // Contact Form Handler
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData);
+            
+            // Create WhatsApp message
+            let message = `*Nova solicitação de orçamento - SOL TECH*\n\n`;
+            message += `👤 *Nome:* ${data.name}\n`;
+            message += `📧 *E-mail:* ${data.email}\n`;
+            message += `📱 *Telefone:* ${data.phone}\n`;
+            if (data.city) message += `🏙️ *Cidade:* ${data.city}\n`;
+            if (data.consumption) message += `💡 *Conta de luz:* R$ ${data.consumption}\n`;
+            if (data.message) message += `💬 *Mensagem:* ${data.message}\n`;
+            
+            // Encode message and redirect to WhatsApp
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/556436011000?text=${encodedMessage}`;
+            
+            // Show success message
+            alert('Redirecionando para o WhatsApp para enviar sua solicitação!');
+            
+            // Open WhatsApp
+            window.open(whatsappUrl, '_blank');
+            
+            // Reset form
+            event.target.reset();
+        }
+
+        // Form validation enhancement
+        document.querySelectorAll('#contactForm input[required], #contactForm textarea[required]').forEach(field => {
+            field.addEventListener('blur', function() {
+                if (!this.value.trim()) {
+                    this.style.borderColor = '#ff6b6b';
+                } else {
+                    this.style.borderColor = '#e1e1e1';
+                }
+            });
+        });
+
+        // Phone mask
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length <= 11) {
+                value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+                if (value.length < 14) {
+                    value = value.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+                }
+                e.target.value = value;
+            }
+        });
+
+        // Consumption input formatting
+        document.getElementById('consumption').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>

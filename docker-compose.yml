@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  # Serviço do Site (PHP + Apache)
+  web:
+    build: .
+    container_name: soltech_web
+    ports:
+      - "8000:80" # Acessaremos o site em http://localhost:8000
+    volumes:
+      - ./:/var/www/html/ # Mapeia o código local para dentro do container
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_NAME=${POSTGRES_DB}
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASS=${POSTGRES_PASSWORD}
+      - DB_PORT=5432
+
+  # Serviço do Banco de Dados (PostgreSQL)
+  db:
+    image: postgres:13-alpine
+    container_name: soltech_db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./database.sql:/docker-entrypoint-initdb.d/init.sql # Executa o script SQL na inicialização
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5433:5432" # Expõe a porta do banco no host (opcional, bom para debugar)
+
+volumes:
+  postgres_data:
