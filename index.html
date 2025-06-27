@@ -1338,6 +1338,65 @@
             background: rgba(255,255,255,0.5);
             border-radius: 2px;
         }
+
+
+        /* ===== ESTILOS PARA THUMBNAILS DE VÍDEO ===== */
+        .loading-thumbnail {
+            position: relative;
+        }
+
+        .loading-thumbnail::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid rgba(255,255,255,0.8);
+            border-radius: 50%;
+            animation: thumbnailSpin 1s linear infinite;
+            z-index: 2;
+        }
+
+        .thumbnail-loaded::after {
+            display: none;
+        }
+
+        @keyframes thumbnailSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .video-fallback-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Melhorar indicador de vídeo */
+        .carousel-video-indicator {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            backdrop-filter: blur(5px);
+        }
+
+
     </style>
 </head>
 <body>
@@ -1765,8 +1824,19 @@
                 });
                 
                 document.addEventListener('keydown', (e) => {
-                    if (e.key === 'ArrowLeft') this.prevSlide();
-                    if (e.key === 'ArrowRight') this.nextSlide();
+                    if (!this.isOpen()) return;
+                    
+                    switch(e.key) {
+                        case 'Escape':
+                            this.close(); // Já vai pausar os vídeos através do método close() modificado
+                            break;
+                        case 'ArrowLeft':
+                            this.prevImage();
+                            break;
+                        case 'ArrowRight':
+                            this.nextImage();
+                            break;
+                    }
                 });
                 
                 let startX = 0;
@@ -1799,7 +1869,7 @@
                 document.getElementById('projectsCarouselContainer').style.display = 'block';
             }
             
-            // ===== MÉTODO CORRIGIDO: renderProjects() =====
+            // Substitua a função renderProjects() inteira por esta versão:
             renderProjects() {
                 if (!this.track || !this.projects.length) return;
 
@@ -1809,40 +1879,36 @@
                     const isVideo = hasMedia && primaryMedia.media_type === 'video';
                     const isImage = hasMedia && primaryMedia.media_type === 'image';
 
-                    // Construir classes CSS
                     let mediaClasses = 'carousel-project-image';
                     let mediaStyle = '';
                     let mediaIcon = '';
                     let videoIndicator = '';
+                    let dataAttributes = '';
 
                     if (hasMedia) {
                         mediaClasses += ' has-media';
                         
                         if (isVideo) {
-                            mediaClasses += ' is-video';
-                            // Para vídeos: usar thumbnail se possível, senão fundo escuro
+                            mediaClasses += ' is-video loading-thumbnail';
                             const videoPath = `upload/images/projects/${primaryMedia.path}`;
-                            mediaStyle = `background-image: url('${videoPath}#t=1');`;
                             
-                            // Ícone de hover
+                            // Fundo escuro temporário
+                            mediaStyle = 'background-color: #2a2a2a;';
+                            dataAttributes = `data-video-path="${videoPath}"`;
+                            
                             mediaIcon = '<div class="carousel-project-view-icon"><i class="fas fa-play"></i></div>';
-                            
-                            // Indicador permanente de vídeo
                             videoIndicator = '<div class="carousel-video-indicator"><i class="fas fa-video"></i> Vídeo</div>';
                             
                         } else if (isImage) {
                             mediaClasses += ' is-image';
                             mediaStyle = `background-image: url('upload/images/projects/${primaryMedia.path}');`;
-                            
-                            // Ícone de hover para imagens
                             mediaIcon = '<div class="carousel-project-view-icon"><i class="fas fa-search-plus"></i></div>';
                         }
                     }
-                    // Se não há mídia, o CSS ::before vai mostrar o ícone de câmera automaticamente
 
                     return `
                     <div class="carousel-project-card" data-project-id="${project.id}">
-                        <div class="${mediaClasses}" style="${mediaStyle}">
+                        <div class="${mediaClasses}" style="${mediaStyle}" ${dataAttributes}>
                             ${mediaIcon}
                             ${videoIndicator}
                         </div>
@@ -1853,7 +1919,7 @@
                     </div>`;
                 }).join('');
 
-                // Reattach event listeners para os novos cards
+                // Reattach event listeners
                 this.track.querySelectorAll('.carousel-project-card').forEach(card => {
                     card.addEventListener('click', () => {
                         const projectId = card.dataset.projectId;
@@ -1862,6 +1928,11 @@
                         }
                     });
                 });
+
+                // NOVO: Aplicar thumbnails de vídeo após renderizar
+                setTimeout(() => {
+                    applyVideoThumbnails();
+                }, 100);
             }
             
             updateCarousel() {
@@ -1953,6 +2024,11 @@
                         if (window.projectModal) {
                             projectModal.attachCardListeners();
                         }
+                        
+                        // NOVO: Aplicar thumbnails após carregamento
+                        setTimeout(() => {
+                            applyVideoThumbnails();
+                        }, 500);
                     } else {
                         showNoFeaturedState();
                     }
@@ -2012,7 +2088,10 @@
             
             init() {
                 this.closeBtn?.addEventListener('click', () => this.close());
-                this.modal?.addEventListener('click', (e) => { if (e.target === this.modal) this.close(); });
+                this.modal?.addEventListener('click', (e) => {
+                    if (e.target === this.modal) this.close();
+                });
+
                 this.prevBtn?.addEventListener('click', () => this.prevImage());
                 this.nextBtn?.addEventListener('click', () => this.nextImage());
                 
@@ -2093,6 +2172,8 @@
             showCurrentImage() {
                 if (this.media.length === 0) return;
 
+                 this.pauseAllVideos();
+
                 const currentMedia = this.media[this.currentMediaIndex];
                 const mediaUrl = `upload/images/projects/${currentMedia.path}`;
 
@@ -2104,6 +2185,12 @@
                     videoElement.src = mediaUrl;
                     videoElement.controls = true;
                     videoElement.style.cssText = 'width: 100%; height: 100%; object-fit: contain;';
+
+                    videoElement.addEventListener('loadstart', () => {
+                        // Pausar outros vídeos quando um novo começar a carregar
+                        this.pauseAllVideos();
+                    });
+
                     this.mainImage.appendChild(videoElement);
                 } else {
                     this.mainImage.style.backgroundImage = `url('${mediaUrl}')`;
@@ -2207,14 +2294,40 @@
             showError(message) {
                 this.modalLoading.innerHTML = `<div style="text-align: center; color: #d32f2f;"><i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i><h3>Erro</h3><p>${message}</p><button onclick="window.projectModal.close()" style="margin-top: 1rem; padding: 10px 20px; background: #d32f2f; color: white; border: none; border-radius: 5px; cursor: pointer;">Fechar</button></div>`;
             }
-            
+
+
+            pauseAllVideos() {
+                // Pausa vídeos no container principal da modal
+                const videos = this.mainImage.querySelectorAll('video');
+                videos.forEach(video => {
+                    video.pause();
+                    video.currentTime = 0; // Opcional: volta para o início
+                });
+                
+                // Também pausa qualquer vídeo que possa estar em outros containers
+                const allModalVideos = this.modal.querySelectorAll('video');
+                allModalVideos.forEach(video => {
+                    video.pause();
+                    video.currentTime = 0;
+                });
+            }           
+
+
+
             close() {
+
+                this.pauseAllVideos();
                 this.modal.style.display = 'none';
                 this.modal.classList.remove('opening');
                 document.body.style.overflow = 'auto';
                 this.currentProject = null;
                 this.media = []; // Corrigido
                 this.currentMediaIndex = 0;
+
+                // NOVA LINHA: Limpar o container de imagem para remover elementos de vídeo
+                this.mainImage.innerHTML = '<div class="modal-image-placeholder">📸</div>';
+                this.mainImage.style.backgroundImage = 'none';
+
             }
             
             isOpen() {
@@ -2235,6 +2348,87 @@
                 projectModal.open(projectId);
             }
         }
+
+
+
+        // ===== SISTEMA DE THUMBNAILS PARA VÍDEOS =====
+        function generateVideoThumbnail(videoPath, timeInSeconds = 0.5) {
+            return new Promise((resolve, reject) => {
+                const video = document.createElement('video');
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                video.crossOrigin = 'anonymous';
+                video.muted = true;
+                
+                video.onloadedmetadata = () => {
+                    video.currentTime = Math.min(timeInSeconds, video.duration);
+                };
+                
+                video.onseeked = () => {
+                    try {
+                        canvas.width = video.videoWidth;
+                        canvas.height = video.videoHeight;
+                        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                        const thumbnailDataURL = canvas.toDataURL('image/jpeg', 0.8);
+                        resolve(thumbnailDataURL);
+                        video.remove();
+                    } catch (error) {
+                        reject(error);
+                    }
+                };
+                
+                video.onerror = () => reject(new Error('Erro ao carregar vídeo'));
+                video.src = videoPath;
+                video.load();
+            });
+        }
+
+        async function applyVideoThumbnails() {
+            const videoElements = document.querySelectorAll('.carousel-project-image.is-video[data-video-path]');
+            
+            for (const element of videoElements) {
+                try {
+                    const videoPath = element.dataset.videoPath;
+                    if (!videoPath || element.classList.contains('thumbnail-loaded')) continue;
+                    
+                    const thumbnailDataURL = await generateVideoThumbnail(videoPath, 0.5);
+                    
+                    element.style.backgroundImage = `url('${thumbnailDataURL}')`;
+                    element.style.backgroundSize = 'cover';
+                    element.style.backgroundPosition = 'center';
+                    element.style.backgroundRepeat = 'no-repeat';
+                    
+                    element.classList.remove('loading-thumbnail');
+                    element.classList.add('thumbnail-loaded');
+                    
+                } catch (error) {
+                    console.error('Erro ao gerar thumbnail:', error);
+                    
+                    element.style.backgroundColor = '#2a2a2a';
+                    element.style.backgroundImage = 'none';
+                    element.classList.remove('loading-thumbnail');
+                    
+                    if (!element.querySelector('.video-fallback-icon')) {
+                        const iconDiv = document.createElement('div');
+                        iconDiv.className = 'video-fallback-icon';
+                        iconDiv.innerHTML = '<i class="fas fa-play" style="font-size: 3rem; color: rgba(255,255,255,0.7);"></i>';
+                        element.appendChild(iconDiv);
+                    }
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
     </script>
 </body>
 </html>

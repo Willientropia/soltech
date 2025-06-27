@@ -191,18 +191,7 @@
             background-color: #222;
         }
 
-        .project-image.has-media.is-video::after {
-            content: '▶';
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.8);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            z-index: 3;
-        }
+
 
         .project-image:not(.has-media)::before {
             content: '📸';
@@ -212,6 +201,11 @@
             transform: translate(-50%, -50%);
             font-size: 80px;
             color: rgba(255,255,255,0.7);
+        }
+
+
+        .project-image:not(.has-media)::after {
+            display: none;
         }
 
         .project-overlay {
@@ -750,6 +744,86 @@
                 opacity: 1; 
             }
         }
+
+        /* ===== ESTILOS PARA THUMBNAILS DE VÍDEO ===== */
+        .loading-thumbnail {
+            position: relative;
+        }
+
+
+        .loading-thumbnail::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid rgba(255,255,255,0.8);
+            border-radius: 50%;
+            animation: thumbnailSpin 1s linear infinite;
+            z-index: 1; /* Menor que o ícone de vídeo */
+        }
+
+        .thumbnail-loaded::after {
+            display: none;
+        }
+
+        @keyframes thumbnailSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Remove o estilo antigo que estava conflitante */
+        .project-image.has-media.is-video::after {
+            content: '';
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            background: rgba(0,0,0,0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3;
+            backdrop-filter: blur(5px);
+        }
+
+        .project-image.has-media.is-video::before {
+            content: '▶';
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            color: white;
+            font-size: 16px;
+            z-index: 4;
+            pointer-events: none;
+        }
+
+
+
+
+        .video-fallback-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .video-fallback-icon i {
+            font-size: 3rem;
+            color: rgba(255,255,255,0.7);
+        }
+
+
+
+
+
     </style>
 </head>
 <body class="page-gallery">
@@ -912,10 +986,15 @@
                     renderProjects(projects);
                     ui.showGallery();
                     
-                    // IMPORTANTE: Reativar os event listeners após renderizar
+                    // Reativar event listeners
                     if (window.projectModal) {
                         window.projectModal.attachCardListeners();
                     }
+                    
+                    // NOVO: Aplicar thumbnails após carregamento
+                    setTimeout(() => {
+                        applyVideoThumbnails();
+                    }, 500);
                 } else {
                     ui.showNoResults();
                 }
@@ -926,6 +1005,7 @@
             }
         }
 
+        // Substitua a função renderProjects() inteira por esta versão:
         function renderProjects(projectsToRender) {
             ui.galleryGrid.innerHTML = projectsToRender.map(project => {
                 const primaryMedia = project.media && project.media.length > 0 ? project.media[0] : null;
@@ -935,15 +1015,18 @@
 
                 let mediaClasses = 'project-image';
                 let mediaStyle = '';
+                let dataAttributes = '';
 
                 if (hasMedia) {
                     mediaClasses += ' has-media';
                     
                     if (isVideo) {
-                        mediaClasses += ' is-video';
-                        // Para vídeos, usar o primeiro frame como thumbnail
+                        mediaClasses += ' is-video loading-thumbnail';
                         const videoPath = `upload/images/projects/${primaryMedia.path}`;
-                        mediaStyle = `background-image: url('${videoPath}#t=1');`;
+                        
+                        // Fundo escuro temporário
+                        mediaStyle = 'background-color: #2a2a2a;';
+                        dataAttributes = `data-video-path="${videoPath}"`;
                     } else {
                         mediaClasses += ' is-image';
                         mediaStyle = `background-image: url('upload/images/projects/${primaryMedia.path}');`;
@@ -952,7 +1035,7 @@
 
                 return `
                 <div class="project-card" data-project-id="${project.id}">
-                    <div class="${mediaClasses}" style="${mediaStyle}">
+                    <div class="${mediaClasses}" style="${mediaStyle}" ${dataAttributes}>
                         <div class="project-overlay">
                             <i class="fas fa-${isVideo ? 'play' : 'search-plus'} view-icon"></i>
                         </div>
@@ -964,6 +1047,11 @@
                 </div>
                 `;
             }).join('');
+
+            // NOVO: Aplicar thumbnails de vídeo após renderizar
+            setTimeout(() => {
+                applyVideoThumbnails();
+            }, 100);
         }
 
         function setupFilterEventListeners() {
@@ -1011,7 +1099,7 @@
                     
                     switch(e.key) {
                         case 'Escape':
-                            this.close();
+                            this.close(); // Já vai pausar os vídeos através do método close() modificado
                             break;
                         case 'ArrowLeft':
                             this.prevImage();
@@ -1130,6 +1218,7 @@
             showCurrentImage() {
                 if (this.media.length === 0) return;
 
+                this.pauseAllVideos();
                 const currentMedia = this.media[this.currentImageIndex];
                 const mediaUrl = `upload/images/projects/${currentMedia.path}`;
 
@@ -1141,6 +1230,13 @@
                     videoElement.src = mediaUrl;
                     videoElement.controls = true;
                     videoElement.style.cssText = 'width: 100%; height: 100%; object-fit: contain;';
+                    videoElement.addEventListener('loadstart', () => {
+                        // Pausar outros vídeos quando um novo começar a carregar
+                        this.pauseAllVideos();
+                    });
+
+
+
                     this.mainImage.appendChild(videoElement);
                 } else {
                     this.mainImage.style.backgroundImage = `url('${mediaUrl}')`;
@@ -1271,14 +1367,41 @@
                     </div>
                 `;
             }
+
+            pauseAllVideos() {
+                // Pausa vídeos no container principal da modal
+                const videos = this.mainImage.querySelectorAll('video');
+                videos.forEach(video => {
+                    video.pause();
+                    video.currentTime = 0; // Opcional: volta para o início
+                });
+                
+                // Também pausa qualquer vídeo que possa estar em outros containers
+                const allModalVideos = this.modal.querySelectorAll('video');
+                allModalVideos.forEach(video => {
+                    video.pause();
+                    video.currentTime = 0;
+                });
+            }
+
+
+
             
             close() {
+
+                this.pauseAllVideos();
+
                 this.modal.style.display = 'none';
                 this.modal.classList.remove('opening');
                 document.body.style.overflow = 'auto';
                 this.currentProject = null;
                 this.images = [];
                 this.currentImageIndex = 0;
+
+                this.mainImage.innerHTML = '<div class="modal-image-placeholder">📸</div>';
+                this.mainImage.style.backgroundImage = 'none';
+
+
             }
             
             isOpen() {
@@ -1304,6 +1427,78 @@
                 window.projectModal.open(projectId);
             }
         }
+
+
+        // ===== SISTEMA DE THUMBNAILS PARA VÍDEOS =====
+        function generateVideoThumbnail(videoPath, timeInSeconds = 0.5) {
+            return new Promise((resolve, reject) => {
+                const video = document.createElement('video');
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                video.crossOrigin = 'anonymous';
+                video.muted = true;
+                
+                video.onloadedmetadata = () => {
+                    video.currentTime = Math.min(timeInSeconds, video.duration);
+                };
+                
+                video.onseeked = () => {
+                    try {
+                        canvas.width = video.videoWidth;
+                        canvas.height = video.videoHeight;
+                        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                        const thumbnailDataURL = canvas.toDataURL('image/jpeg', 0.8);
+                        resolve(thumbnailDataURL);
+                        video.remove();
+                    } catch (error) {
+                        reject(error);
+                    }
+                };
+                
+                video.onerror = () => reject(new Error('Erro ao carregar vídeo'));
+                video.src = videoPath;
+                video.load();
+            });
+        }
+
+        async function applyVideoThumbnails() {
+            const videoElements = document.querySelectorAll('.project-image.is-video[data-video-path]');
+            
+            for (const element of videoElements) {
+                try {
+                    const videoPath = element.dataset.videoPath;
+                    if (!videoPath || element.classList.contains('thumbnail-loaded')) continue;
+                    
+                    const thumbnailDataURL = await generateVideoThumbnail(videoPath, 0.5);
+                    
+                    element.style.backgroundImage = `url('${thumbnailDataURL}')`;
+                    element.style.backgroundSize = 'cover';
+                    element.style.backgroundPosition = 'center';
+                    element.style.backgroundRepeat = 'no-repeat';
+                    
+                    element.classList.remove('loading-thumbnail');
+                    element.classList.add('thumbnail-loaded');
+                    
+                } catch (error) {
+                    console.error('Erro ao gerar thumbnail:', error);
+                    
+                    element.style.backgroundColor = '#2a2a2a';
+                    element.style.backgroundImage = 'none';
+                    element.classList.remove('loading-thumbnail');
+                    
+                    if (!element.querySelector('.video-fallback-icon')) {
+                        const iconDiv = document.createElement('div');
+                        iconDiv.className = 'video-fallback-icon';
+                        iconDiv.innerHTML = '<i class="fas fa-play" style="font-size: 3rem; color: rgba(255,255,255,0.7);"></i>';
+                        element.appendChild(iconDiv);
+                    }
+                }
+            }
+        }
+
+
+
     </script>
 
 

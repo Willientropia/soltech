@@ -112,6 +112,10 @@ try {
     $message = "Erro ao buscar contatos: " . $e->getMessage();
     $message_type = 'error';
 }
+
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -152,6 +156,26 @@ try {
             align-items: center;
             max-width: 1600px;
             margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .back-btn {
+            background: var(--primary-color);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #e6940a;
         }
 
         .container {
@@ -232,6 +256,13 @@ try {
             border-bottom: 1px solid #e9e9e9;
             vertical-align: middle;
             white-space: nowrap;
+            line-height: 1.4;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
         }
 
         tr:last-child td {
@@ -260,6 +291,9 @@ try {
             cursor: pointer;
             transition: all 0.3s ease;
             border: 2px solid transparent;
+            min-width: 140px;
+            height: 40px;
+            box-sizing: border-box;
         }
 
         .select-wrapper::after {
@@ -298,10 +332,12 @@ try {
             display: flex;
             gap: 10px;
             align-items: center;
+            justify-content: flex-start;
+            min-height: 50px;
         }
 
         .action-btn {
-            padding: 8px 12px;
+            padding: 10px 12px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -309,6 +345,12 @@ try {
             transition: opacity 0.3s;
             font-size: 1rem;
             line-height: 1;
+            height: 40px;
+            min-width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
         }
 
         .btn-delete {
@@ -397,11 +439,84 @@ try {
             cursor: pointer;
             font-size: 1rem;
         }
+
+
+        /* ===== ESTILOS PARA THUMBNAILS DE VÍDEO ===== */
+        .loading-thumbnail {
+            position: relative;
+        }
+
+        .loading-thumbnail::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid rgba(255,255,255,0.8);
+            border-radius: 50%;
+            animation: thumbnailSpin 1s linear infinite;
+            z-index: 2;
+        }
+
+        .thumbnail-loaded::after {
+            display: none;
+        }
+
+        @keyframes thumbnailSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .video-fallback-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Indicador de vídeo para admin */
+        .project-image.has-image.is-video::after {
+            content: '▶ VÍDEO';
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            z-index: 3;
+        }
+
+
+
+
+
+
+
+
+
+
+
     </style>
 </head>
 <body>
     <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-solar-panel"></i> SOL TECH Admin
+            </div>
+            <a href="dashboard.php" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Voltar ao Dashboard
+            </a>
         </div>
+    </div>
 
     <div class="container">
         <h1 class="page-title">Gerenciar Contatos (Leads)</h1>
@@ -464,8 +579,10 @@ try {
                                             </select>
                                         </div>
                                     <?php elseif ($contact['status'] === 'perdido'): ?>
-                                        <strong class="status-perdido" style="padding: 10px 15px; border-radius: 8px; background-color: #f1f3f5;">Perdido</strong>
-                                        <button onclick="updateStatus(this, <?= $contact['id'] ?>, 'lixeira')" class="action-btn btn-delete" title="Mover para Lixeira"><i class="fas fa-trash"></i></button>
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <strong class="status-perdido" style="padding: 10px 15px; border-radius: 8px; background-color: #f1f3f5; height: 20px; display: flex; align-items: center;">Perdido</strong>
+                                            <button onclick="updateStatus(this, <?= $contact['id'] ?>, 'lixeira')" class="action-btn btn-delete" title="Mover para Lixeira"><i class="fas fa-trash"></i></button>
+                                        </div>
                                     <?php elseif ($contact['status'] === 'lixeira'): ?>
                                         <button onclick="updateStatus(this, <?= $contact['id'] ?>, 'novo')" class="action-btn btn-restore" title="Restaurar"><i class="fas fa-undo"></i> Restaurar</button>
                                         <button onclick="showDeleteModal(<?= $contact['id'] ?>)" class="action-btn btn-delete" title="Excluir Permanentemente"><i class="fas fa-fire"></i> Excluir</button>
