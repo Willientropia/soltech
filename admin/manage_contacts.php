@@ -1,10 +1,11 @@
 <?php
+
 require_once 'auth_check.php';
 $admin = checkAdminAuth();
 
 include_once '../config/database.php';
 
-// Bloco para processar as ações (antes chamado via API)
+// --- Processamento de Ações POST (API) ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Content-Type: application/json');
     $database = new Database();
@@ -45,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute();
                 echo json_encode(['success' => true]);
                 break;
-            
+
             default:
                 echo json_encode(['success' => false, 'message' => 'Ação desconhecida.']);
                 break;
@@ -57,24 +58,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit; // Termina a execução para não renderizar o HTML
 }
 
-// Lógica para exibir a página (inalterada)
+// --- Lógica para Exibir a Página HTML ---
 $message = '';
 $message_type = '';
 $contacts = [];
 $status_map = [
-    'novo' => ['label' => 'Novo', 'class' => 'status-novo'],
+    'novo'               => ['label' => 'Novo', 'class' => 'status-novo'],
     'entramos em contato' => ['label' => 'Em Contato', 'class' => 'status-contato'],
-    'vendido' => ['label' => 'Vendido', 'class' => 'status-vendido'],
-    'perdido' => ['label' => 'Perdido', 'class' => 'status-perdido'],
-    'lixeira' => ['label' => 'Lixeira', 'class' => 'status-lixeira'],
+    'vendido'            => ['label' => 'Vendido', 'class' => 'status-vendido'],
+    'perdido'            => ['label' => 'Perdido', 'class' => 'status-perdido'],
+    'lixeira'            => ['label' => 'Lixeira', 'class' => 'status-lixeira'],
 ];
+// Inicializa as estatísticas de contatos para cada status
 $stats = array_fill_keys(array_keys($status_map), 0);
 
 try {
     $database = new Database();
     $db = $database->getConnection();
 
+    // Limpa contatos da lixeira que expiraram (após 30 dias)
     $db->query("DELETE FROM contacts WHERE status = 'lixeira' AND deleted_at < NOW() - INTERVAL 30 DAY");
+
+    // Obtém a contagem de contatos por status
     $query = "SELECT status, COUNT(*) as count FROM contacts GROUP BY status";
     $stmt = $db->prepare($query);
     $stmt->execute();
@@ -85,16 +90,19 @@ try {
         }
     }
 
+    // Define a aba atual e busca os contatos correspondentes
     $current_tab = $_GET['tab'] ?? 'novo';
-    $contacts_query = "SELECT id, name, email, phone, city, consumption, message, source, status, created_at, deleted_at,
-                    CASE 
-                        WHEN status = 'lixeira' AND deleted_at IS NOT NULL 
-                        THEN 30 - DATEDIFF(NOW(), deleted_at)
-                        ELSE NULL 
-                    END as days_left
-                    FROM contacts 
-                    WHERE status = :status 
-                    ORDER BY created_at DESC";
+    $contacts_query = "
+        SELECT *,
+               CASE
+                   WHEN status = 'lixeira' AND deleted_at IS NOT NULL
+                   THEN 30 - DATEDIFF(NOW(), deleted_at)
+                   ELSE NULL
+               END as days_left
+        FROM contacts
+        WHERE status = :status
+        ORDER BY created_at DESC
+    ";
     $contacts_stmt = $db->prepare($contacts_query);
     $contacts_stmt->bindValue(':status', $current_tab);
     $contacts_stmt->execute();
@@ -114,91 +122,281 @@ try {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #FFA500; --secondary-color: #FF6B35; --dark-color: #1a1a1a;
-            --light-color: #f5f5f5; --success-color: #4CAF50; --danger-color: #f44336;
-            --info-color: #007bff; --lost-color: #6c757d;
+            --primary-color: #FFA500;
+            --secondary-color: #FF6B35;
+            --dark-color: #1a1a1a;
+            --light-color: #f5f5f5;
+            --success-color: #4CAF50;
+            --danger-color: #f44336;
+            --info-color: #007bff;
+            --lost-color: #6c757d;
         }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--light-color); color: var(--dark-color); margin: 0; }
-        .header { background: linear-gradient(135deg, var(--dark-color), #2a2a2a); color: white; padding: 1rem 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .header-content { display: flex; justify-content: space-between; align-items: center; max-width: 1600px; margin: 0 auto; }
-        .container { max-width: 1600px; margin: 2rem auto; padding: 0 2rem; }
-        .page-title { font-size: 2.5rem; margin-bottom: 1rem; }
-        .tabs { display: flex; flex-wrap: wrap; border-bottom: 1px solid #ccc; margin-bottom: 2rem; }
-        .tab-link { padding: 12px 20px; cursor: pointer; border: none; background: none; font-size: 1rem; color: #666; position: relative; text-decoration: none; }
-        .tab-link.active { color: var(--primary-color); font-weight: bold; }
-        .tab-link.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 3px; background: var(--primary-color); border-radius: 3px 3px 0 0; }
-        .badge { background: #e0e0e0; color: #333; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem; margin-left: 8px; font-weight: normal; }
-        .tab-link.active .badge { background: var(--primary-color); color: white; }
-        .table-container { background: white; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--light-color);
+            color: var(--dark-color);
+            margin: 0;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--dark-color), #2a2a2a);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 2rem;
+        }
+
+        .tab-link {
+            padding: 12px 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            color: #666;
+            position: relative;
+            text-decoration: none;
+        }
+
+        .tab-link.active {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .tab-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 3px 3px 0 0;
+        }
+
+        .badge {
+            background: #e0e0e0;
+            color: #333;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            margin-left: 8px;
+            font-weight: normal;
+        }
+
+        .tab-link.active .badge {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
         th, td {
             padding: 15px 20px;
             text-align: left;
             border-bottom: 1px solid #e9e9e9;
             vertical-align: middle;
-            /* white-space: nowrap; REMOVA ESTA LINHA */
-        }
-            /* Adicione estas regras para as células de dados */
-        td {
-            white-space: normal; /* Permite que o texto quebre linha */
+            white-space: nowrap;
         }
 
-
-         /* Específico para mensagem e consumo, para quebrar linha se necessário */
-        td:nth-child(5) { /* Coluna da Mensagem */
-            max-width: 250px; /* Limita a largura da mensagem */
-            word-wrap: break-word; /* Força quebra de palavras longas */
+        tr:last-child td {
+            border-bottom: none;
         }
 
-        td:nth-child(6) { /* Coluna do Consumo (R$) */
-            max-width: 120px; /* Limita a largura do consumo */
-            word-wrap: break-word; /* Força quebra de palavras longas */
-        }
-        
-        /* Específico para o Email / Telefone */
-        td:nth-child(3) { /* Coluna Email / Telefone */
-            max-width: 200px; /* Limita a largura do Email/Telefone */
-            word-wrap: break-word;
+        .empty-state {
+            padding: 3rem;
+            text-align: center;
+            color: #888;
         }
 
+        .select-wrapper {
+            position: relative;
+            display: inline-block;
+        }
 
-        tr:last-child td { border-bottom: none; }
-        .empty-state { padding: 3rem; text-align: center; color: #888; }
-        
-        .select-wrapper { position: relative; display: inline-block; }
         .status-select {
-            -webkit-appearance: none; -moz-appearance: none; appearance: none;
-            border-radius: 8px; padding: 10px 35px 10px 15px;
-            font-size: 0.9rem; font-weight: 500; cursor: pointer;
-            transition: all 0.3s ease; border: 2px solid transparent;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            border-radius: 8px;
+            padding: 10px 35px 10px 15px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
         }
+
         .select-wrapper::after {
-            content: '\f078'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
-            position: absolute; right: 15px; top: 50%;
-            transform: translateY(-50%); pointer-events: none;
+            content: '\f078';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
             transition: all 0.3s ease;
         }
-        .status-novo { color: var(--info-color); background-color: #e6f2ff; }
-        .status-contato { color: #b07000; background-color: #fff8e1; }
-        .status-vendido { color: var(--success-color); background-color: #e8f5e9; }
-        .status-perdido { color: var(--lost-color); background-color: #f1f3f5; }
-        
-        .actions-cell { display: flex; gap: 10px; align-items: center; }
-        .action-btn { padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; color: white; transition: opacity 0.3s; font-size: 1rem; line-height: 1; }
-        .btn-delete { background: var(--danger-color); }
-        .btn-restore { background: var(--info-color); }
-        
-        .trash-container { text-align: right; margin-top: 1.5rem; }
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); backdrop-filter: blur(5px); align-items: center; justify-content: center; }
-        .modal-content { background-color: #fefefe; padding: 30px; border: 1px solid #888; width: 90%; max-width: 500px; border-radius: 15px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        .modal-content h3 { margin-top: 0; }
-        .modal-content input { width: 100%; padding: 12px; margin: 15px 0; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; text-align: center; }
-        
+
+        .status-novo {
+            color: var(--info-color);
+            background-color: #e6f2ff;
+        }
+
+        .status-contato {
+            color: #b07000;
+            background-color: #fff8e1;
+        }
+
+        .status-vendido {
+            color: var(--success-color);
+            background-color: #e8f5e9;
+        }
+
+        .status-perdido {
+            color: var(--lost-color);
+            background-color: #f1f3f5;
+        }
+
+        .actions-cell {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .action-btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            transition: opacity 0.3s;
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        .btn-delete {
+            background: var(--danger-color);
+        }
+
+        .btn-restore {
+            background: var(--info-color);
+        }
+
+        .trash-container {
+            text-align: right;
+            margin-top: 1.5rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            padding: 30px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-content h3 {
+            margin-top: 0;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+            text-align: center;
+        }
+
         /* Estilos atualizados para os botões do modal */
-        .modal-buttons { display: flex; justify-content: center; gap: 1rem; align-items: center; margin-top: 1rem; }
-        .btn-delete-confirm { background: var(--danger-color); color: white; padding: 12px 28px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer; transition: background 0.3s; }
-        .btn-delete-confirm:hover { background: #c9302c; }
-        .btn-cancel { background: none; border: none; color: #666; text-decoration: underline; padding: 10px; cursor: pointer; font-size: 1rem; }
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .btn-delete-confirm {
+            background: var(--danger-color);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-delete-confirm:hover {
+            background: #c9302c;
+        }
+
+        .btn-cancel {
+            background: none;
+            border: none;
+            color: #666;
+            text-decoration: underline;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -220,22 +418,24 @@ try {
                 <i class="fas fa-trash"></i> Lixeira <span class="badge"><?= $stats['lixeira'] ?></span>
             </a>
         </div>
-        
+
         <div class="table-container">
             <?php if (empty($contacts)): ?>
-                <div class="empty-state"><h3>Nenhum contato nesta categoria.</h3></div>
+                <div class="empty-state">
+                    <h3>Nenhum contato nesta categoria.</h3>
+                </div>
             <?php else: ?>
                 <table>
                     <thead>
                         <tr>
                             <th>Data</th>
-                            <th>Nome</th>
+                            <th>Nome</th>   
                             <th>Email / Telefone</th>
                             <th>Cidade</th>
+                            <th>Valor Luz (R$)</th>
                             <th>Mensagem</th>
-                            <th>Consumo (R$)</th>
                             <?php if ($current_tab === 'lixeira'): ?>
-                                <th>Tempo Restante</th>
+                            <th>Tempo Restante</th>
                             <?php endif; ?>
                             <th>Ações</th>
                         </tr>
@@ -243,25 +443,34 @@ try {
                     <tbody>
                         <?php foreach ($contacts as $contact): ?>
                             <tr>
+                                
                                 <td><?= date('d/m/Y H:i', strtotime($contact['created_at'])) ?></td>
                                 <td><?= htmlspecialchars($contact['name']) ?></td>
                                 <td><?= htmlspecialchars($contact['email']) ?><br><?= htmlspecialchars($contact['phone']) ?></td>
                                 <td><?= htmlspecialchars($contact['city'] ?: 'N/A') ?></td>
+                                <td><?= !empty($contact['consumption']) ? 'R$ ' . number_format($contact['consumption'], 2, ',', '.') : 'N/A' ?></td>
                                 <td style="white-space: pre-wrap; max-width: 300px;"><?= htmlspecialchars($contact['message'] ?: 'Nenhuma') ?></td>
-                                <td>
-                                    <?php 
-                                    if (!empty($contact['consumption'])) {
-                                        echo 'R$ ' . number_format($contact['consumption'], 2, ',', '.');
-                                    } else {
-                                        echo 'N/A';
-                                    }
-                                    ?>
-                                </td>
                                 <?php if ($current_tab === 'lixeira'): ?>
                                     <td><i class="fas fa-clock"></i> <?= max(0, round($contact['days_left'])) ?> dias</td>
                                 <?php endif; ?>
                                 <td class="actions-cell">
-                                    </td>
+                                    <?php if (in_array($contact['status'], ['novo', 'entramos em contato', 'vendido'])): ?>
+                                        <div class="select-wrapper">
+                                            <select class="status-select <?= $status_map[$contact['status']]['class'] ?>" onchange="updateStatus(this, <?= $contact['id'] ?>)">
+                                                <option value="novo" <?= $contact['status'] == 'novo' ? 'selected' : '' ?>>Novo</option>
+                                                <option value="entramos em contato" <?= $contact['status'] == 'entramos em contato' ? 'selected' : '' ?>>Em Contato</option>
+                                                <option value="vendido" <?= $contact['status'] == 'vendido' ? 'selected' : '' ?>>Vendido</option>
+                                                <option value="perdido">Perdido</option>
+                                            </select>
+                                        </div>
+                                    <?php elseif ($contact['status'] === 'perdido'): ?>
+                                        <strong class="status-perdido" style="padding: 10px 15px; border-radius: 8px; background-color: #f1f3f5;">Perdido</strong>
+                                        <button onclick="updateStatus(this, <?= $contact['id'] ?>, 'lixeira')" class="action-btn btn-delete" title="Mover para Lixeira"><i class="fas fa-trash"></i></button>
+                                    <?php elseif ($contact['status'] === 'lixeira'): ?>
+                                        <button onclick="updateStatus(this, <?= $contact['id'] ?>, 'novo')" class="action-btn btn-restore" title="Restaurar"><i class="fas fa-undo"></i> Restaurar</button>
+                                        <button onclick="showDeleteModal(<?= $contact['id'] ?>)" class="action-btn btn-delete" title="Excluir Permanentemente"><i class="fas fa-fire"></i> Excluir</button>
+                                    <?php endif; ?>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -287,13 +496,22 @@ try {
             </div>
         </div>
     </div>
-    
+
     <script>
         let contactIdToDelete = null;
 
+        /**
+         * Atualiza o status de um contato via AJAX.
+         * @param {HTMLElement} element O elemento que disparou a função (ex: o select).
+         * @param {number} id O ID do contato a ser atualizado.
+         * @param {string|null} newStatus O novo status. Se null, o valor será pego do `element.value`.
+         */
         function updateStatus(element, id, newStatus = null) {
             const status = newStatus || element.value;
-            element.disabled = true;
+            // Desabilita o elemento para evitar múltiplas submissões
+            if (element) {
+                element.disabled = true;
+            }
 
             fetch('manage_contacts.php', {
                 method: 'POST',
@@ -301,31 +519,40 @@ try {
                 body: JSON.stringify({ action: 'update_status', id: id, status: status })
             })
             .then(response => {
-                if (!response.ok) throw new Error(`Erro de Rede: ${response.status}`);
+                if (!response.ok) {
+                    throw new Error(`Erro de Rede: ${response.status}`);
+                }
                 return response.json();
             })
             .then(data => {
                 if (data.success) {
-                    window.location.reload();
+                    window.location.reload(); // Recarrega a página em caso de sucesso
                 } else {
                     alert(`Falha ao atualizar o status: ${data.message || 'Erro desconhecido.'}`);
-                    element.disabled = false;
+                    if (element) {
+                        element.disabled = false;
+                    }
                 }
             })
             .catch(error => {
                 console.error('Erro na requisição:', error);
                 alert(`Não foi possível se comunicar com o servidor. Erro: ${error.message}`);
-                element.disabled = false;
+                if (element) {
+                    element.disabled = false;
+                }
             });
         }
-        
+
+        /**
+         * Confirma a exclusão permanente de um contato ou esvaziamento da lixeira.
+         */
         function confirmDelete() {
             const confirmInput = document.getElementById('deleteConfirmInput');
             if (confirmInput.value.toLowerCase() !== 'confirmar') {
                 alert('A palavra de confirmação está incorreta.');
                 return;
             }
-            
+
             fetch('manage_contacts.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -334,13 +561,21 @@ try {
             .then(response => response.json())
             .then(data => {
                 if(data.success) {
-                    window.location.href = '?tab=lixeira';
+                    window.location.href = '?tab=lixeira'; // Redireciona para a aba da lixeira após a exclusão
                 } else {
                     alert('Erro ao deletar: ' + (data.message || 'Erro desconhecido.'));
                 }
+            })
+            .catch(error => {
+                console.error('Erro na requisição:', error);
+                alert(`Não foi possível se comunicar com o servidor. Erro: ${error.message}`);
             });
         }
 
+        /**
+         * Exibe o modal de confirmação para exclusão de um contato específico.
+         * @param {number} id O ID do contato a ser excluído.
+         */
         function showDeleteModal(id) {
             contactIdToDelete = id;
             document.getElementById('modalTitle').innerText = 'Excluir Permanentemente';
@@ -349,14 +584,21 @@ try {
             document.getElementById('deleteModal').style.display = 'flex';
         }
 
+        /**
+         * Exibe o modal de confirmação para esvaziar a lixeira.
+         */
         function showEmptyTrashModal() {
-            contactIdToDelete = 'all';
+            contactIdToDelete = 'all'; // Define 'all' para indicar exclusão de todos
             document.getElementById('modalTitle').innerText = 'Esvaziar Lixeira';
             document.getElementById('modalText').innerText = 'TODOS os contatos na lixeira serão excluídos permanentemente. Esta ação não pode ser desfeita. Digite "confirmar" para prosseguir.';
             document.getElementById('deleteConfirmInput').value = '';
             document.getElementById('deleteModal').style.display = 'flex';
         }
 
+        /**
+         * Fecha um modal.
+         * @param {string} modalId O ID do modal a ser fechado.
+         */
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
         }
