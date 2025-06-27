@@ -86,7 +86,7 @@ try {
     }
 
     $current_tab = $_GET['tab'] ?? 'novo';
-    $contacts_query = "SELECT *, 
+    $contacts_query = "SELECT id, name, email, phone, city, consumption, message, source, status, created_at, deleted_at,
                     CASE 
                         WHEN status = 'lixeira' AND deleted_at IS NOT NULL 
                         THEN 30 - DATEDIFF(NOW(), deleted_at)
@@ -131,7 +131,37 @@ try {
         .tab-link.active .badge { background: var(--primary-color); color: white; }
         .table-container { background: white; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 15px 20px; text-align: left; border-bottom: 1px solid #e9e9e9; vertical-align: middle; white-space: nowrap; }
+        th, td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid #e9e9e9;
+            vertical-align: middle;
+            /* white-space: nowrap; REMOVA ESTA LINHA */
+        }
+            /* Adicione estas regras para as células de dados */
+        td {
+            white-space: normal; /* Permite que o texto quebre linha */
+        }
+
+
+         /* Específico para mensagem e consumo, para quebrar linha se necessário */
+        td:nth-child(5) { /* Coluna da Mensagem */
+            max-width: 250px; /* Limita a largura da mensagem */
+            word-wrap: break-word; /* Força quebra de palavras longas */
+        }
+
+        td:nth-child(6) { /* Coluna do Consumo (R$) */
+            max-width: 120px; /* Limita a largura do consumo */
+            word-wrap: break-word; /* Força quebra de palavras longas */
+        }
+        
+        /* Específico para o Email / Telefone */
+        td:nth-child(3) { /* Coluna Email / Telefone */
+            max-width: 200px; /* Limita a largura do Email/Telefone */
+            word-wrap: break-word;
+        }
+
+
         tr:last-child td { border-bottom: none; }
         .empty-state { padding: 3rem; text-align: center; color: #888; }
         
@@ -198,7 +228,12 @@ try {
                 <table>
                     <thead>
                         <tr>
-                            <th>Data</th><th>Nome</th><th>Email / Telefone</th><th>Cidade</th><th>Mensagem</th>
+                            <th>Data</th>
+                            <th>Nome</th>
+                            <th>Email / Telefone</th>
+                            <th>Cidade</th>
+                            <th>Mensagem</th>
+                            <th>Consumo (R$)</th>
                             <?php if ($current_tab === 'lixeira'): ?>
                                 <th>Tempo Restante</th>
                             <?php endif; ?>
@@ -213,27 +248,20 @@ try {
                                 <td><?= htmlspecialchars($contact['email']) ?><br><?= htmlspecialchars($contact['phone']) ?></td>
                                 <td><?= htmlspecialchars($contact['city'] ?: 'N/A') ?></td>
                                 <td style="white-space: pre-wrap; max-width: 300px;"><?= htmlspecialchars($contact['message'] ?: 'Nenhuma') ?></td>
+                                <td>
+                                    <?php 
+                                    if (!empty($contact['consumption'])) {
+                                        echo 'R$ ' . number_format($contact['consumption'], 2, ',', '.');
+                                    } else {
+                                        echo 'N/A';
+                                    }
+                                    ?>
+                                </td>
                                 <?php if ($current_tab === 'lixeira'): ?>
                                     <td><i class="fas fa-clock"></i> <?= max(0, round($contact['days_left'])) ?> dias</td>
                                 <?php endif; ?>
                                 <td class="actions-cell">
-                                    <?php if (in_array($contact['status'], ['novo', 'entramos em contato', 'vendido'])): ?>
-                                        <div class="select-wrapper">
-                                            <select class="status-select <?= $status_map[$contact['status']]['class'] ?>" onchange="updateStatus(this, <?= $contact['id'] ?>)">
-                                                <option value="novo" <?= $contact['status'] == 'novo' ? 'selected' : '' ?>>Novo</option>
-                                                <option value="entramos em contato" <?= $contact['status'] == 'entramos em contato' ? 'selected' : '' ?>>Em Contato</option>
-                                                <option value="vendido" <?= $contact['status'] == 'vendido' ? 'selected' : '' ?>>Vendido</option>
-                                                <option value="perdido">Perdido</option>
-                                            </select>
-                                        </div>
-                                    <?php elseif ($contact['status'] === 'perdido'): ?>
-                                        <strong class="status-perdido" style="padding: 10px 15px; border-radius: 8px; background-color: #f1f3f5;">Perdido</strong>
-                                        <button onclick="updateStatus(this, <?= $contact['id'] ?>, 'lixeira')" class="action-btn btn-delete" title="Mover para Lixeira"><i class="fas fa-trash"></i></button>
-                                    <?php elseif ($contact['status'] === 'lixeira'): ?>
-                                        <button onclick="updateStatus(this, <?= $contact['id'] ?>, 'novo')" class="action-btn btn-restore" title="Restaurar"><i class="fas fa-undo"></i> Restaurar</button>
-                                        <button onclick="showDeleteModal(<?= $contact['id'] ?>)" class="action-btn btn-delete" title="Excluir Permanentemente"><i class="fas fa-fire"></i> Excluir</button>
-                                    <?php endif; ?>
-                                </td>
+                                    </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

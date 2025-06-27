@@ -1,4 +1,9 @@
 <?php
+error_reporting(E_ALL); // Reporta todos os erros
+ini_set('display_errors', 1); // Exibe os erros no navegador (APENAS PARA DEPURAR)
+ini_set('log_errors', 1); // Habilita o log de erros
+ini_set('error_log', '/caminho/para/seu/pasta_de_logs/php_errors.log'); // Defina um caminho para o log de erros na Locaweb (se possível)
+
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST");
@@ -6,6 +11,8 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 include_once '../config/database.php';
 include_once '../models/Contact.php';
+
+
 
 $database = new Database();
 $db = $database->getConnection();
@@ -56,7 +63,7 @@ if (
         $headers .= 'Reply-To: <contato@seusite.com.br>' . "\r\n";
 
         // Envia o e-mail
-        mail($to, $subject, $email_body, $headers);
+        //mail($to, $subject, $email_body, $headers);
 
         http_response_code(201); // Created
         echo json_encode(array("message" => "Contato salvo com sucesso e e-mail enviado."));
