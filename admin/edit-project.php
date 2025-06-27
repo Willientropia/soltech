@@ -820,7 +820,7 @@ if (isset($_GET['success'])) {
             <?php endif; ?>
 
             <div class="form-group">
-                <label>Adicionar Novas Imagens</label>
+                 <label for="images">Adicionar Novas Imagens</label>
                 <div class="file-upload" id="fileUploadArea">
                     <div class="file-upload-icon">
                         <i class="fas fa-cloud-upload-alt"></i>

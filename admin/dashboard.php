@@ -5,6 +5,9 @@ $admin = checkAdminAuth();
 // Estatísticas básicas
 try {
     include_once '../config/database.php';
+    // --- INÍCIO DO CÓDIGO DE DEPURÇÃO ---
+    
+
     $database = new Database();
     $conn = $database->getConnection();
     
@@ -13,7 +16,7 @@ try {
     $total_projects = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
     
     // Contar contatos
-    $stmt = $conn->query("SELECT COUNT(*) as total FROM contacts WHERE created_at >= CURRENT_DATE - INTERVAL '30 days'");
+    $stmt = $conn->query("SELECT COUNT(*) as total FROM contacts WHERE created_at >= CURRENT_DATE - INTERVAL 30 DAY");
     $total_contacts = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
     
     // Contar categorias
