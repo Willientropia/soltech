@@ -5,442 +5,556 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galeria de Projetos - SOL TECH ENERGIA SOLAR</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
+        /* Global Styles */
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            margin: 0; /* [cite: 73] */
+            padding: 0; /* [cite: 74] */
+            box-sizing: border-box; /* [cite: 74] */
         }
 
         :root {
-            --primary-color: #FFA500;
-            --secondary-color: #FF6B35;
-            --dark-color: #1a1a1a;
-            --light-color: #f5f5f5;
-            --text-color: #333;
-            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --primary-color: #FFA500; /* [cite: 75] */
+            --secondary-color: #FF6B35; /* [cite: 75] */
+            --dark-color: #1a1a1a; /* [cite: 75] */
+            --light-color: #f5f5f5; /* [cite: 75] */
+            --text-color: #333; /* [cite: 75] */
+            --shadow: 0 10px 30px rgba(0,0,0,0.1); /* [cite: 76] */
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--light-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* [cite: 77] */
+            line-height: 1.6; /* [cite: 77] */
+            color: var(--text-color); /* [cite: 77] */
+            background-color: var(--light-color); /* [cite: 77] */
         }
 
         /* Header */
         header {
-            background: linear-gradient(135deg, var(--dark-color) 0%, #2a2a2a 100%);
-            color: white;
-            padding: 1rem 0;
-            box-shadow: var(--shadow);
+            background: linear-gradient(135deg, var(--dark-color) 0%, #2a2a2a 100%); /* [cite: 78] */
+            color: white; /* [cite: 78] */
+            padding: 1rem 0; /* [cite: 78] */
+            box-shadow: var(--shadow); /* [cite: 78] */
         }
 
         nav {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            max-width: 1200px; /* [cite: 79] */
+            margin: 0 auto; /* [cite: 79] */
+            padding: 0 2rem; /* [cite: 79] */
+            display: flex; /* [cite: 80] */
+            justify-content: space-between; /* [cite: 80] */
+            align-items: center; /* [cite: 80] */
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: white;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-size: 1.5rem; /* [cite: 81] */
+            font-weight: bold; /* [cite: 81] */
+            color: white; /* [cite: 81] */
+            text-decoration: none; /* [cite: 81] */
+            display: flex; /* [cite: 82] */
+            align-items: center; /* [cite: 82] */
+            gap: 10px; /* [cite: 82] */
         }
 
         .logo-img {
-            height: 50px;
-            width: auto;
-            border-radius: 50%;
+            height: 50px; /* [cite: 83] */
+            width: auto; /* [cite: 83] */
+            border-radius: 50%; /* [cite: 83] */
         }
 
         .back-btn {
-            background: var(--primary-color);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 25px;
-            text-decoration: none;
-            transition: all 0.3s ease;
+            background: var(--primary-color); /* [cite: 84] */
+            color: white; /* [cite: 84] */
+            padding: 10px 20px; /* [cite: 84] */
+            border-radius: 25px; /* [cite: 84] */
+            text-decoration: none; /* [cite: 84] */
+            transition: all 0.3s ease; /* [cite: 85] */
         }
 
         .back-btn:hover {
-            background: var(--secondary-color);
-            transform: translateY(-2px);
+            background: var(--secondary-color); /* [cite: 86] */
+            transform: translateY(-2px); /* [cite: 86] */
         }
 
         /* Loading Spinner */
         .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 200px;
+            display: flex; /* [cite: 87] */
+            justify-content: center; /* [cite: 87] */
+            align-items: center; /* [cite: 87] */
+            height: 200px; /* [cite: 87] */
         }
 
         .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+            width: 50px; /* [cite: 88] */
+            height: 50px; /* [cite: 88] */
+            border: 5px solid #f3f3f3; /* [cite: 88] */
+            border-top: 5px solid var(--primary-color); /* [cite: 88] */
+            border-radius: 50%; /* [cite: 88] */
+            animation: spin 1s linear infinite; /* [cite: 89] */
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% { transform: rotate(0deg); } /* [cite: 90] */
+            100% { transform: rotate(360deg); } /* [cite: 91] */
         }
 
         /* Main Content */
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
+            max-width: 1200px; /* [cite: 92] */
+            margin: 0 auto; /* [cite: 92] */
+            padding: 4rem 2rem; /* [cite: 92] */
         }
 
         .page-header {
-            text-align: center;
-            margin-bottom: 4rem;
+            text-align: center; /* [cite: 93] */
+            margin-bottom: 4rem; /* [cite: 93] */
         }
 
         .page-header h1 {
-            font-size: 3rem;
-            color: var(--dark-color);
-            margin-bottom: 1rem;
+            font-size: 3rem; /* [cite: 94] */
+            color: var(--dark-color); /* [cite: 94] */
+            margin-bottom: 1rem; /* [cite: 94] */
         }
 
         .page-header p {
-            font-size: 1.2rem;
-            color: #666;
-            max-width: 600px;
-            margin: 0 auto;
+            font-size: 1.2rem; /* [cite: 95] */
+            color: #666; /* [cite: 95] */
+            max-width: 600px; /* [cite: 95] */
+            margin: 0 auto; /* [cite: 95] */
         }
 
         /* Filters */
         .filters {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 3rem;
+            display: flex; /* [cite: 96] */
+            justify-content: center; /* [cite: 96] */
+            flex-wrap: wrap; /* [cite: 96] */
+            gap: 1rem; /* [cite: 96] */
+            margin-bottom: 3rem; /* [cite: 96] */
         }
 
         .filter-btn {
-            padding: 12px 24px;
-            border: 2px solid var(--primary-color);
-            background: white;
-            color: var(--primary-color);
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            outline: none;
+            padding: 12px 24px; /* [cite: 97] */
+            border: 2px solid var(--primary-color); /* [cite: 97] */
+            background: white; /* [cite: 97] */
+            color: var(--primary-color); /* [cite: 97] */
+            border-radius: 25px; /* [cite: 97] */
+            cursor: pointer; /* [cite: 97] */
+            transition: all 0.3s ease; /* [cite: 97] */
+            font-weight: 500; /* [cite: 97] */
+            outline: none; /* [cite: 98] */
         }
 
         .filter-btn:hover,
         .filter-btn.active {
-            background: var(--primary-color);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 165, 0, 0.3);
+            background: var(--primary-color); /* [cite: 99] */
+            color: white; /* [cite: 99] */
+            transform: translateY(-2px); /* [cite: 99] */
+            box-shadow: 0 5px 15px rgba(255, 165, 0, 0.3); /* [cite: 100] */
         }
 
         /* Gallery Grid */
         .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 2rem;
+            display: grid; /* [cite: 101] */
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* [cite: 101] */
+            gap: 2rem; /* [cite: 101] */
         }
 
         .project-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            transition: all 0.4s ease;
-            cursor: pointer;
-            position: relative;
+            background: white; /* [cite: 102] */
+            border-radius: 20px; /* [cite: 102] */
+            overflow: hidden; /* [cite: 102] */
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1); /* [cite: 102] */
+            transition: all 0.4s ease; /* [cite: 102] */
+            cursor: pointer; /* [cite: 103] */
+            position: relative; /* [cite: 103] */
         }
 
         .project-card:hover {
-            transform: translateY(-15px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            transform: translateY(-15px); /* [cite: 104] */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2); /* [cite: 104] */
         }
 
         .project-image {
-            height: 250px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            position: relative;
-            overflow: hidden;
+            height: 250px; /* [cite: 105] */
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); /* [cite: 105] */
+            position: relative; /* [cite: 105] */
+            overflow: hidden; /* [cite: 105] */
         }
 
         .project-image.has-media {
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-referrer;
+            background-size: cover; /* [cite: 106] */
+            background-position: center; /* [cite: 106] */
+            background-repeat: no-referrer; /* [cite: 106] */
         }   
 
-        /* Especificações para vídeos */
+        /* Specifics for videos */
         .project-image.has-media.is-video {
-            background-color: #222;
+            background-color: #222; /* [cite: 107] */
         }
-
-
 
         .project-image:not(.has-media)::before {
-            content: '📸';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 80px;
-            color: rgba(255,255,255,0.7);
+            content: '📸'; /* [cite: 108] */
+            position: absolute; /* [cite: 108] */
+            top: 50%; /* [cite: 108] */
+            left: 50%; /* [cite: 108] */
+            transform: translate(-50%, -50%); /* [cite: 108] */
+            font-size: 80px; /* [cite: 108] */
+            color: rgba(255,255,255,0.7); /* [cite: 109] */
         }
 
-
         .project-image:not(.has-media)::after {
-            display: none;
+            display: none; /* [cite: 110] */
         }
 
         .project-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 2;
+            position: absolute; /* [cite: 111] */
+            top: 0; /* [cite: 111] */
+            left: 0; /* [cite: 111] */
+            right: 0; /* [cite: 111] */
+            bottom: 0; /* [cite: 111] */
+            background: rgba(0,0,0,0.6); /* [cite: 111] */
+            display: flex; /* [cite: 111] */
+            align-items: center; /* [cite: 111] */
+            justify-content: center; /* [cite: 112] */
+            opacity: 0; /* [cite: 112] */
+            transition: opacity 0.3s ease; /* [cite: 112] */
+            z-index: 2; /* [cite: 112] */
         }
 
         .project-card:hover .project-overlay {
-            opacity: 1;
+            opacity: 1; /* [cite: 113] */
         }
 
         .view-icon {
-            color: white;
-            font-size: 3rem;
+            color: white; /* [cite: 114] */
+            font-size: 3rem; /* [cite: 114] */
         }
 
         .project-info {
-            padding: 2rem;
-            text-align: center;
+            padding: 2rem; /* [cite: 115] */
+            text-align: center; /* [cite: 115] */
         }
 
         .project-category {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            font-weight: 600;
-            padding: 0.5rem 1.2rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            display: inline-block; /* [cite: 116] */
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); /* [cite: 116] */
+            color: white; /* [cite: 116] */
+            font-weight: 600; /* [cite: 116] */
+            padding: 0.5rem 1.2rem; /* [cite: 116] */
+            border-radius: 20px; /* [cite: 116] */
+            font-size: 0.85rem; /* [cite: 116] */
+            margin-bottom: 1rem; /* [cite: 117] */
+            text-transform: uppercase; /* [cite: 117] */
+            letter-spacing: 0.5px; /* [cite: 117] */
         }
 
         .project-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: var(--dark-color);
-            line-height: 1.4;
+            font-size: 1.4rem; /* [cite: 118] */
+            font-weight: 700; /* [cite: 118] */
+            margin-bottom: 0.5rem; /* [cite: 118] */
+            color: var(--dark-color); /* [cite: 118] */
+            line-height: 1.4; /* [cite: 118] */
         }
 
         .project-description {
-            color: #666;
-            line-height: 1.6;
-            font-size: 0.95rem;
-            margin-bottom: 1.5rem;
+            color: #666; /* [cite: 119] */
+            line-height: 1.6; /* [cite: 119] */
+            font-size: 0.95rem; /* [cite: 119] */
+            margin-bottom: 1.5rem; /* [cite: 119] */
         }
         
         .project-specs-preview {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
-            padding-top: 1rem;
-            border-top: 1px solid #eee;
+            display: grid; /* [cite: 120] */
+            grid-template-columns: 1fr 1fr; /* [cite: 120] */
+            gap: 0.75rem; /* [cite: 120] */
+            padding-top: 1rem; /* [cite: 120] */
+            border-top: 1px solid #eee; /* [cite: 121] */
         }
         
         .project-specs-preview .spec-item {
-            font-size: 0.85rem;
-            color: #666;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            font-size: 0.85rem; /* [cite: 122] */
+            color: #666; /* [cite: 122] */
+            display: flex; /* [cite: 122] */
+            align-items: center; /* [cite: 122] */
+            gap: 0.5rem; /* [cite: 122] */
         }
         
         .project-specs-preview .spec-item i {
-            color: var(--primary-color);
-            font-size: 0.9rem;
-            width: 14px;
-            flex-shrink: 0;
+            color: var(--primary-color); /* [cite: 123] */
+            font-size: 0.9rem; /* [cite: 123] */
+            width: 14px; /* [cite: 123] */
+            flex-shrink: 0; /* [cite: 123] */
         }
 
-        /* No Results / Error */
+        /* No Results / Error Messages */
         .info-message {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: #666;
-            display: none;
+            text-align: center; /* [cite: 124] */
+            padding: 4rem 2rem; /* [cite: 124] */
+            color: #666; /* [cite: 124] */
+            display: none; /* [cite: 124] */
         }
 
         .info-message i {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            color: #ccc;
+            font-size: 4rem; /* [cite: 125] */
+            margin-bottom: 1rem; /* [cite: 125] */
+            color: #ccc; /* [cite: 125] */
         }
 
         #errorMessage {
-            color: #d32f2f;
+            color: #d32f2f; /* [cite: 126] */
         }
         
         #errorMessage i {
-            color: #d32f2f;
+            color: #d32f2f; /* [cite: 127] */
         }
 
-        /* Modal de Projeto */
+        /* Project Modal - Updated Version */
         .project-modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.9);
-            animation: modalFadeIn 0.3s ease;
-            overflow-y: auto;
-            padding: 20px 0;
+            display: none; /* [cite: 1] */
+            position: fixed; /* [cite: 2] */
+            z-index: 2000; /* [cite: 2] */
+            left: 0; /* [cite: 2] */
+            top: 0; /* [cite: 2] */
+            width: 100%; /* [cite: 2] */
+            height: 100%; /* [cite: 2] */
+            background-color: rgba(0,0,0,0.9); /* [cite: 2] */
+            animation: modalFadeIn 0.3s ease; /* [cite: 2] */
+            overflow-y: auto; /* [cite: 2] */
+            padding: 20px 0; /* [cite: 3] */
         }
 
         @keyframes modalFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; } /* [cite: 59] */
+            to { opacity: 1; } /* [cite: 60] */
         }
 
         .project-modal-content {
-            position: relative;
-            margin: 2% auto;
-            width: 90%;
-            max-width: 1000px;
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            animation: modalSlideIn 0.4s ease;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            position: relative; /* [cite: 3] */
+            margin: 2% auto; /* [cite: 4] */
+            width: 90%; /* [cite: 4] */
+            max-width: 1200px; /* Aumentado para dar mais espaço [cite: 4] */
+            background: white; /* [cite: 4] */
+            border-radius: 20px; /* [cite: 5] */
+            overflow: hidden; /* [cite: 5] */
+            animation: modalSlideIn 0.4s ease; /* [cite: 5] */
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5); /* [cite: 5] */
         }
 
         @keyframes modalSlideIn {
             from { 
-                transform: translateY(-50px) scale(0.9); 
+                transform: translateY(-50px) scale(0.9); /* [cite: 61] */
                 opacity: 0; 
             }
             to { 
-                transform: translateY(0) scale(1); 
+                transform: translateY(0) scale(1); /* [cite: 62] */
                 opacity: 1; 
             }
         }
 
         .project-modal-close {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            color: white;
-            font-size: 35px;
-            font-weight: bold;
-            cursor: pointer;
-            z-index: 10;
-            width: 45px;
-            height: 45px;
-            background: rgba(0,0,0,0.7);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
+            position: absolute; /* [cite: 6] */
+            top: 15px; /* [cite: 7] */
+            right: 20px; /* [cite: 7] */
+            color: white; /* [cite: 7] */
+            font-size: 35px; /* [cite: 7] */
+            font-weight: bold; /* [cite: 7] */
+            cursor: pointer; /* [cite: 7] */
+            z-index: 10; /* [cite: 7] */
+            width: 45px; /* [cite: 7] */
+            height: 45px; /* [cite: 7] */
+            background: rgba(0,0,0,0.7); /* [cite: 7] */
+            border-radius: 50%; /* [cite: 8] */
+            display: flex; /* [cite: 8] */
+            align-items: center; /* [cite: 8] */
+            justify-content: center; /* [cite: 8] */
+            transition: all 0.3s ease; /* [cite: 8] */
         }
 
         .project-modal-close:hover {
-            background: #f44336;
-            transform: scale(1.1) rotate(90deg);
+            background: #f44336; /* [cite: 9] */
+            transform: scale(1.1) rotate(90deg); /* [cite: 10] */
         }
 
+        /* Main Image Gallery Improvements */
+        /* Ajustar a galeria para dar espaço aos controles */
         .modal-image-gallery {
             position: relative;
-            height: 450px;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            height: 500px;
+            background: #f8f9fa;
             overflow: hidden;
-        }
-
-        .modal-image-main {
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            transition: all 0.5s ease;
-            position: relative;
-        }
-
-        .modal-image-placeholder {
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100%;
-            font-size: 150px;
-            color: rgba(255,255,255,0.7);
+            padding-bottom: 40px; /* NOVO: Espaço para os controles */
         }
 
-        .modal-image-nav {
+        .modal-image-main {
+            width: 100%; /* [cite: 13] */
+            height: 100%; /* [cite: 14] */
+            position: relative; /* [cite: 14] */
+            display: flex; /* [cite: 14] */
+            align-items: center; /* [cite: 14] */
+            justify-content: center; /* [cite: 14] */
+            background: #f8f9fa; /* [cite: 14] */
+        }
+
+        /* NEW APPROACH: Centered image without forced filling */
+        .modal-image-main img,
+        .modal-image-main video {
+            max-width: 100%; /* [cite: 16] */
+            max-height: 100%; /* [cite: 16] */
+            object-fit: contain; /* MAIN CHANGE: contain instead of cover [cite: 16] */
+            border-radius: 10px; /* [cite: 17] */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); /* [cite: 17] */
+            background: white; /* [cite: 17] */
+        }
+
+        /* Improved Placeholder */
+        .modal-image-placeholder {
+            display: flex; /* [cite: 17] */
+            align-items: center; /* [cite: 18] */
+            justify-content: center; /* [cite: 18] */
+            height: 100%; /* [cite: 18] */
+            font-size: 120px; /* [cite: 18] */
+            color: #ddd; /* [cite: 18] */
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef); /* [cite: 19] */
+        }
+
+        /* Controles dinâmicos melhorados */
+        /* Barra de controles reposicionada */
+        .modal-image-controls {
             position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0,0,0,0.7);
+            bottom: 5px; /* MUDANÇA: Movido para fora da área da imagem */
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            background: rgba(0,0,0,0.9); /* Fundo mais escuro */
+            padding: 12px 20px; /* Padding reduzido */
+            border-radius: 25px;
+            backdrop-filter: blur(15px);
+            z-index: 150;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .modal-control-btn {
+            background: rgba(255,255,255,0.15);
             color: white;
             border: none;
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.3s ease;
-            display: none;
+            font-size: 16px;
         }
+
+        .modal-control-btn:hover {
+            background: rgba(255,255,255,0.25);
+            transform: scale(1.1);
+        }
+
+        .modal-control-btn.fullscreen-btn {
+            background: rgba(255,165,0,0.8);
+        }
+
+        .modal-control-btn.fullscreen-btn:hover {
+            background: rgba(255,165,0,1);
+            box-shadow: 0 4px 15px rgba(255,165,0,0.4);
+        }
+
+        /* Image Navigation - improved */
+        .modal-image-nav {
+            display: none !important; /* Oculta completamente as setas laterais */
+        }
+
 
         .modal-image-nav:hover {
-            background: rgba(0,0,0,0.9);
-            transform: translateY(-50%) scale(1.1);
+            background: rgba(0,0,0,0.9); /* [cite: 29] */
+            transform: translateY(-50%) scale(1.1); /* [cite: 29] */
         }
 
-        .modal-image-prev { left: 20px; }
-        .modal-image-next { right: 20px; }
+        .modal-image-prev { left: 20px; /* [cite: 30] */ }
+        .modal-image-next { right: 20px; /* [cite: 31] */ }
 
+        /* Fullscreen Modal for Images */
+        .image-fullscreen-modal {
+            display: none; /* [cite: 32] */
+            position: fixed; /* [cite: 32] */
+            z-index: 3000; /* [cite: 32] */
+            left: 0; /* [cite: 32] */
+            top: 0; /* [cite: 32] */
+            width: 100%; /* [cite: 32] */
+            height: 100%; /* [cite: 32] */
+            background-color: rgba(0,0,0,0.95); /* [cite: 32] */
+            cursor: zoom-out; /* [cite: 33] */
+        }
+
+        .fullscreen-image-container {
+            width: 100%; /* [cite: 33] */
+            height: 100%; /* [cite: 34] */
+            display: flex; /* [cite: 34] */
+            align-items: center; /* [cite: 34] */
+            justify-content: center; /* [cite: 34] */
+            padding: 20px; /* [cite: 35] */
+        }
+
+        .fullscreen-image {
+            max-width: 100%; /* [cite: 36] */
+            max-height: 100%; /* [cite: 36] */
+            object-fit: contain; /* [cite: 36] */
+            border-radius: 5px; /* [cite: 36] */
+            cursor: zoom-out; /* [cite: 36] */
+        }
+
+        .fullscreen-close {
+            position: absolute; /* [cite: 37] */
+            top: 20px; /* [cite: 37] */
+            right: 30px; /* [cite: 37] */
+            color: white; /* [cite: 37] */
+            font-size: 40px; /* [cite: 37] */
+            cursor: pointer; /* [cite: 37] */
+            z-index: 10; /* [cite: 37] */
+            transition: all 0.3s ease; /* [cite: 38] */
+        }
+
+        .fullscreen-close:hover {
+            color: #ff6b6b; /* [cite: 39] */
+            transform: scale(1.1); /* [cite: 39] */
+        }
+
+        /* Improved Thumbnails */
         .modal-image-thumbnails {
+            display: none !important;
             position: absolute;
-            bottom: 20px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             gap: 10px;
             max-width: 80%;
             overflow-x: auto;
-            padding: 10px;
-            background: rgba(0,0,0,0.5);
-            border-radius: 25px;
-            display: none;
+            padding: 10px 15px;
+            background: rgba(0,0,0,0.7);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
+
+
+
+        .modal-image-thumbnails.show {
+            display: flex !important;
+        }
+
+        .modal-image-thumbnails.hide {
+            display: none !important;
+        }        
 
         .modal-thumbnail {
             width: 60px;
@@ -458,373 +572,393 @@
         .modal-thumbnail:hover,
         .modal-thumbnail.active {
             opacity: 1;
-            border-color: white;
+            border-color: #FFA500;
             transform: scale(1.1);
         }
 
+        /* Project Content Improvements */
         .project-modal-body {
             padding: 2.5rem;
+            max-height: 55vh; /* Reduzido para dar espaço aos controles */
+            overflow-y: auto;
+            margin-top: 40px; /* NOVO: Margem para os controles */
         }
 
         .modal-project-header {
-            margin-bottom: 2rem;
+            margin-bottom: 2rem; /* [cite: 156] */
         }
 
         .modal-project-category {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 0.5rem 1.2rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            display: inline-block; /* [cite: 157] */
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); /* [cite: 157] */
+            color: white; /* [cite: 157] */
+            padding: 0.5rem 1.2rem; /* [cite: 157] */
+            border-radius: 20px; /* [cite: 157] */
+            font-size: 0.9rem; /* [cite: 157] */
+            font-weight: 600; /* [cite: 157] */
+            margin-bottom: 1rem; /* [cite: 158] */
+            text-transform: uppercase; /* [cite: 158] */
+            letter-spacing: 0.5px; /* [cite: 158] */
         }
 
         .modal-project-title {
-            font-size: 2.2rem;
-            color: var(--dark-color);
-            margin-bottom: 1rem;
-            font-weight: 700;
-            line-height: 1.2;
+            font-size: 2.2rem; /* [cite: 159] */
+            color: var(--dark-color); /* [cite: 159] */
+            margin-bottom: 1rem; /* [cite: 159] */
+            font-weight: 700; /* [cite: 159] */
+            line-height: 1.2; /* [cite: 159] */
         }
 
         .modal-project-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #555;
-            margin-bottom: 2.5rem;
+            font-size: 1.1rem; /* [cite: 160] */
+            line-height: 1.8; /* [cite: 160] */
+            color: #555; /* [cite: 160] */
+            margin-bottom: 2.5rem; /* [cite: 160] */
         }
 
         .modal-project-specs {
-            display: block; /* Remove o grid layout */
-            margin-bottom: 2.5rem;
-            padding-top: 1rem;
-            border-top: 1px solid #f0f0f0;
+            display: block; /* Remove o grid layout [cite: 161] */
+            margin-bottom: 2.5rem; /* [cite: 162] */
+            padding-top: 1rem; /* [cite: 162] */
+            border-top: 1px solid #f0f0f0; /* [cite: 162] */
         }
 
         .specs-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            column-count: 2; /* Cria duas colunas */
-            column-gap: 2rem;
+            list-style: none; /* [cite: 163] */
+            padding: 0; /* [cite: 163] */
+            margin: 0; /* [cite: 163] */
+            column-count: 2; /* Cria duas colunas [cite: 164] */
+            column-gap: 2rem; /* [cite: 164] */
         }
-       .spec-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 0;
-            border-bottom: 1px solid #f5f5f5;
-            break-inside: avoid-column; /* Evita que um item quebre entre colunas */
+        .spec-item {
+            display: flex; /* [cite: 165] */
+            align-items: center; /* [cite: 165] */
+            gap: 12px; /* [cite: 165] */
+            padding: 12px 0; /* [cite: 165] */
+            border-bottom: 1px solid #f5f5f5; /* [cite: 165] */
+            break-inside: avoid-column; /* Evita que um item quebre entre colunas [cite: 166] */
         }
         .spec-item:last-child {
-            border-bottom: none;
+            border-bottom: none; /* [cite: 167] */
         }
         .spec-item-icon {
-            font-size: 1.5rem; /* Ícone um pouco menor */
-            color: var(--primary-color);
-            background-color: rgba(255, 165, 0, 0.1);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
+            font-size: 1.5rem; /* Ícone um pouco menor [cite: 168] */
+            color: var(--primary-color); /* [cite: 169] */
+            background-color: rgba(255, 165, 0, 0.1); /* [cite: 169] */
+            width: 40px; /* [cite: 169] */
+            height: 40px; /* [cite: 169] */
+            border-radius: 50%; /* [cite: 169] */
+            display: inline-flex; /* [cite: 169] */
+            align-items: center; /* [cite: 170] */
+            justify-content: center; /* [cite: 170] */
+            flex-shrink: 0; /* [cite: 170] */
         }
         .spec-item-content {
-            display: flex;
-            flex-direction: column;
+            display: flex; /* [cite: 171] */
+            flex-direction: column; /* [cite: 171] */
         }
 
 
         .spec-item-label {
-            font-size: 0.9rem;
-            color: #666;
-            font-weight: 500;
+            font-size: 0.9rem; /* [cite: 172] */
+            color: #666; /* [cite: 172] */
+            font-weight: 500; /* [cite: 172] */
         }
 
         .spec-item-value {
-            font-size: 1.1rem;
-            color: var(--dark-color);
-            font-weight: 600;
+            font-size: 1.1rem; /* [cite: 173] */
+            color: var(--dark-color); /* [cite: 173] */
+            font-weight: 600; /* [cite: 173] */
         }
 
-
-        /* Esconder botão "Ver Mais Projetos" APENAS na galeria */
+        /* Hide "View More Projects" button ONLY in the gallery */
         .page-gallery .modal-action-secondary {
-            display: none;
+            display: none; /* [cite: 174] */
         }
-
-
-
-
-
-
-
 
         .modal-spec-card {
-            background: var(--light-color);
-            padding: 1.5rem;
-            border-radius: 15px;
-            text-align: center;
-            border-left: 4px solid var(--primary-color);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            background: var(--light-color); /* [cite: 175] */
+            padding: 1.5rem; /* [cite: 175] */
+            border-radius: 15px; /* [cite: 175] */
+            text-align: center; /* [cite: 175] */
+            border-left: 4px solid var(--primary-color); /* [cite: 175] */
+            transition: all 0.3s ease; /* [cite: 176] */
+            position: relative; /* [cite: 176] */
+            overflow: hidden; /* [cite: 176] */
         }
 
         .modal-spec-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 1;
+            content: ''; /* [cite: 177] */
+            position: absolute; /* [cite: 177] */
+            top: 0; /* [cite: 177] */
+            left: 0; /* [cite: 177] */
+            width: 100%; /* [cite: 177] */
+            height: 100%; /* [cite: 177] */
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); /* [cite: 177] */
+            opacity: 0; /* [cite: 178] */
+            transition: opacity 0.3s ease; /* [cite: 178] */
+            z-index: 1; /* [cite: 178] */
         }
 
-        .modal-spec-card:hover::before { opacity: 0.1; }
+        .modal-spec-card:hover::before { opacity: 0.1; /* [cite: 179] */ }
         .modal-spec-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            transform: translateY(-5px); /* [cite: 180] */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15); /* [cite: 180] */
         }
 
         .modal-spec-icon {
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            margin-bottom: 0.8rem;
-            position: relative;
-            z-index: 2;
+            font-size: 2.5rem; /* [cite: 181] */
+            color: var(--primary-color); /* [cite: 181] */
+            margin-bottom: 0.8rem; /* [cite: 181] */
+            position: relative; /* [cite: 181] */
+            z-index: 2; /* [cite: 181] */
         }
 
         .modal-spec-label {
-            font-weight: 600;
-            color: var(--dark-color);
-            font-size: 1rem;
-            margin-bottom: 0.3rem;
-            position: relative;
-            z-index: 2;
+            font-weight: 600; /* [cite: 182] */
+            color: var(--dark-color); /* [cite: 182] */
+            font-size: 1rem; /* [cite: 182] */
+            margin-bottom: 0.3rem; /* [cite: 183] */
+            position: relative; /* [cite: 183] */
+            z-index: 2; /* [cite: 183] */
         }
 
         .modal-spec-value {
-            color: #666;
-            font-size: 1.1rem;
-            font-weight: 500;
-            position: relative;
-            z-index: 2;
+            color: #666; /* [cite: 184] */
+            font-size: 1.1rem; /* [cite: 184] */
+            font-weight: 500; /* [cite: 184] */
+            position: relative; /* [cite: 184] */
+            z-index: 2; /* [cite: 184] */
         }
 
         .modal-project-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid #eee;
+            display: flex; /* [cite: 185] */
+            gap: 1rem; /* [cite: 185] */
+            justify-content: center; /* [cite: 185] */
+            flex-wrap: wrap; /* [cite: 185] */
+            margin-top: 2rem; /* [cite: 185] */
+            padding-top: 2rem; /* [cite: 186] */
+            border-top: 1px solid #eee; /* [cite: 186] */
         }
 
         .modal-action-btn {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1rem;
+            padding: 12px 30px; /* [cite: 187] */
+            border: none; /* [cite: 187] */
+            border-radius: 25px; /* [cite: 187] */
+            font-weight: 600; /* [cite: 187] */
+            cursor: pointer; /* [cite: 187] */
+            transition: all 0.3s ease; /* [cite: 187] */
+            text-decoration: none; /* [cite: 188] */
+            display: inline-flex; /* [cite: 188] */
+            align-items: center; /* [cite: 188] */
+            gap: 10px; /* [cite: 188] */
+            font-size: 1rem; /* [cite: 188] */
         }
 
         .modal-action-primary {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); /* [cite: 189] */
+            color: white; /* [cite: 189] */
         }
 
         .modal-action-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255,165,0,0.4);
-            color: white;
-            text-decoration: none;
+            transform: translateY(-2px); /* [cite: 190] */
+            box-shadow: 0 8px 20px rgba(255,165,0,0.4); /* [cite: 190] */
+            color: white; /* [cite: 190] */
+            text-decoration: none; /* [cite: 190] */
         }
 
         .modal-action-secondary {
-            background: white;
-            color: var(--primary-color);
-            border: 2px solid var(--primary-color);
+            background: white; /* [cite: 191] */
+            color: var(--primary-color); /* [cite: 191] */
+            border: 2px solid var(--primary-color); /* [cite: 191] */
         }
 
         .modal-action-secondary:hover {
-            background: var(--primary-color);
-            color: white;
-            text-decoration: none;
+            background: var(--primary-color); /* [cite: 192] */
+            color: white; /* [cite: 192] */
+            text-decoration: none; /* [cite: 192] */
         }
 
         .modal-loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 200px;
-            flex-direction: column;
-            gap: 1rem;
-            background: white;
-            border-radius: 20px;
+            display: flex; /* [cite: 193] */
+            justify-content: center; /* [cite: 193] */
+            align-items: center; /* [cite: 193] */
+            height: 200px; /* [cite: 193] */
+            flex-direction: column; /* [cite: 193] */
+            gap: 1rem; /* [cite: 193] */
+            background: white; /* [cite: 194] */
+            border-radius: 20px; /* [cite: 194] */
         }
 
         .modal-loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid var(--primary-color);
-            border-radius: 50%;
-            animation: modalSpin 1s linear infinite;
+            width: 50px; /* [cite: 195] */
+            height: 50px; /* [cite: 195] */
+            border: 5px solid #f3f3f3; /* [cite: 195] */
+            border-top: 5px solid var(--primary-color); /* [cite: 195] */
+            border-radius: 50%; /* [cite: 195] */
+            animation: modalSpin 1s linear infinite; /* [cite: 196] */
         }
 
         @keyframes modalSpin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% { transform: rotate(0deg); } /* [cite: 197] */
+            100% { transform: rotate(360deg); } /* [cite: 198] */
         }
 
+        /* Video Thumbnail Styles */
+        .loading-thumbnail {
+            position: relative; /* [cite: 224] */
+        }
+
+        .loading-thumbnail::after {
+            content: ''; /* [cite: 225] */
+            position: absolute; /* [cite: 225] */
+            top: 50%; /* [cite: 225] */
+            left: 50%; /* [cite: 225] */
+            width: 20px; /* [cite: 226] */
+            height: 20px; /* [cite: 226] */
+            margin: -10px 0 0 -10px; /* [cite: 226] */
+            border: 2px solid rgba(255,255,255,0.3); /* [cite: 226] */
+            border-top: 2px solid rgba(255,255,255,0.8); /* [cite: 226] */
+            border-radius: 50%; /* [cite: 226] */
+            animation: thumbnailSpin 1s linear infinite; /* [cite: 226] */
+            z-index: 1; /* Menor que o ícone de vídeo [cite: 227] */
+        }
+
+        .thumbnail-loaded::after {
+            display: none; /* [cite: 228] */
+        }
+
+        @keyframes thumbnailSpin {
+            0% { transform: rotate(0deg); } /* [cite: 229] */
+            100% { transform: rotate(360deg); } /* [cite: 230] */
+        }
+        
+        /* Remove old conflicting style */
+        .project-image.has-media.is-video::after {
+            content: ''; /* [cite: 231] */
+            position: absolute; /* [cite: 231] */
+            bottom: 10px; /* [cite: 231] */
+            right: 10px; /* [cite: 231] */
+            width: 40px; /* [cite: 231] */
+            height: 40px; /* [cite: 231] */
+            background: rgba(0,0,0,0.8); /* [cite: 231] */
+            border-radius: 50%; /* [cite: 231] */
+            display: flex; /* [cite: 232] */
+            align-items: center; /* [cite: 232] */
+            justify-content: center; /* [cite: 232] */
+            z-index: 3; /* [cite: 232] */
+            backdrop-filter: blur(5px); /* [cite: 232] */
+        }
+
+        .project-image.has-media.is-video::before {
+            content: '▶'; /* [cite: 233] */
+            position: absolute; /* [cite: 233] */
+            bottom: 20px; /* [cite: 233] */
+            right: 20px; /* [cite: 233] */
+            color: white; /* [cite: 233] */
+            font-size: 16px; /* [cite: 234] */
+            z-index: 4; /* [cite: 234] */
+            pointer-events: none; /* [cite: 234] */
+        }
+
+        .video-fallback-icon {
+            position: absolute; /* [cite: 235] */
+            top: 50%; /* [cite: 235] */
+            left: 50%; /* [cite: 235] */
+            transform: translate(-50%, -50%); /* [cite: 235] */
+            z-index: 2; /* [cite: 236] */
+            pointer-events: none; /* [cite: 236] */
+        }
+
+        .video-fallback-icon i {
+            font-size: 3rem; /* [cite: 237] */
+            color: rgba(255,255,255,0.7); /* [cite: 237] */
+        }
+
+        /* Responsive Design */
         @media (max-width: 768px) {
             .specs-list {
-                column-count: 1; /* Uma coluna em telas menores */
+                column-count: 1; /* Uma coluna em telas menores [cite: 199] */
             }
-        }
+            .page-header h1 { font-size: 2.5rem; /* [cite: 200] */ }
+            .filters { gap: 0.5rem; /* [cite: 201] */ }
+            .filter-btn { padding: 10px 20px; font-size: 0.9rem; /* [cite: 202] */ }
+            .gallery-grid { grid-template-columns: 1fr; gap: 1.5rem; /* [cite: 203] */ }
+            .project-info { padding: 1.5rem; /* [cite: 204] */ }
+            .project-modal-content { width: 95%; margin: 5% auto; /* [cite: 205] */ }
+            .project-modal-body { padding: 1.5rem; /* [cite: 207] */ }
+            .modal-project-title { font-size: 1.8rem; /* [cite: 208] */ }
+            .modal-project-specs { grid-template-columns: 1fr 1fr; gap: 1rem; /* [cite: 209] */ }
+            .modal-spec-card { padding: 1rem; /* [cite: 210] */ }
+            .modal-spec-icon { font-size: 2rem; /* [cite: 211] */ }
+            .modal-action-btn { padding: 10px 20px; font-size: 0.9rem; /* [cite: 212] */ }
+            .modal-project-actions { flex-direction: column; align-items: stretch; /* [cite: 213] */ }
+            .project-specs-preview { grid-template-columns: 1fr; gap: 0.5rem; /* [cite: 214] */ }
+
+
+            .modal-image-gallery {
+                height: 300px;
+                padding-bottom: 30px;
+            }
+            
+            .modal-image-controls {
+                bottom: -5px; /* Ainda mais próximo em mobile */
+                padding: 10px 15px;
+                gap: 12px;
+            }
+            
+            .modal-control-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
+            }
+            
+            .modal-image-thumbnails {
+                bottom: -50px;
+                max-width: 90%;
+                padding: 8px 12px;
+            }
+            
+            .modal-thumbnail {
+                width: 50px;
+                height: 32px;
+            }
 
 
 
-        /* Responsivo */
-        @media (max-width: 768px) {
-            .page-header h1 { font-size: 2.5rem; }
-            .filters { gap: 0.5rem; }
-            .filter-btn { padding: 10px 20px; font-size: 0.9rem; }
-            .gallery-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-            .project-info { padding: 1.5rem; }
-            .project-modal-content { width: 95%; margin: 5% auto; }
-            .modal-image-gallery { height: 300px; }
-            .project-modal-body { padding: 1.5rem; }
-            .modal-project-title { font-size: 1.8rem; }
-            .modal-project-specs { grid-template-columns: 1fr 1fr; gap: 1rem; }
-            .modal-spec-card { padding: 1rem; }
-            .modal-spec-icon { font-size: 2rem; }
-            .modal-action-btn { padding: 10px 20px; font-size: 0.9rem; }
-            .modal-project-actions { flex-direction: column; align-items: stretch; }
-            .project-specs-preview { grid-template-columns: 1fr; gap: 0.5rem; }
+
+
+
+
+
+
         }
 
         @media (max-width: 480px) {
-            .container { padding: 2rem 1rem; }
-            .filters { flex-direction: column; align-items: stretch; text-align: center; }
-            .modal-project-specs { grid-template-columns: 1fr; }
-            .project-specs-preview { grid-template-columns: 1fr; }
-            .modal-image-gallery { height: 250px; }
-            .modal-project-title { font-size: 1.5rem; }
+            .container { padding: 2rem 1rem; /* [cite: 215] */ }
+            .filters { flex-direction: column; align-items: stretch; text-align: center; /* [cite: 216] */ }
+            .modal-project-specs { grid-template-columns: 1fr; /* [cite: 217] */ }
+            .project-specs-preview { grid-template-columns: 1fr; /* [cite: 218] */ }
+            .modal-image-gallery { height: 250px; /* [cite: 219] */ }
+            .modal-project-title { font-size: 1.5rem; /* [cite: 220] */ }
         }
 
         .project-modal.opening .project-modal-content {
-            animation: modalSlideInMobile 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            animation: modalSlideInMobile 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* [cite: 221] */
         }
 
         @keyframes modalSlideInMobile {
             0% { 
-                transform: translateY(100px) scale(0.9); 
+                transform: translateY(100px) scale(0.9); /* [cite: 222] */
                 opacity: 0; 
             }
             100% { 
-                transform: translateY(0) scale(1); 
+                transform: translateY(0) scale(1); /* [cite: 223] */
                 opacity: 1; 
             }
         }
-
-        /* ===== ESTILOS PARA THUMBNAILS DE VÍDEO ===== */
-        .loading-thumbnail {
-            position: relative;
-        }
-
-
-        .loading-thumbnail::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 20px;
-            height: 20px;
-            margin: -10px 0 0 -10px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-top: 2px solid rgba(255,255,255,0.8);
-            border-radius: 50%;
-            animation: thumbnailSpin 1s linear infinite;
-            z-index: 1; /* Menor que o ícone de vídeo */
-        }
-
-        .thumbnail-loaded::after {
-            display: none;
-        }
-
-        @keyframes thumbnailSpin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* Remove o estilo antigo que estava conflitante */
-        .project-image.has-media.is-video::after {
-            content: '';
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            width: 40px;
-            height: 40px;
-            background: rgba(0,0,0,0.8);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 3;
-            backdrop-filter: blur(5px);
-        }
-
-        .project-image.has-media.is-video::before {
-            content: '▶';
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            color: white;
-            font-size: 16px;
-            z-index: 4;
-            pointer-events: none;
-        }
-
-
-
-
-        .video-fallback-icon {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 2;
-            pointer-events: none;
-        }
-
-        .video-fallback-icon i {
-            font-size: 3rem;
-            color: rgba(255,255,255,0.7);
-        }
-
-
-
-
-
     </style>
+
 </head>
 <body class="page-gallery">
     <header>
@@ -879,12 +1013,15 @@
                     <div class="modal-image-placeholder">📸</div>
                 </div>
                 
+                <!-- Manter apenas os controles de navegação lateral -->
                 <button class="modal-image-nav modal-image-prev" id="modalImagePrev">
                     <i class="fas fa-chevron-left"></i>
                 </button>
                 <button class="modal-image-nav modal-image-next" id="modalImageNext">
                     <i class="fas fa-chevron-right"></i>
                 </button>
+                
+                <!-- Controles dinâmicos serão adicionados via JavaScript -->
                 
                 <div class="modal-image-thumbnails" id="modalImageThumbnails">
                 </div>
@@ -1066,6 +1203,7 @@
         }
 
         // Sistema de Modal de Projetos
+        // ===== CLASSE ProjectModal CORRIGIDA =====
         class ProjectModal {
             constructor() {
                 this.modal = document.getElementById('projectModal');
@@ -1079,8 +1217,8 @@
                 this.thumbnailsContainer = document.getElementById('modalImageThumbnails');
                 
                 this.currentProject = null;
-                this.currentImageIndex = 0;
-                this.images = [];
+                this.currentMediaIndex = 0; // CORRIGIDO: usar currentMediaIndex
+                this.media = []; // CORRIGIDO: usar media em vez de images
                 
                 this.init();
             }
@@ -1091,15 +1229,14 @@
                     if (e.target === this.modal) this.close();
                 });
                 
-                this.prevBtn?.addEventListener('click', () => this.prevImage());
-                this.nextBtn?.addEventListener('click', () => this.nextImage());
+                // REMOVIDO: Event listeners das setas laterais (prevBtn e nextBtn)
                 
                 document.addEventListener('keydown', (e) => {
                     if (!this.isOpen()) return;
                     
                     switch(e.key) {
                         case 'Escape':
-                            this.close(); // Já vai pausar os vídeos através do método close() modificado
+                            this.close();
                             break;
                         case 'ArrowLeft':
                             this.prevImage();
@@ -1107,23 +1244,21 @@
                         case 'ArrowRight':
                             this.nextImage();
                             break;
+                        case 'f':
+                        case 'F':
+                            this.openFullscreen();
+                            break;
                     }
                 });
                 
                 this.attachCardListeners();
             }
-            
-
 
             attachCardListeners() {
                 const grid = document.getElementById('galleryGrid');
                 if (!grid) return;
-
-                // Remove listener antigo para evitar duplicação
-                // (Você precisaria armazenar a referência da função se fizesse isso)
                 
                 grid.addEventListener('click', (e) => {
-                    // Encontra o card que foi clicado, subindo na árvore do DOM a partir do alvo do clique
                     const card = e.target.closest('.project-card');
                     if (card) {
                         e.preventDefault();
@@ -1135,10 +1270,7 @@
                 });
             }
 
-
-
             async open(projectId) {
-                console.log('Tentando abrir modal para o Projeto ID:', projectId);
                 console.log('Abrindo modal para projeto:', projectId);
                 
                 if (!projectId) {
@@ -1153,7 +1285,6 @@
                 document.body.style.overflow = 'hidden';
                 
                 try {
-                    
                     const response = await fetch(`${API_BASE_URL}/projects.php?id=${projectId}`);
                     console.log('Resposta da API:', response.status);
                     
@@ -1187,14 +1318,15 @@
                     descEl.innerHTML = description.replace(/\n/g, '<br>');
                 }
                 
-                this.setupMedia(project.media || []); // <-- Chamada corrigida
+                this.setupMedia(project.media || []);
                 this.renderSpecs(project.specifications || {});
                 this.setupWhatsAppButton(project);
             }
             
-            // SUBSTITUA POR ISTO:
+            // ===== SETUPMEDIA CORRIGIDO =====
             setupMedia(media) {
-                this.media = media.filter(m => m && m.path); // <-- Usa o novo array 'media'
+                console.log('Configurando mídias:', media);
+                this.media = media.filter(m => m && m.path);
                 this.currentMediaIndex = 0;
 
                 if (this.media.length === 0) {
@@ -1204,7 +1336,8 @@
                     return;
                 }
 
-                this.showCurrentImage();
+                console.log('Total de mídias válidas:', this.media.length);
+                this.showCurrentMedia();
 
                 if (this.media.length > 1) {
                     this.showImageNavigation();
@@ -1214,96 +1347,194 @@
                 }
             }
             
-            // SUBSTITUA POR ISTO:
-            showCurrentImage() {
+            // ===== SHOWCURRENTMEDIA CORRIGIDO =====
+            showCurrentMedia() {
                 if (this.media.length === 0) return;
 
-                this.pauseAllVideos();
-                const currentMedia = this.media[this.currentImageIndex];
+                const currentMedia = this.media[this.currentMediaIndex];
                 const mediaUrl = `upload/images/projects/${currentMedia.path}`;
+                
+                console.log('Mostrando mídia:', this.currentMediaIndex, 'de', this.media.length, '- URL:', mediaUrl);
 
-                this.mainImage.innerHTML = ''; // Limpa o container
-                this.mainImage.style.backgroundImage = 'none'; // Remove fundo antigo
+                this.mainImage.innerHTML = '';
+                this.mainImage.style.backgroundImage = 'none';
 
                 if (currentMedia.media_type === 'video') {
                     const videoElement = document.createElement('video');
                     videoElement.src = mediaUrl;
                     videoElement.controls = true;
-                    videoElement.style.cssText = 'width: 100%; height: 100%; object-fit: contain;';
-                    videoElement.addEventListener('loadstart', () => {
-                        // Pausar outros vídeos quando um novo começar a carregar
-                        this.pauseAllVideos();
-                    });
-
-
-
+                    videoElement.style.cssText = 'max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);';
                     this.mainImage.appendChild(videoElement);
+                    
+                    this.addVideoControls(videoElement);
                 } else {
-                    this.mainImage.style.backgroundImage = `url('${mediaUrl}')`;
+                    const img = document.createElement('img');
+                    img.src = mediaUrl;
+                    img.alt = 'Projeto Solar';
+                    img.style.cssText = 'max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); cursor: zoom-in;';
+                    img.onclick = () => this.openFullscreen();
+                    
+                    this.addImageControls();
+                    this.mainImage.appendChild(img);
+                }
+            }
+            
+            // ===== NOVOS MÉTODOS PARA CONTROLES =====
+           addImageControls() {
+                const existingControls = this.modal.querySelector('.modal-image-controls');
+                if (existingControls) existingControls.remove();
+                
+                const controls = document.createElement('div');
+                controls.className = 'modal-image-controls';
+                
+                // Apenas os controles que cabem na barra
+                let controlsHTML = '';
+                
+                if (this.media.length > 1) {
+                    controlsHTML += '<button class="modal-control-btn" onclick="window.projectModal.prevImage()" title="Anterior"><i class="fas fa-chevron-left"></i></button>';
+                }
+                
+                controlsHTML += '<button class="modal-control-btn fullscreen-btn" onclick="window.projectModal.openFullscreen()" title="Tela Cheia"><i class="fas fa-expand"></i></button>';
+                
+                if (this.media.length > 1) {
+                    controlsHTML += '<button class="modal-control-btn" onclick="window.projectModal.nextImage()" title="Próxima"><i class="fas fa-chevron-right"></i></button>';
+                }
+                
+                controls.innerHTML = controlsHTML;
+                
+                const gallery = this.modal.querySelector('.modal-image-gallery');
+                gallery.appendChild(controls);
+            }
+            
+            addVideoControls(videoElement) {
+                const existingControls = this.modal.querySelector('.modal-image-controls');
+                if (existingControls) existingControls.remove();
+                
+                const controls = document.createElement('div');
+                controls.className = 'modal-image-controls';
+                
+                let controlsHTML = '';
+                
+                if (this.media.length > 1) {
+                    controlsHTML += '<button class="modal-control-btn" onclick="window.projectModal.prevImage()" title="Anterior"><i class="fas fa-chevron-left"></i></button>';
+                }
+                
+                controlsHTML += '<button class="modal-control-btn" onclick="window.projectModal.togglePlayPause()" title="Play/Pause"><i class="fas fa-play"></i></button>';
+                controlsHTML += '<button class="modal-control-btn" onclick="window.projectModal.toggleMute()" title="Mudo"><i class="fas fa-volume-up"></i></button>';
+                
+                if (this.media.length > 1) {
+                    controlsHTML += '<button class="modal-control-btn" onclick="window.projectModal.nextImage()" title="Próxima"><i class="fas fa-chevron-right"></i></button>';
+                }
+                
+                controls.innerHTML = controlsHTML;
+                
+                const gallery = this.modal.querySelector('.modal-image-gallery');
+                gallery.appendChild(controls);
+                
+                // Event listeners para atualizar ícones
+                videoElement.addEventListener('play', () => {
+                    const playBtn = controls.querySelector('i.fa-play, i.fa-pause');
+                    if (playBtn) playBtn.className = 'fas fa-pause';
+                });
+                
+                videoElement.addEventListener('pause', () => {
+                    const playBtn = controls.querySelector('i.fa-play, i.fa-pause');
+                    if (playBtn) playBtn.className = 'fas fa-play';
+                });
+                
+                videoElement.addEventListener('volumechange', () => {
+                    const muteBtn = controls.querySelector('i.fa-volume-up, i.fa-volume-mute');
+                    if (muteBtn) {
+                        muteBtn.className = videoElement.muted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+                    }
+                });
+            }
+            toggleMute() {
+                const video = this.mainImage.querySelector('video');
+                if (video) {
+                    video.muted = !video.muted;
+                }
+            }
+
+            
+            togglePlayPause() {
+                const video = this.mainImage.querySelector('video');
+                if (video) {
+                    if (video.paused) {
+                        video.play();
+                    } else {
+                        video.pause();
+                    }
                 }
             }
             
             showImageNavigation() {
-                this.prevBtn.style.display = 'block';
-                this.nextBtn.style.display = 'block';
-                this.thumbnailsContainer.style.display = 'flex';
+                // REMOVIDO: Controle das setas laterais
+                if (this.thumbnailsContainer) this.thumbnailsContainer.style.display = 'flex';
             }
-            
+                
             hideImageNavigation() {
-                this.prevBtn.style.display = 'none';
-                this.nextBtn.style.display = 'none';
-                this.thumbnailsContainer.style.display = 'none';
+                // REMOVIDO: Controle das setas laterais
+                if (this.thumbnailsContainer) this.thumbnailsContainer.style.display = 'none';
             }
             
-            // SUBSTITUA A FUNÇÃO 'renderThumbnails' INTEIRA POR ISTO:
+            // ===== RENDERTHUMBNAILS CORRIGIDO =====
             renderThumbnails() {
+                if (!this.thumbnailsContainer) return;
+                
                 this.thumbnailsContainer.innerHTML = this.media.map((item, index) => {
                     const isActive = index === this.currentMediaIndex ? 'active' : '';
                     const isVideo = item.media_type === 'video';
                     const thumbStyle = !isVideo 
                         ? `background-image: url('upload/images/projects/${item.path}')` 
                         : 'background-color: #333; display:flex; align-items:center; justify-content:center;';
-                    const thumbContent = isVideo ? '<i class="fas fa-play" style="color:white;"></i>' : '';
+                    const thumbContent = isVideo ? '<i class="fas fa-play" style="color:white; font-size:12px;"></i>' : '';
 
                     return `<div class="modal-thumbnail ${isActive}" style="${thumbStyle}" data-index="${index}">${thumbContent}</div>`;
                 }).join('');
 
                 this.thumbnailsContainer.querySelectorAll('.modal-thumbnail').forEach((thumb, index) => {
-                    thumb.addEventListener('click', () => this.goToImage(index));
+                    thumb.addEventListener('click', () => this.goToMedia(index));
                 });
             }
             
-            // SUBSTITUA AS 3 FUNÇÕES DE NAVEGAÇÃO POR ESTAS:
+            // ===== FUNÇÕES DE NAVEGAÇÃO CORRIGIDAS =====
             prevImage() {
+                console.log('Navegando para imagem anterior');
                 if (this.media.length <= 1) return;
-                this.currentImageIndex = this.currentImageIndex === 0 ? this.media.length - 1 : this.currentImageIndex - 1;
-                this.showCurrentImage();
+                this.currentMediaIndex = this.currentMediaIndex === 0 ? this.media.length - 1 : this.currentMediaIndex - 1;
+                console.log('Novo índice:', this.currentMediaIndex);
+                this.showCurrentMedia();
                 this.updateThumbnails();
             }
 
             nextImage() {
+                console.log('Navegando para próxima imagem');
                 if (this.media.length <= 1) return;
-                this.currentImageIndex = this.currentImageIndex === this.media.length - 1 ? 0 : this.currentImageIndex + 1;
-                this.showCurrentImage();
+                this.currentMediaIndex = this.currentMediaIndex === this.media.length - 1 ? 0 : this.currentMediaIndex + 1;
+                console.log('Novo índice:', this.currentMediaIndex);
+                this.showCurrentMedia();
                 this.updateThumbnails();
             }
 
-            goToImage(index) {
+            goToMedia(index) {
+                console.log('Navegando diretamente para mídia:', index);
                 if (index >= 0 && index < this.media.length) {
-                    this.currentImageIndex = index;
-                    this.showCurrentImage();
+                    this.currentMediaIndex = index;
+                    this.showCurrentMedia();
                     this.updateThumbnails();
                 }
             }
             
             updateThumbnails() {
+                if (!this.thumbnailsContainer) return;
+                
                 this.thumbnailsContainer.querySelectorAll('.modal-thumbnail').forEach((thumb, index) => {
-                    thumb.classList.toggle('active', index === this.currentImageIndex);
+                    thumb.classList.toggle('active', index === this.currentMediaIndex);
                 });
             }
             
-            // Dentro da classe ProjectModal, substitua a função renderSpecs
-
+            // ===== RENDERIZADOR DE ESPECIFICAÇÕES =====
             renderSpecs(specs) {
                 const specsContainer = document.getElementById('modalSpecs');
                 if (!specsContainer) return;
@@ -1337,11 +1568,9 @@
                 if (specItems.length === 0) {
                     specsContainer.innerHTML = '<p style="text-align: center; color: #666;">Especificações técnicas não disponíveis.</p>';
                 } else {
-                    // Envolve os itens em uma <ul>
                     specsContainer.innerHTML = `<ul class="specs-list">${specItems.join('')}</ul>`;
                 }
             }
-            
             
             setupWhatsAppButton(project) {
                 const whatsappBtn = document.getElementById('modalWhatsappBtn');
@@ -1353,6 +1582,39 @@
                 
                 whatsappBtn.href = whatsappUrl;
                 whatsappBtn.target = '_blank';
+            }
+            
+            // ===== FUNCIONALIDADE FULLSCREEN =====
+            openFullscreen() {
+                if (this.media.length === 0 || this.media[this.currentMediaIndex].media_type === 'video') return;
+                
+                let fullscreenModal = document.getElementById('imageFullscreenModal');
+                if (!fullscreenModal) {
+                    fullscreenModal = document.createElement('div');
+                    fullscreenModal.id = 'imageFullscreenModal';
+                    fullscreenModal.className = 'image-fullscreen-modal';
+                    fullscreenModal.innerHTML = `
+                        <span class="fullscreen-close">&times;</span>
+                        <div class="fullscreen-image-container">
+                            <img id="fullscreenImage" class="fullscreen-image" src="" alt="">
+                        </div>
+                    `;
+                    document.body.appendChild(fullscreenModal);
+                    
+                    fullscreenModal.addEventListener('click', this.closeFullscreen.bind(this));
+                    fullscreenModal.querySelector('.fullscreen-close').addEventListener('click', this.closeFullscreen.bind(this));
+                }
+                
+                const fullscreenImage = document.getElementById('fullscreenImage');
+                fullscreenImage.src = `upload/images/projects/${this.media[this.currentMediaIndex].path}`;
+                fullscreenModal.style.display = 'block';
+            }
+
+            closeFullscreen() {
+                const fullscreenModal = document.getElementById('imageFullscreenModal');
+                if (fullscreenModal) {
+                    fullscreenModal.style.display = 'none';
+                }
             }
             
             showError(message) {
@@ -1369,45 +1631,54 @@
             }
 
             pauseAllVideos() {
-                // Pausa vídeos no container principal da modal
                 const videos = this.mainImage.querySelectorAll('video');
                 videos.forEach(video => {
                     video.pause();
-                    video.currentTime = 0; // Opcional: volta para o início
+                    video.currentTime = 0;
                 });
                 
-                // Também pausa qualquer vídeo que possa estar em outros containers
                 const allModalVideos = this.modal.querySelectorAll('video');
                 allModalVideos.forEach(video => {
                     video.pause();
                     video.currentTime = 0;
                 });
             }
-
-
-
             
             close() {
-
                 this.pauseAllVideos();
+                
+                // Limpar controles
+                const existingControls = this.modal.querySelector('.modal-image-controls');
+                if (existingControls) existingControls.remove();
 
                 this.modal.style.display = 'none';
                 this.modal.classList.remove('opening');
                 document.body.style.overflow = 'auto';
                 this.currentProject = null;
-                this.images = [];
-                this.currentImageIndex = 0;
+                this.media = [];
+                this.currentMediaIndex = 0;
 
                 this.mainImage.innerHTML = '<div class="modal-image-placeholder">📸</div>';
                 this.mainImage.style.backgroundImage = 'none';
-
-
             }
             
             isOpen() {
                 return this.modal && this.modal.style.display === 'block';
             }
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {

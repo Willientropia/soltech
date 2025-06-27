@@ -1,0 +1,907 @@
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0; [cite_start]/* [cite: 73] */
+            padding: 0; [cite_start]/* [cite: 74] */
+            box-sizing: border-box; [cite_start]/* [cite: 74] */
+        }
+
+        :root {
+            --primary-color: #FFA500; [cite_start]/* [cite: 75] */
+            --secondary-color: #FF6B35; [cite_start]/* [cite: 75] */
+            --dark-color: #1a1a1a; [cite_start]/* [cite: 75] */
+            --light-color: #f5f5f5; [cite_start]/* [cite: 75] */
+            --text-color: #333; [cite_start]/* [cite: 75] */
+            --shadow: 0 10px 30px rgba(0,0,0,0.1); [cite_start]/* [cite: 76] */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; [cite_start]/* [cite: 77] */
+            line-height: 1.6; [cite_start]/* [cite: 77] */
+            color: var(--text-color); [cite_start]/* [cite: 77] */
+            background-color: var(--light-color); [cite_start]/* [cite: 77] */
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--dark-color) 0%, #2a2a2a 100%); [cite_start]/* [cite: 78] */
+            color: white; [cite_start]/* [cite: 78] */
+            padding: 1rem 0; [cite_start]/* [cite: 78] */
+            box-shadow: var(--shadow); [cite_start]/* [cite: 78] */
+        }
+
+        nav {
+            max-width: 1200px; [cite_start]/* [cite: 79] */
+            margin: 0 auto; [cite_start]/* [cite: 79] */
+            padding: 0 2rem; [cite_start]/* [cite: 79] */
+            display: flex; [cite_start]/* [cite: 80] */
+            justify-content: space-between; [cite_start]/* [cite: 80] */
+            align-items: center; [cite_start]/* [cite: 80] */
+        }
+
+        .logo {
+            font-size: 1.5rem; [cite_start]/* [cite: 81] */
+            font-weight: bold; [cite_start]/* [cite: 81] */
+            color: white; [cite_start]/* [cite: 81] */
+            text-decoration: none; [cite_start]/* [cite: 81] */
+            display: flex; [cite_start]/* [cite: 82] */
+            align-items: center; [cite_start]/* [cite: 82] */
+            gap: 10px; [cite_start]/* [cite: 82] */
+        }
+
+        .logo-img {
+            height: 50px; [cite_start]/* [cite: 83] */
+            width: auto; [cite_start]/* [cite: 83] */
+            border-radius: 50%; [cite_start]/* [cite: 83] */
+        }
+
+        .back-btn {
+            background: var(--primary-color); [cite_start]/* [cite: 84] */
+            color: white; [cite_start]/* [cite: 84] */
+            padding: 10px 20px; [cite_start]/* [cite: 84] */
+            border-radius: 25px; [cite_start]/* [cite: 84] */
+            text-decoration: none; [cite_start]/* [cite: 84] */
+            transition: all 0.3s ease; [cite_start]/* [cite: 85] */
+        }
+
+        .back-btn:hover {
+            background: var(--secondary-color); [cite_start]/* [cite: 86] */
+            transform: translateY(-2px); [cite_start]/* [cite: 86] */
+        }
+
+        /* Loading Spinner */
+        .loading {
+            display: flex; [cite_start]/* [cite: 87] */
+            justify-content: center; [cite_start]/* [cite: 87] */
+            align-items: center; [cite_start]/* [cite: 87] */
+            height: 200px; [cite_start]/* [cite: 87] */
+        }
+
+        .spinner {
+            width: 50px; [cite_start]/* [cite: 88] */
+            height: 50px; [cite_start]/* [cite: 88] */
+            border: 5px solid #f3f3f3; [cite_start]/* [cite: 88] */
+            border-top: 5px solid var(--primary-color); [cite_start]/* [cite: 88] */
+            border-radius: 50%; [cite_start]/* [cite: 88] */
+            animation: spin 1s linear infinite; [cite_start]/* [cite: 89] */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); [cite_start]} /* [cite: 90] */
+            100% { transform: rotate(360deg); [cite_start]} /* [cite: 91] */
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px; [cite_start]/* [cite: 92] */
+            margin: 0 auto; [cite_start]/* [cite: 92] */
+            padding: 4rem 2rem; [cite_start]/* [cite: 92] */
+        }
+
+        .page-header {
+            text-align: center; [cite_start]/* [cite: 93] */
+            margin-bottom: 4rem; [cite_start]/* [cite: 93] */
+        }
+
+        .page-header h1 {
+            font-size: 3rem; [cite_start]/* [cite: 94] */
+            color: var(--dark-color); [cite_start]/* [cite: 94] */
+            margin-bottom: 1rem; [cite_start]/* [cite: 94] */
+        }
+
+        .page-header p {
+            font-size: 1.2rem; [cite_start]/* [cite: 95] */
+            color: #666; [cite_start]/* [cite: 95] */
+            max-width: 600px; [cite_start]/* [cite: 95] */
+            margin: 0 auto; [cite_start]/* [cite: 95] */
+        }
+
+        /* Filters */
+        .filters {
+            display: flex; [cite_start]/* [cite: 96] */
+            justify-content: center; [cite_start]/* [cite: 96] */
+            flex-wrap: wrap; [cite_start]/* [cite: 96] */
+            gap: 1rem; [cite_start]/* [cite: 96] */
+            margin-bottom: 3rem; [cite_start]/* [cite: 96] */
+        }
+
+        .filter-btn {
+            padding: 12px 24px; [cite_start]/* [cite: 97] */
+            border: 2px solid var(--primary-color); [cite_start]/* [cite: 97] */
+            background: white; [cite_start]/* [cite: 97] */
+            color: var(--primary-color); [cite_start]/* [cite: 97] */
+            border-radius: 25px; [cite_start]/* [cite: 97] */
+            cursor: pointer; [cite_start]/* [cite: 97] */
+            transition: all 0.3s ease; [cite_start]/* [cite: 97] */
+            font-weight: 500; [cite_start]/* [cite: 97] */
+            outline: none; [cite_start]/* [cite: 98] */
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary-color); [cite_start]/* [cite: 99] */
+            color: white; [cite_start]/* [cite: 99] */
+            transform: translateY(-2px); [cite_start]/* [cite: 99] */
+            box-shadow: 0 5px 15px rgba(255, 165, 0, 0.3); [cite_start]/* [cite: 100] */
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid; [cite_start]/* [cite: 101] */
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); [cite_start]/* [cite: 101] */
+            gap: 2rem; [cite_start]/* [cite: 101] */
+        }
+
+        .project-card {
+            background: white; [cite_start]/* [cite: 102] */
+            border-radius: 20px; [cite_start]/* [cite: 102] */
+            overflow: hidden; [cite_start]/* [cite: 102] */
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1); [cite_start]/* [cite: 102] */
+            transition: all 0.4s ease; [cite_start]/* [cite: 102] */
+            cursor: pointer; [cite_start]/* [cite: 103] */
+            position: relative; [cite_start]/* [cite: 103] */
+        }
+
+        .project-card:hover {
+            transform: translateY(-15px); [cite_start]/* [cite: 104] */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2); [cite_start]/* [cite: 104] */
+        }
+
+        .project-image {
+            height: 250px; [cite_start]/* [cite: 105] */
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); [cite_start]/* [cite: 105] */
+            position: relative; [cite_start]/* [cite: 105] */
+            overflow: hidden; [cite_start]/* [cite: 105] */
+        }
+
+        .project-image.has-media {
+            background-size: cover; [cite_start]/* [cite: 106] */
+            background-position: center; [cite_start]/* [cite: 106] */
+            background-repeat: no-referrer; [cite_start]/* [cite: 106] */
+        }   
+
+        /* Specifics for videos */
+        .project-image.has-media.is-video {
+            background-color: #222; [cite_start]/* [cite: 107] */
+        }
+
+        .project-image:not(.has-media)::before {
+            content: '📸'; [cite_start]/* [cite: 108] */
+            position: absolute; [cite_start]/* [cite: 108] */
+            top: 50%; [cite_start]/* [cite: 108] */
+            left: 50%; [cite_start]/* [cite: 108] */
+            transform: translate(-50%, -50%); [cite_start]/* [cite: 108] */
+            font-size: 80px; [cite_start]/* [cite: 108] */
+            color: rgba(255,255,255,0.7); [cite_start]/* [cite: 109] */
+        }
+
+        .project-image:not(.has-media)::after {
+            display: none; [cite_start]/* [cite: 110] */
+        }
+
+        .project-overlay {
+            position: absolute; [cite_start]/* [cite: 111] */
+            top: 0; [cite_start]/* [cite: 111] */
+            left: 0; [cite_start]/* [cite: 111] */
+            right: 0; [cite_start]/* [cite: 111] */
+            bottom: 0; [cite_start]/* [cite: 111] */
+            background: rgba(0,0,0,0.6); [cite_start]/* [cite: 111] */
+            display: flex; [cite_start]/* [cite: 111] */
+            align-items: center; [cite_start]/* [cite: 111] */
+            justify-content: center; [cite_start]/* [cite: 112] */
+            opacity: 0; [cite_start]/* [cite: 112] */
+            transition: opacity 0.3s ease; [cite_start]/* [cite: 112] */
+            z-index: 2; [cite_start]/* [cite: 112] */
+        }
+
+        .project-card:hover .project-overlay {
+            opacity: 1; [cite_start]/* [cite: 113] */
+        }
+
+        .view-icon {
+            color: white; [cite_start]/* [cite: 114] */
+            font-size: 3rem; [cite_start]/* [cite: 114] */
+        }
+
+        .project-info {
+            padding: 2rem; [cite_start]/* [cite: 115] */
+            text-align: center; [cite_start]/* [cite: 115] */
+        }
+
+        .project-category {
+            display: inline-block; [cite_start]/* [cite: 116] */
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); [cite_start]/* [cite: 116] */
+            color: white; [cite_start]/* [cite: 116] */
+            font-weight: 600; [cite_start]/* [cite: 116] */
+            padding: 0.5rem 1.2rem; [cite_start]/* [cite: 116] */
+            border-radius: 20px; [cite_start]/* [cite: 116] */
+            font-size: 0.85rem; [cite_start]/* [cite: 116] */
+            margin-bottom: 1rem; [cite_start]/* [cite: 117] */
+            text-transform: uppercase; [cite_start]/* [cite: 117] */
+            letter-spacing: 0.5px; [cite_start]/* [cite: 117] */
+        }
+
+        .project-title {
+            font-size: 1.4rem; [cite_start]/* [cite: 118] */
+            font-weight: 700; [cite_start]/* [cite: 118] */
+            margin-bottom: 0.5rem; [cite_start]/* [cite: 118] */
+            color: var(--dark-color); [cite_start]/* [cite: 118] */
+            line-height: 1.4; [cite_start]/* [cite: 118] */
+        }
+
+        .project-description {
+            color: #666; [cite_start]/* [cite: 119] */
+            line-height: 1.6; [cite_start]/* [cite: 119] */
+            font-size: 0.95rem; [cite_start]/* [cite: 119] */
+            margin-bottom: 1.5rem; [cite_start]/* [cite: 119] */
+        }
+        
+        .project-specs-preview {
+            display: grid; [cite_start]/* [cite: 120] */
+            grid-template-columns: 1fr 1fr; [cite_start]/* [cite: 120] */
+            gap: 0.75rem; [cite_start]/* [cite: 120] */
+            padding-top: 1rem; [cite_start]/* [cite: 120] */
+            border-top: 1px solid #eee; [cite_start]/* [cite: 121] */
+        }
+        
+        .project-specs-preview .spec-item {
+            font-size: 0.85rem; [cite_start]/* [cite: 122] */
+            color: #666; [cite_start]/* [cite: 122] */
+            display: flex; [cite_start]/* [cite: 122] */
+            align-items: center; [cite_start]/* [cite: 122] */
+            gap: 0.5rem; [cite_start]/* [cite: 122] */
+        }
+        
+        .project-specs-preview .spec-item i {
+            color: var(--primary-color); [cite_start]/* [cite: 123] */
+            font-size: 0.9rem; [cite_start]/* [cite: 123] */
+            width: 14px; [cite_start]/* [cite: 123] */
+            flex-shrink: 0; [cite_start]/* [cite: 123] */
+        }
+
+        /* No Results / Error Messages */
+        .info-message {
+            text-align: center; [cite_start]/* [cite: 124] */
+            padding: 4rem 2rem; [cite_start]/* [cite: 124] */
+            color: #666; [cite_start]/* [cite: 124] */
+            display: none; [cite_start]/* [cite: 124] */
+        }
+
+        .info-message i {
+            font-size: 4rem; [cite_start]/* [cite: 125] */
+            margin-bottom: 1rem; [cite_start]/* [cite: 125] */
+            color: #ccc; [cite_start]/* [cite: 125] */
+        }
+
+        #errorMessage {
+            color: #d32f2f; [cite_start]/* [cite: 126] */
+        }
+        
+        #errorMessage i {
+            color: #d32f2f; [cite_start]/* [cite: 127] */
+        }
+
+        /* Project Modal - Updated Version */
+        .project-modal {
+            display: none; [cite_start]/* [cite: 1] */
+            position: fixed; [cite_start]/* [cite: 2] */
+            z-index: 2000; [cite_start]/* [cite: 2] */
+            left: 0; [cite_start]/* [cite: 2] */
+            top: 0; [cite_start]/* [cite: 2] */
+            width: 100%; [cite_start]/* [cite: 2] */
+            height: 100%; [cite_start]/* [cite: 2] */
+            background-color: rgba(0,0,0,0.9); [cite_start]/* [cite: 2] */
+            animation: modalFadeIn 0.3s ease; [cite_start]/* [cite: 2] */
+            overflow-y: auto; [cite_start]/* [cite: 2] */
+            padding: 20px 0; [cite_start]/* [cite: 3] */
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; [cite_start]} /* [cite: 59] */
+            to { opacity: 1; [cite_start]} /* [cite: 60] */
+        }
+
+        .project-modal-content {
+            position: relative; [cite_start]/* [cite: 3] */
+            margin: 2% auto; [cite_start]/* [cite: 4] */
+            width: 90%; [cite_start]/* [cite: 4] */
+            max-width: 1200px; [cite_start]/* Aumentado para dar mais espaço [cite: 4] */
+            background: white; [cite_start]/* [cite: 4] */
+            border-radius: 20px; [cite_start]/* [cite: 5] */
+            overflow: hidden; [cite_start]/* [cite: 5] */
+            animation: modalSlideIn 0.4s ease; [cite_start]/* [cite: 5] */
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5); [cite_start]/* [cite: 5] */
+        }
+
+        @keyframes modalSlideIn {
+            from { 
+                transform: translateY(-50px) scale(0.9); [cite_start]/* [cite: 61] */
+                opacity: 0; 
+            }
+            to { 
+                transform: translateY(0) scale(1); [cite_start]/* [cite: 62] */
+                opacity: 1; 
+            }
+        }
+
+        .project-modal-close {
+            position: absolute; [cite_start]/* [cite: 6] */
+            top: 15px; [cite_start]/* [cite: 7] */
+            right: 20px; [cite_start]/* [cite: 7] */
+            color: white; [cite_start]/* [cite: 7] */
+            font-size: 35px; [cite_start]/* [cite: 7] */
+            font-weight: bold; [cite_start]/* [cite: 7] */
+            cursor: pointer; [cite_start]/* [cite: 7] */
+            z-index: 10; [cite_start]/* [cite: 7] */
+            width: 45px; [cite_start]/* [cite: 7] */
+            height: 45px; [cite_start]/* [cite: 7] */
+            background: rgba(0,0,0,0.7); [cite_start]/* [cite: 7] */
+            border-radius: 50%; [cite_start]/* [cite: 8] */
+            display: flex; [cite_start]/* [cite: 8] */
+            align-items: center; [cite_start]/* [cite: 8] */
+            justify-content: center; [cite_start]/* [cite: 8] */
+            transition: all 0.3s ease; [cite_start]/* [cite: 8] */
+        }
+
+        .project-modal-close:hover {
+            background: #f44336; [cite_start]/* [cite: 9] */
+            transform: scale(1.1) rotate(90deg); [cite_start]/* [cite: 10] */
+        }
+
+        /* Main Image Gallery Improvements */
+        .modal-image-gallery {
+            position: relative; [cite_start]/* [cite: 10] */
+            height: 500px; [cite_start]/* Aumentado de 450px [cite: 11] */
+            background: #f8f9fa; [cite_start]/* Fundo mais neutro [cite: 11] */
+            overflow: hidden; [cite_start]/* [cite: 12] */
+            display: flex; [cite_start]/* [cite: 12] */
+            align-items: center; [cite_start]/* [cite: 13] */
+            justify-content: center; [cite_start]/* [cite: 13] */
+        }
+
+        .modal-image-main {
+            width: 100%; [cite_start]/* [cite: 13] */
+            height: 100%; [cite_start]/* [cite: 14] */
+            position: relative; [cite_start]/* [cite: 14] */
+            display: flex; [cite_start]/* [cite: 14] */
+            align-items: center; [cite_start]/* [cite: 14] */
+            justify-content: center; [cite_start]/* [cite: 14] */
+            background: #f8f9fa; [cite_start]/* [cite: 14] */
+        }
+
+        /* NEW APPROACH: Centered image without forced filling */
+        .modal-image-main img,
+        .modal-image-main video {
+            max-width: 100%; [cite_start]/* [cite: 16] */
+            max-height: 100%; [cite_start]/* [cite: 16] */
+            object-fit: contain; [cite_start]/* MAIN CHANGE: contain instead of cover [cite: 16] */
+            border-radius: 10px; [cite_start]/* [cite: 17] */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); [cite_start]/* [cite: 17] */
+            background: white; [cite_start]/* [cite: 17] */
+        }
+
+        /* Improved Placeholder */
+        .modal-image-placeholder {
+            display: flex; [cite_start]/* [cite: 17] */
+            align-items: center; [cite_start]/* [cite: 18] */
+            justify-content: center; [cite_start]/* [cite: 18] */
+            height: 100%; [cite_start]/* [cite: 18] */
+            font-size: 120px; [cite_start]/* [cite: 18] */
+            color: #ddd; [cite_start]/* [cite: 18] */
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef); [cite_start]/* [cite: 19] */
+        }
+
+        /* Improved Control Buttons */
+        .modal-image-controls {
+            position: absolute; [cite_start]/* [cite: 19] */
+            bottom: 20px; [cite_start]/* [cite: 20] */
+            left: 50%; [cite_start]/* [cite: 20] */
+            transform: translateX(-50%); [cite_start]/* [cite: 20] */
+            display: flex; [cite_start]/* [cite: 20] */
+            gap: 15px; [cite_start]/* [cite: 20] */
+            background: rgba(0,0,0,0.8); [cite_start]/* [cite: 20] */
+            padding: 15px 20px; [cite_start]/* [cite: 20] */
+            border-radius: 30px; [cite_start]/* [cite: 20] */
+            backdrop-filter: blur(10px); [cite_start]/* [cite: 21] */
+        }
+
+        .modal-control-btn {
+            background: rgba(255,255,255,0.2); [cite_start]/* [cite: 21] */
+            color: white; [cite_start]/* [cite: 22] */
+            border: none; [cite_start]/* [cite: 22] */
+            width: 40px; [cite_start]/* [cite: 22] */
+            height: 40px; [cite_start]/* [cite: 22] */
+            border-radius: 50%; [cite_start]/* [cite: 22] */
+            cursor: pointer; [cite_start]/* [cite: 22] */
+            display: flex; [cite_start]/* [cite: 22] */
+            align-items: center; [cite_start]/* [cite: 22] */
+            justify-content: center; [cite_start]/* [cite: 22] */
+            transition: all 0.3s ease; [cite_start]/* [cite: 23] */
+            font-size: 16px; [cite_start]/* [cite: 23] */
+        }
+
+        .modal-control-btn:hover {
+            background: rgba(255,255,255,0.3); [cite_start]/* [cite: 23] */
+            transform: scale(1.1); [cite_start]/* [cite: 24] */
+        }
+
+        .modal-control-btn.fullscreen-btn {
+            background: rgba(255,165,0,0.8); [cite_start]/* [cite: 24] */
+        }
+
+        .modal-control-btn.fullscreen-btn:hover {
+            background: rgba(255,165,0,1); [cite_start]/* [cite: 26] */
+        }
+
+        /* Image Navigation - improved */
+        .modal-image-nav {
+            position: absolute; [cite_start]/* [cite: 26] */
+            top: 50%; [cite_start]/* [cite: 27] */
+            transform: translateY(-50%); [cite_start]/* [cite: 27] */
+            background: rgba(0,0,0,0.7); [cite_start]/* [cite: 27] */
+            color: white; [cite_start]/* [cite: 27] */
+            border: none; [cite_start]/* [cite: 27] */
+            width: 50px; [cite_start]/* [cite: 27] */
+            height: 50px; [cite_start]/* [cite: 27] */
+            border-radius: 50%; [cite_start]/* [cite: 27] */
+            cursor: pointer; [cite_start]/* [cite: 27] */
+            font-size: 20px; [cite_start]/* [cite: 27] */
+            transition: all 0.3s ease; [cite_start]/* [cite: 28] */
+            display: none; [cite_start]/* [cite: 28] */
+            backdrop-filter: blur(5px); [cite_start]/* [cite: 28] */
+        }
+
+        .modal-image-nav:hover {
+            background: rgba(0,0,0,0.9); [cite_start]/* [cite: 29] */
+            transform: translateY(-50%) scale(1.1); [cite_start]/* [cite: 29] */
+        }
+
+        .modal-image-prev { left: 20px; [cite_start]/* [cite: 30] */ }
+        .modal-image-next { right: 20px; [cite_start]/* [cite: 31] */ }
+
+        /* Fullscreen Modal for Images */
+        .image-fullscreen-modal {
+            display: none; [cite_start]/* [cite: 32] */
+            position: fixed; [cite_start]/* [cite: 32] */
+            z-index: 3000; [cite_start]/* [cite: 32] */
+            left: 0; [cite_start]/* [cite: 32] */
+            top: 0; [cite_start]/* [cite: 32] */
+            width: 100%; [cite_start]/* [cite: 32] */
+            height: 100%; [cite_start]/* [cite: 32] */
+            background-color: rgba(0,0,0,0.95); [cite_start]/* [cite: 32] */
+            cursor: zoom-out; [cite_start]/* [cite: 33] */
+        }
+
+        .fullscreen-image-container {
+            width: 100%; [cite_start]/* [cite: 33] */
+            height: 100%; [cite_start]/* [cite: 34] */
+            display: flex; [cite_start]/* [cite: 34] */
+            align-items: center; [cite_start]/* [cite: 34] */
+            justify-content: center; [cite_start]/* [cite: 34] */
+            padding: 20px; [cite_start]/* [cite: 35] */
+        }
+
+        .fullscreen-image {
+            max-width: 100%; [cite_start]/* [cite: 36] */
+            max-height: 100%; [cite_start]/* [cite: 36] */
+            object-fit: contain; [cite_start]/* [cite: 36] */
+            border-radius: 5px; [cite_start]/* [cite: 36] */
+            cursor: zoom-out; [cite_start]/* [cite: 36] */
+        }
+
+        .fullscreen-close {
+            position: absolute; [cite_start]/* [cite: 37] */
+            top: 20px; [cite_start]/* [cite: 37] */
+            right: 30px; [cite_start]/* [cite: 37] */
+            color: white; [cite_start]/* [cite: 37] */
+            font-size: 40px; [cite_start]/* [cite: 37] */
+            cursor: pointer; [cite_start]/* [cite: 37] */
+            z-index: 10; [cite_start]/* [cite: 37] */
+            transition: all 0.3s ease; [cite_start]/* [cite: 38] */
+        }
+
+        .fullscreen-close:hover {
+            color: #ff6b6b; [cite_start]/* [cite: 39] */
+            transform: scale(1.1); [cite_start]/* [cite: 39] */
+        }
+
+        /* Improved Thumbnails */
+        .modal-image-thumbnails {
+            position: absolute; [cite_start]/* [cite: 40] */
+            bottom: 80px; [cite_start]/* Movido para cima por causa dos controles [cite: 40] */
+            left: 50%; [cite_start]/* [cite: 41] */
+            transform: translateX(-50%); [cite_start]/* [cite: 41] */
+            display: flex; [cite_start]/* [cite: 41] */
+            gap: 10px; [cite_start]/* [cite: 41] */
+            max-width: 80%; [cite_start]/* [cite: 41] */
+            overflow-x: auto; [cite_start]/* [cite: 41] */
+            padding: 10px; [cite_start]/* [cite: 41] */
+            background: rgba(0,0,0,0.6); [cite_start]/* [cite: 41] */
+            border-radius: 25px; [cite_start]/* [cite: 41] */
+            backdrop-filter: blur(10px); [cite_start]/* [cite: 42] */
+        }
+
+        .modal-thumbnail {
+            width: 60px; [cite_start]/* [cite: 43] */
+            height: 40px; [cite_start]/* [cite: 43] */
+            background-size: cover; [cite_start]/* [cite: 43] */
+            background-position: center; [cite_start]/* [cite: 43] */
+            border-radius: 8px; [cite_start]/* [cite: 43] */
+            cursor: pointer; [cite_start]/* [cite: 43] */
+            opacity: 0.6; [cite_start]/* [cite: 43] */
+            transition: all 0.3s ease; [cite_start]/* [cite: 43] */
+            border: 2px solid transparent; [cite_start]/* [cite: 44] */
+            flex-shrink: 0; [cite_start]/* [cite: 44] */
+        }
+
+        .modal-thumbnail:hover,
+        .modal-thumbnail.active {
+            opacity: 1; [cite_start]/* [cite: 45] */
+            border-color: #FFA500; [cite_start]/* [cite: 45] */
+            transform: scale(1.1); [cite_start]/* [cite: 45] */
+        }
+
+        /* Project Content Improvements */
+        .project-modal-body {
+            padding: 2.5rem; [cite_start]/* [cite: 46] */
+            max-height: 60vh; [cite_start]/* [cite: 46] */
+            overflow-y: auto; [cite_start]/* [cite: 46] */
+        }
+
+        .modal-project-header {
+            margin-bottom: 2rem; [cite_start]/* [cite: 156] */
+        }
+
+        .modal-project-category {
+            display: inline-block; [cite_start]/* [cite: 157] */
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); [cite_start]/* [cite: 157] */
+            color: white; [cite_start]/* [cite: 157] */
+            padding: 0.5rem 1.2rem; [cite_start]/* [cite: 157] */
+            border-radius: 20px; [cite_start]/* [cite: 157] */
+            font-size: 0.9rem; [cite_start]/* [cite: 157] */
+            font-weight: 600; [cite_start]/* [cite: 157] */
+            margin-bottom: 1rem; [cite_start]/* [cite: 158] */
+            text-transform: uppercase; [cite_start]/* [cite: 158] */
+            letter-spacing: 0.5px; [cite_start]/* [cite: 158] */
+        }
+
+        .modal-project-title {
+            font-size: 2.2rem; [cite_start]/* [cite: 159] */
+            color: var(--dark-color); [cite_start]/* [cite: 159] */
+            margin-bottom: 1rem; [cite_start]/* [cite: 159] */
+            font-weight: 700; [cite_start]/* [cite: 159] */
+            line-height: 1.2; [cite_start]/* [cite: 159] */
+        }
+
+        .modal-project-description {
+            font-size: 1.1rem; [cite_start]/* [cite: 160] */
+            line-height: 1.8; [cite_start]/* [cite: 160] */
+            color: #555; [cite_start]/* [cite: 160] */
+            margin-bottom: 2.5rem; [cite_start]/* [cite: 160] */
+        }
+
+        .modal-project-specs {
+            display: block; [cite_start]/* Remove o grid layout [cite: 161] */
+            margin-bottom: 2.5rem; [cite_start]/* [cite: 162] */
+            padding-top: 1rem; [cite_start]/* [cite: 162] */
+            border-top: 1px solid #f0f0f0; [cite_start]/* [cite: 162] */
+        }
+
+        .specs-list {
+            list-style: none; [cite_start]/* [cite: 163] */
+            padding: 0; [cite_start]/* [cite: 163] */
+            margin: 0; [cite_start]/* [cite: 163] */
+            column-count: 2; [cite_start]/* Cria duas colunas [cite: 164] */
+            column-gap: 2rem; [cite_start]/* [cite: 164] */
+        }
+        .spec-item {
+            display: flex; [cite_start]/* [cite: 165] */
+            align-items: center; [cite_start]/* [cite: 165] */
+            gap: 12px; [cite_start]/* [cite: 165] */
+            padding: 12px 0; [cite_start]/* [cite: 165] */
+            border-bottom: 1px solid #f5f5f5; [cite_start]/* [cite: 165] */
+            break-inside: avoid-column; [cite_start]/* Evita que um item quebre entre colunas [cite: 166] */
+        }
+        .spec-item:last-child {
+            border-bottom: none; [cite_start]/* [cite: 167] */
+        }
+        .spec-item-icon {
+            font-size: 1.5rem; [cite_start]/* Ícone um pouco menor [cite: 168] */
+            color: var(--primary-color); [cite_start]/* [cite: 169] */
+            background-color: rgba(255, 165, 0, 0.1); [cite_start]/* [cite: 169] */
+            width: 40px; [cite_start]/* [cite: 169] */
+            height: 40px; [cite_start]/* [cite: 169] */
+            border-radius: 50%; [cite_start]/* [cite: 169] */
+            display: inline-flex; [cite_start]/* [cite: 169] */
+            align-items: center; [cite_start]/* [cite: 170] */
+            justify-content: center; [cite_start]/* [cite: 170] */
+            flex-shrink: 0; [cite_start]/* [cite: 170] */
+        }
+        .spec-item-content {
+            display: flex; [cite_start]/* [cite: 171] */
+            flex-direction: column; [cite_start]/* [cite: 171] */
+        }
+
+
+        .spec-item-label {
+            font-size: 0.9rem; [cite_start]/* [cite: 172] */
+            color: #666; [cite_start]/* [cite: 172] */
+            font-weight: 500; [cite_start]/* [cite: 172] */
+        }
+
+        .spec-item-value {
+            font-size: 1.1rem; [cite_start]/* [cite: 173] */
+            color: var(--dark-color); [cite_start]/* [cite: 173] */
+            font-weight: 600; [cite_start]/* [cite: 173] */
+        }
+
+        /* Hide "View More Projects" button ONLY in the gallery */
+        .page-gallery .modal-action-secondary {
+            display: none; [cite_start]/* [cite: 174] */
+        }
+
+        .modal-spec-card {
+            background: var(--light-color); [cite_start]/* [cite: 175] */
+            padding: 1.5rem; [cite_start]/* [cite: 175] */
+            border-radius: 15px; [cite_start]/* [cite: 175] */
+            text-align: center; [cite_start]/* [cite: 175] */
+            border-left: 4px solid var(--primary-color); [cite_start]/* [cite: 175] */
+            transition: all 0.3s ease; [cite_start]/* [cite: 176] */
+            position: relative; [cite_start]/* [cite: 176] */
+            overflow: hidden; [cite_start]/* [cite: 176] */
+        }
+
+        .modal-spec-card::before {
+            content: ''; [cite_start]/* [cite: 177] */
+            position: absolute; [cite_start]/* [cite: 177] */
+            top: 0; [cite_start]/* [cite: 177] */
+            left: 0; [cite_start]/* [cite: 177] */
+            width: 100%; [cite_start]/* [cite: 177] */
+            height: 100%; [cite_start]/* [cite: 177] */
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); [cite_start]/* [cite: 177] */
+            opacity: 0; [cite_start]/* [cite: 178] */
+            transition: opacity 0.3s ease; [cite_start]/* [cite: 178] */
+            z-index: 1; [cite_start]/* [cite: 178] */
+        }
+
+        .modal-spec-card:hover::before { opacity: 0.1; [cite_start]/* [cite: 179] */ }
+        .modal-spec-card:hover {
+            transform: translateY(-5px); [cite_start]/* [cite: 180] */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15); [cite_start]/* [cite: 180] */
+        }
+
+        .modal-spec-icon {
+            font-size: 2.5rem; [cite_start]/* [cite: 181] */
+            color: var(--primary-color); [cite_start]/* [cite: 181] */
+            margin-bottom: 0.8rem; [cite_start]/* [cite: 181] */
+            position: relative; [cite_start]/* [cite: 181] */
+            z-index: 2; [cite_start]/* [cite: 181] */
+        }
+
+        .modal-spec-label {
+            font-weight: 600; [cite_start]/* [cite: 182] */
+            color: var(--dark-color); [cite_start]/* [cite: 182] */
+            font-size: 1rem; [cite_start]/* [cite: 182] */
+            margin-bottom: 0.3rem; [cite_start]/* [cite: 183] */
+            position: relative; [cite_start]/* [cite: 183] */
+            z-index: 2; [cite_start]/* [cite: 183] */
+        }
+
+        .modal-spec-value {
+            color: #666; [cite_start]/* [cite: 184] */
+            font-size: 1.1rem; [cite_start]/* [cite: 184] */
+            font-weight: 500; [cite_start]/* [cite: 184] */
+            position: relative; [cite_start]/* [cite: 184] */
+            z-index: 2; [cite_start]/* [cite: 184] */
+        }
+
+        .modal-project-actions {
+            display: flex; [cite_start]/* [cite: 185] */
+            gap: 1rem; [cite_start]/* [cite: 185] */
+            justify-content: center; [cite_start]/* [cite: 185] */
+            flex-wrap: wrap; [cite_start]/* [cite: 185] */
+            margin-top: 2rem; [cite_start]/* [cite: 185] */
+            padding-top: 2rem; [cite_start]/* [cite: 186] */
+            border-top: 1px solid #eee; [cite_start]/* [cite: 186] */
+        }
+
+        .modal-action-btn {
+            padding: 12px 30px; [cite_start]/* [cite: 187] */
+            border: none; [cite_start]/* [cite: 187] */
+            border-radius: 25px; [cite_start]/* [cite: 187] */
+            font-weight: 600; [cite_start]/* [cite: 187] */
+            cursor: pointer; [cite_start]/* [cite: 187] */
+            transition: all 0.3s ease; [cite_start]/* [cite: 187] */
+            text-decoration: none; [cite_start]/* [cite: 188] */
+            display: inline-flex; [cite_start]/* [cite: 188] */
+            align-items: center; [cite_start]/* [cite: 188] */
+            gap: 10px; [cite_start]/* [cite: 188] */
+            font-size: 1rem; [cite_start]/* [cite: 188] */
+        }
+
+        .modal-action-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); [cite_start]/* [cite: 189] */
+            color: white; [cite_start]/* [cite: 189] */
+        }
+
+        .modal-action-primary:hover {
+            transform: translateY(-2px); [cite_start]/* [cite: 190] */
+            box-shadow: 0 8px 20px rgba(255,165,0,0.4); [cite_start]/* [cite: 190] */
+            color: white; [cite_start]/* [cite: 190] */
+            text-decoration: none; [cite_start]/* [cite: 190] */
+        }
+
+        .modal-action-secondary {
+            background: white; [cite_start]/* [cite: 191] */
+            color: var(--primary-color); [cite_start]/* [cite: 191] */
+            border: 2px solid var(--primary-color); [cite_start]/* [cite: 191] */
+        }
+
+        .modal-action-secondary:hover {
+            background: var(--primary-color); [cite_start]/* [cite: 192] */
+            color: white; [cite_start]/* [cite: 192] */
+            text-decoration: none; [cite_start]/* [cite: 192] */
+        }
+
+        .modal-loading {
+            display: flex; [cite_start]/* [cite: 193] */
+            justify-content: center; [cite_start]/* [cite: 193] */
+            align-items: center; [cite_start]/* [cite: 193] */
+            height: 200px; [cite_start]/* [cite: 193] */
+            flex-direction: column; [cite_start]/* [cite: 193] */
+            gap: 1rem; [cite_start]/* [cite: 193] */
+            background: white; [cite_start]/* [cite: 194] */
+            border-radius: 20px; [cite_start]/* [cite: 194] */
+        }
+
+        .modal-loading-spinner {
+            width: 50px; [cite_start]/* [cite: 195] */
+            height: 50px; [cite_start]/* [cite: 195] */
+            border: 5px solid #f3f3f3; [cite_start]/* [cite: 195] */
+            border-top: 5px solid var(--primary-color); [cite_start]/* [cite: 195] */
+            border-radius: 50%; [cite_start]/* [cite: 195] */
+            animation: modalSpin 1s linear infinite; [cite_start]/* [cite: 196] */
+        }
+
+        @keyframes modalSpin {
+            0% { transform: rotate(0deg); [cite_start]} /* [cite: 197] */
+            100% { transform: rotate(360deg); [cite_start]} /* [cite: 198] */
+        }
+
+        /* Video Thumbnail Styles */
+        .loading-thumbnail {
+            position: relative; [cite_start]/* [cite: 224] */
+        }
+
+        .loading-thumbnail::after {
+            content: ''; [cite_start]/* [cite: 225] */
+            position: absolute; [cite_start]/* [cite: 225] */
+            top: 50%; [cite_start]/* [cite: 225] */
+            left: 50%; [cite_start]/* [cite: 225] */
+            width: 20px; [cite_start]/* [cite: 226] */
+            height: 20px; [cite_start]/* [cite: 226] */
+            margin: -10px 0 0 -10px; [cite_start]/* [cite: 226] */
+            border: 2px solid rgba(255,255,255,0.3); [cite_start]/* [cite: 226] */
+            border-top: 2px solid rgba(255,255,255,0.8); [cite_start]/* [cite: 226] */
+            border-radius: 50%; [cite_start]/* [cite: 226] */
+            animation: thumbnailSpin 1s linear infinite; [cite_start]/* [cite: 226] */
+            z-index: 1; [cite_start]/* Menor que o ícone de vídeo [cite: 227] */
+        }
+
+        .thumbnail-loaded::after {
+            display: none; [cite_start]/* [cite: 228] */
+        }
+
+        @keyframes thumbnailSpin {
+            0% { transform: rotate(0deg); [cite_start]} /* [cite: 229] */
+            100% { transform: rotate(360deg); [cite_start]} /* [cite: 230] */
+        }
+        
+        /* Remove old conflicting style */
+        .project-image.has-media.is-video::after {
+            content: ''; [cite_start]/* [cite: 231] */
+            position: absolute; [cite_start]/* [cite: 231] */
+            bottom: 10px; [cite_start]/* [cite: 231] */
+            right: 10px; [cite_start]/* [cite: 231] */
+            width: 40px; [cite_start]/* [cite: 231] */
+            height: 40px; [cite_start]/* [cite: 231] */
+            background: rgba(0,0,0,0.8); [cite_start]/* [cite: 231] */
+            border-radius: 50%; [cite_start]/* [cite: 231] */
+            display: flex; [cite_start]/* [cite: 232] */
+            align-items: center; [cite_start]/* [cite: 232] */
+            justify-content: center; [cite_start]/* [cite: 232] */
+            z-index: 3; [cite_start]/* [cite: 232] */
+            backdrop-filter: blur(5px); [cite_start]/* [cite: 232] */
+        }
+
+        .project-image.has-media.is-video::before {
+            content: '▶'; [cite_start]/* [cite: 233] */
+            position: absolute; [cite_start]/* [cite: 233] */
+            bottom: 20px; [cite_start]/* [cite: 233] */
+            right: 20px; [cite_start]/* [cite: 233] */
+            color: white; [cite_start]/* [cite: 233] */
+            font-size: 16px; [cite_start]/* [cite: 234] */
+            z-index: 4; [cite_start]/* [cite: 234] */
+            pointer-events: none; [cite_start]/* [cite: 234] */
+        }
+
+        .video-fallback-icon {
+            position: absolute; [cite_start]/* [cite: 235] */
+            top: 50%; [cite_start]/* [cite: 235] */
+            left: 50%; [cite_start]/* [cite: 235] */
+            transform: translate(-50%, -50%); [cite_start]/* [cite: 235] */
+            z-index: 2; [cite_start]/* [cite: 236] */
+            pointer-events: none; [cite_start]/* [cite: 236] */
+        }
+
+        .video-fallback-icon i {
+            font-size: 3rem; [cite_start]/* [cite: 237] */
+            color: rgba(255,255,255,0.7); [cite_start]/* [cite: 237] */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .specs-list {
+                column-count: 1; [cite_start]/* Uma coluna em telas menores [cite: 199] */
+            }
+            .page-header h1 { font-size: 2.5rem; [cite_start]/* [cite: 200] */ }
+            .filters { gap: 0.5rem; [cite_start]/* [cite: 201] */ }
+            .filter-btn { padding: 10px 20px; font-size: 0.9rem; [cite_start]/* [cite: 202] */ }
+            .gallery-grid { grid-template-columns: 1fr; gap: 1.5rem; [cite_start]/* [cite: 203] */ }
+            .project-info { padding: 1.5rem; [cite_start]/* [cite: 204] */ }
+            .project-modal-content { width: 95%; margin: 5% auto; [cite_start]/* [cite: 205] */ }
+            .modal-image-gallery { height: 300px; [cite_start]/* [cite: 206] */ }
+            .project-modal-body { padding: 1.5rem; [cite_start]/* [cite: 207] */ }
+            .modal-project-title { font-size: 1.8rem; [cite_start]/* [cite: 208] */ }
+            .modal-project-specs { grid-template-columns: 1fr 1fr; gap: 1rem; [cite_start]/* [cite: 209] */ }
+            .modal-spec-card { padding: 1rem; [cite_start]/* [cite: 210] */ }
+            .modal-spec-icon { font-size: 2rem; [cite_start]/* [cite: 211] */ }
+            .modal-action-btn { padding: 10px 20px; font-size: 0.9rem; [cite_start]/* [cite: 212] */ }
+            .modal-project-actions { flex-direction: column; align-items: stretch; [cite_start]/* [cite: 213] */ }
+            .project-specs-preview { grid-template-columns: 1fr; gap: 0.5rem; [cite_start]/* [cite: 214] */ }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 2rem 1rem; [cite_start]/* [cite: 215] */ }
+            .filters { flex-direction: column; align-items: stretch; text-align: center; [cite_start]/* [cite: 216] */ }
+            .modal-project-specs { grid-template-columns: 1fr; [cite_start]/* [cite: 217] */ }
+            .project-specs-preview { grid-template-columns: 1fr; [cite_start]/* [cite: 218] */ }
+            .modal-image-gallery { height: 250px; [cite_start]/* [cite: 219] */ }
+            .modal-project-title { font-size: 1.5rem; [cite_start]/* [cite: 220] */ }
+        }
+
+        .project-modal.opening .project-modal-content {
+            animation: modalSlideInMobile 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); [cite_start]/* [cite: 221] */
+        }
+
+        @keyframes modalSlideInMobile {
+            0% { 
+                transform: translateY(100px) scale(0.9); [cite_start]/* [cite: 222] */
+                opacity: 0; 
+            }
+            100% { 
+                transform: translateY(0) scale(1); [cite_start]/* [cite: 223] */
+                opacity: 1; 
+            }
+        }
+    </style>

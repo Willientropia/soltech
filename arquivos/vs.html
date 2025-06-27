@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SOL TECH ENERGIA SOLAR - Soluções em Energia Solar e Parceria WEG</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
     <style>
+        /* Global Styles */
         * {
             margin: 0;
             padding: 0;
@@ -63,7 +66,7 @@
             gap: 10px;
             transition: transform 0.3s ease;
         }
-        
+
         .logo-img {
             height: 55px;
             width: auto;
@@ -188,7 +191,7 @@
         .cta-button:hover::before { width: 300px; height: 300px; }
         .cta-button:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(255,165,0,0.5); }
 
-        /* Sections */
+        /* General Section Styling */
         section { padding: 80px 0; position: relative; }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
         h2 {
@@ -211,6 +214,28 @@
             border-radius: 2px;
         }
 
+        .form-feedback {
+            padding: 15px;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none; /* Começa escondido */
+            transition: all 0.3s ease;
+            border-left: 5px solid;
+        }
+        .form-feedback.success {
+            display: block;
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #4caf50;
+        }
+        .form-feedback.error {
+            display: block;
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f44336;
+        }
+
         /* About Section */
         #about { background: white; }
         .about-content { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin-top: 3rem; }
@@ -222,7 +247,8 @@
             animation: fadeInRight 1s ease;
         }
         .about-image::before {
-            content: '☀️'; position: absolute; font-size: 200px;
+            content: '☀️';
+            position: absolute; font-size: 200px;
             top: 50%; left: 50%; transform: translate(-50%, -50%);
             opacity: 0.3; animation: rotate 20s linear infinite;
         }
@@ -231,12 +257,41 @@
             to { transform: translate(-50%, -50%) rotate(360deg); }
         }
 
+        /* Services Section */
+        #services { background: var(--light-color); }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .service-card {
+            background: white;
+            padding: 2.5rem; border-radius: 20px;
+            text-align: center; transition: all 0.3s ease;
+            position: relative; overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        .service-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 5px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            transform: scaleX(0); transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        .service-card:hover::before { transform: scaleX(1); }
+        .service-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0,0,0,0.15); }
+        .service-icon {
+            font-size: 50px;
+            margin-bottom: 1rem; display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .service-card h3 { font-size: 1.5rem; margin-bottom: 1rem; }
+
         /* WEG Section */
         #weg { background: white; overflow: hidden; }
         .weg-logo-container { text-align: center; margin-bottom: 2rem; }
-        .weg-logo-container img { max-width: 250px; }
+        .weg-logo-container img { max-width: 250px; height: auto; }
         .weg-badge {
-            display: inline-block; padding: 15px 30px;
+            display: inline-block;
+            padding: 15px 30px;
             background: linear-gradient(135deg, var(--weg-blue), #0074d9);
             color: white; font-size: 1.5rem; font-weight: bold;
             border-radius: 15px; margin: 1rem 0 2rem 0;
@@ -244,7 +299,8 @@
         }
         .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem; }
         .product-card {
-            background: white; border-radius: 15px; padding: 2rem;
+            background: white;
+            border-radius: 15px; padding: 2rem;
             text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.08);
             transition: all 0.3s ease; border-top: 4px solid var(--weg-blue);
         }
@@ -252,43 +308,306 @@
         .product-icon { font-size: 50px; margin-bottom: 1rem; color: var(--weg-blue); }
         .product-card h3 { color: var(--dark-color); margin-bottom: 0.5rem; }
 
-        /* Services Section */
-        #services { background: var(--light-color); }
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
-        .service-card {
-            background: white; padding: 2.5rem; border-radius: 20px;
-            text-align: center; transition: all 0.3s ease;
-            position: relative; overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        /* Projects Section with Carousel */
+        #projects { background: var(--light-color); }
+        .projects-intro {
+            text-align: center;
+            margin-bottom: 3rem;
         }
-        .service-card::before {
-            content: ''; position: absolute; top: 0; left: 0;
-            width: 100%; height: 5px;
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-            transform: scaleX(0); transform-origin: left; transition: transform 0.3s ease;
+
+        /* Project Carousel Styles */
+        .projects-carousel-container {
+            position: relative;
+            margin: 3rem 0;
         }
-        .service-card:hover::before { transform: scaleX(1); }
-        .service-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0,0,0,0.15); }
-        .service-icon {
-            font-size: 50px; margin-bottom: 1rem; display: inline-block;
+
+        .carousel-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .carousel-container {
+            flex: 1;
+            overflow: hidden;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            gap: 2rem;
+        }
+
+        .carousel-project-card {
+            flex: 0 0 320px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .carousel-project-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .carousel-project-image {
+            height: 220px;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            position: relative;
+            overflow: hidden;
         }
-        .service-card h3 { font-size: 1.5rem; margin-bottom: 1rem; }
+
+        .carousel-project-image:not(.has-media)::before {
+            content: '📸';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 60px;
+            opacity: 0.7;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .carousel-project-image.has-media {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .carousel-project-image.has-media.is-video {
+            background-color: #222;
+        }
+
+        .carousel-project-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,165,0,0.8), rgba(255,107,53,0.8));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .carousel-project-card:hover .carousel-project-image::after {
+            opacity: 1;
+        }
+
+        .carousel-project-view-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 2.5rem;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .carousel-project-card:hover .carousel-project-view-icon {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .carousel-project-image.has-media.is-video .carousel-video-indicator {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .carousel-project-content {
+            padding: 1.8rem;
+            text-align: center;
+        }
+
+        .carousel-project-type {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .carousel-project-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .carousel-project-description {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1.2rem;
+        }
+
+        .carousel-project-specs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.6rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .carousel-project-specs .spec-item {
+            font-size: 0.8rem;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .carousel-project-specs .spec-item i {
+            color: var(--primary-color);
+            font-size: 0.85rem;
+            width: 12px;
+            flex-shrink: 0;
+        }
+
+        /* Carousel Navigation Buttons */
+        .carousel-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255,165,0,0.3);
+            z-index: 10;
+        }
+
+        .carousel-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(255,165,0,0.4);
+        }
+
+        .carousel-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 4px 15px rgba(255,165,0,0.2);
+        }
+
+        /* Carousel Indicators */
+        .carousel-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 2rem;
+        }
+
+        .carousel-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ddd;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-indicator.active {
+            background: var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        .carousel-indicator:hover {
+            background: var(--secondary-color);
+        }
+
+        .view-all-btn {
+            display: inline-block;
+            padding: 18px 45px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255,165,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .view-all-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .view-all-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        .view-all-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(255,165,0,0.4);
+            text-decoration: none;
+            color: white;
+        }
 
         /* Location Section */
         #location { background: white; }
         .location-content { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin-top: 3rem; }
-        .location-info { background: var(--light-color); padding: 2rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
-        .location-info h3 { color: var(--primary-color); margin-bottom: 1rem; font-size: 1.5rem; }
-        .location-info p { margin-bottom: 0.5rem; display: flex; align-items: center; gap: 10px; }
-        .map-container { height: 400px; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .location-info { background: var(--light-color); padding: 2rem; border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        .location-info h3 { color: var(--primary-color); margin-bottom: 1rem;
+            font-size: 1.5rem; }
+        .location-info p { margin-bottom: 0.5rem; display: flex; align-items: center;
+            gap: 10px; }
+        .map-container { height: 400px; border-radius: 15px; overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
 
         /* Contact Section */
-        #contact { background: linear-gradient(135deg, var(--dark-color) 0%, #2a2a2a 100%); color: white; text-align: center; }
+        #contact { background: linear-gradient(135deg, var(--dark-color) 0%, #2a2a2a 100%);
+            color: white; text-align: center; }
         #contact h2 { color: white; }
         .contact-form {
-            background: white; color: var(--text-color);
+            background: white;
+            color: var(--text-color);
             padding: 2.5rem; border-radius: 15px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             margin: 3rem auto; max-width: 800px; text-align: left;
@@ -296,7 +615,8 @@
         .form-group { margin-bottom: 1.5rem; }
         .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
         .form-group input, .form-group textarea {
-            width: 100%; padding: 12px 15px;
+            width: 100%;
+            padding: 12px 15px;
             border: 2px solid #e1e1e1; border-radius: 8px;
             font-size: 16px; transition: border-color 0.3s ease;
         }
@@ -306,38 +626,45 @@
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white; padding: 15px 40px; border: none;
             border-radius: 50px; font-size: 1.1rem; font-weight: bold;
-            cursor: pointer; transition: all 0.3s ease; width: 100%;
+            cursor: pointer; transition: all 0.3s ease;
+            width: 100%;
         }
         .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(255,165,0,0.3); }
         .contact-buttons { display: flex; gap: 2rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap; }
         .contact-button {
-            display: inline-flex; align-items: center; gap: 10px;
+            display: inline-flex;
+            align-items: center; gap: 10px;
             padding: 15px 30px; background: white; color: var(--dark-color);
             text-decoration: none; border-radius: 50px; font-weight: bold;
             transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(255,255,255,0.2);
         }
         .contact-button:hover {
-            transform: translateY(-5px); box-shadow: 0 10px 25px rgba(255,255,255,0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255,255,255,0.3);
             background: var(--primary-color); color: white;
         }
 
         /* Footer */
         footer { background: #111; color: white; padding: 3rem 0 2rem; text-align: center; }
         .footer-content { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
-        .company-info { margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid #333; }
+        .company-info { margin-bottom: 2rem; padding-bottom: 2rem;
+            border-bottom: 1px solid #333; }
         .company-info h3 { color: var(--primary-color); margin-bottom: 1rem; }
         .social-links { display: flex; gap: 1rem; justify-content: center; margin-top: 1rem; margin-bottom: 2rem; }
         .social-links a {
-            display: inline-flex; align-items: center; justify-content: center;
+            display: inline-flex;
+            align-items: center; justify-content: center;
             width: 50px; height: 50px; background: var(--primary-color);
             color: white; border-radius: 50%; text-decoration: none;
-            transition: all 0.3s ease; font-size: 24px;
+            transition: all 0.3s ease;
+            font-size: 24px;
         }
         .social-links a:hover { background: var(--secondary-color); transform: translateY(-5px); }
-        
-        /* Floating WhatsApp */
+
+        /* Floating WhatsApp Button */
         .whatsapp-float {
-            position: fixed; bottom: 20px; right: 20px;
+            position: fixed;
+            bottom: 20px; right: 20px;
             background: #25D366; color: white; width: 60px; height: 60px;
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
             font-size: 30px; text-decoration: none;
@@ -345,37 +672,915 @@
             z-index: 1000; transition: all 0.3s ease;
             animation: pulse-whatsapp 2s infinite;
         }
-        .whatsapp-float:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6); }
+        .whatsapp-float:hover { transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6); }
         @keyframes pulse-whatsapp {
             0% { box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); }
             50% { box-shadow: 0 4px 15px rgba(37, 211, 102, 0.8); }
             100% { box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); }
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav-links {
-                position: fixed; left: -100%; top: 70px;
-                flex-direction: column; background: rgba(26, 26, 26, 0.98);
-                width: 100%; text-align: center; transition: 0.3s;
-                padding: 2rem 0; backdrop-filter: blur(10px);
-            }
-            .nav-links.active { left: 0; }
-            .menu-toggle { display: flex; }
-            .hero h1 { font-size: 2.5rem; }
-            .hero p { font-size: 1.2rem; }
-            .about-content, .location-content { grid-template-columns: 1fr; }
-            .contact-buttons { flex-direction: column; align-items: center; }
-            h2 { font-size: 2.2rem; }
-            .contact-form > div[style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+        /* Loading Spinner for Projects */
+        .projects-loading {
+            text-align: center;
+            padding: 2rem;
+            display: none;
         }
 
-        /* Animations */
-        @keyframes fadeInLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes fadeInRight { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
-        .fade-in { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
-        .fade-in.active { opacity: 1; transform: translateY(0); }
+        .projects-loading .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Project Modal - Improved Version from css.txt */
+        .project-modal {
+            display: none; /* [cite: 1] */
+            position: fixed; /* [cite: 2] */
+            z-index: 2000; /* [cite: 2] */
+            left: 0; /* [cite: 2] */
+            top: 0; /* [cite: 2] */
+            width: 100%; /* [cite: 2] */
+            height: 100%; /* [cite: 2] */
+            background-color: rgba(0,0,0,0.9); /* [cite: 2] */
+            animation: modalFadeIn 0.3s ease; /* [cite: 2] */
+            overflow-y: auto; /* [cite: 2] */
+            padding: 20px 0; /* [cite: 3] */
+        }
+
+        .project-modal-content {
+            position: relative; /* [cite: 3] */
+            margin: 2% auto; /* [cite: 4] */
+            width: 90%; /* [cite: 4] */
+            max-width: 1200px; /* Aumentado para dar mais espaço [cite: 4] */
+            background: white; /* [cite: 4] */
+            border-radius: 20px; /* [cite: 5] */
+            overflow: hidden; /* [cite: 5] */
+            animation: modalSlideIn 0.4s ease; /* [cite: 5] */
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5); /* [cite: 5] */
+        }
+
+        .project-modal-close {
+            position: absolute; /* [cite: 6] */
+            top: 15px; /* [cite: 7] */
+            right: 20px; /* [cite: 7] */
+            color: white; /* [cite: 7] */
+            font-size: 35px; /* [cite: 7] */
+            font-weight: bold; /* [cite: 7] */
+            cursor: pointer; /* [cite: 7] */
+            z-index: 10; /* [cite: 7] */
+            width: 45px; /* [cite: 7] */
+            height: 45px; /* [cite: 7] */
+            background: rgba(0,0,0,0.7); /* [cite: 7] */
+            border-radius: 50%; /* [cite: 8] */
+            display: flex; /* [cite: 8] */
+            align-items: center; /* [cite: 8] */
+            justify-content: center; /* [cite: 8] */
+            transition: all 0.3s ease; /* [cite: 8] */
+        }
+
+        .project-modal-close:hover {
+            background: #f44336; /* [cite: 9] */
+            transform: scale(1.1) rotate(90deg); /* [cite: 10] */
+        }
+
+        /* Main Image Gallery Improvements */
+
+        /* Main Image Gallery Improvements */
+        /* Ajustar a galeria para dar espaço aos controles */
+        .modal-image-gallery {
+            position: relative;
+            height: 500px;
+            background: #f8f9fa;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 40px; /* NOVO: Espaço para os controles */
+        }
+
+        .modal-image-main {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+        }
+
+        /* NEW APPROACH: Centered image without forced filling */
+        .modal-image-main img,
+        .modal-image-main video {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; /* MAIN CHANGE: contain instead of cover */
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            background: white;
+        }
+
+        /* Improved Placeholder */
+        .modal-image-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            font-size: 120px;
+            color: #ddd;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        }
+
+        /* Controles dinâmicos melhorados */
+        /* Barra de controles reposicionada */
+        .modal-image-controls {
+            position: absolute;
+            bottom: 5px; /* MUDANÇA: Movido para fora da área da imagem */
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            background: rgba(0,0,0,0.9); /* Fundo mais escuro */
+            padding: 12px 20px; /* Padding reduzido */
+            border-radius: 25px;
+            backdrop-filter: blur(15px);
+            z-index: 150;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .modal-control-btn {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .modal-control-btn:hover {
+            background: rgba(255,255,255,0.25);
+            transform: scale(1.1);
+        }
+
+        .modal-control-btn.fullscreen-btn {
+            background: rgba(255,165,0,0.8);
+        }
+
+        .modal-control-btn.fullscreen-btn:hover {
+            background: rgba(255,165,0,1);
+            box-shadow: 0 4px 15px rgba(255,165,0,0.4);
+        }
+
+        /* Image Navigation - improved */
+        .modal-image-nav {
+            display: none !important; /* Oculta completamente as setas laterais */
+        }
+
+
+
+
+
+
+        .modal-image-nav:hover {
+            background: rgba(0,0,0,0.9); /* [cite: 29] */
+            transform: translateY(-50%) scale(1.1); /* [cite: 29] */
+        }
+
+        .modal-image-prev { left: 20px; /* [cite: 30] */ }
+        .modal-image-next { right: 20px; /* [cite: 31] */ }
+
+        /* Fullscreen Modal for Images */
+        .image-fullscreen-modal {
+            display: none; /* [cite: 32] */
+            position: fixed; /* [cite: 32] */
+            z-index: 3000; /* [cite: 32] */
+            left: 0; /* [cite: 32] */
+            top: 0; /* [cite: 32] */
+            width: 100%; /* [cite: 32] */
+            height: 100%; /* [cite: 32] */
+            background-color: rgba(0,0,0,0.95); /* [cite: 32] */
+            cursor: zoom-out; /* [cite: 33] */
+        }
+
+        .fullscreen-image-container {
+            width: 100%; /* [cite: 33] */
+            height: 100%; /* [cite: 34] */
+            display: flex; /* [cite: 34] */
+            align-items: center; /* [cite: 34] */
+            justify-content: center; /* [cite: 34] */
+            padding: 20px; /* [cite: 35] */
+        }
+
+        .fullscreen-image {
+            max-width: 100%; /* [cite: 36] */
+            max-height: 100%; /* [cite: 36] */
+            object-fit: contain; /* [cite: 36] */
+            border-radius: 5px; /* [cite: 36] */
+            cursor: zoom-out; /* [cite: 36] */
+        }
+
+        .fullscreen-close {
+            position: absolute; /* [cite: 37] */
+            top: 20px; /* [cite: 37] */
+            right: 30px; /* [cite: 37] */
+            color: white; /* [cite: 37] */
+            font-size: 40px; /* [cite: 37] */
+            cursor: pointer; /* [cite: 37] */
+            z-index: 10; /* [cite: 37] */
+            transition: all 0.3s ease; /* [cite: 38] */
+        }
+
+        .fullscreen-close:hover {
+            color: #ff6b6b; /* [cite: 39] */
+            transform: scale(1.1); /* [cite: 39] */
+        }
+
+        /* Improved Thumbnails */
+        /* Improved Thumbnails */
+        .modal-image-thumbnails {
+            display: none !important;
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            max-width: 80%;
+            overflow-x: auto;
+            padding: 10px 15px;
+            background: rgba(0,0,0,0.7);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .modal-image-thumbnails.show {
+            display: flex !important;
+        }
+
+        .modal-image-thumbnails.hide {
+            display: none !important;
+        }
+
+        .modal-thumbnail {
+            width: 60px;
+            height: 40px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            flex-shrink: 0;
+        }
+
+        .modal-thumbnail:hover,
+        .modal-thumbnail.active {
+            opacity: 1;
+            border-color: #FFA500;
+            transform: scale(1.1);
+        }
+
+        /* Project Content Improvements */
+        .project-modal-body {
+            padding: 2.5rem;
+            max-height: 55vh; /* Reduzido para dar espaço aos controles */
+            overflow-y: auto;
+            margin-top: 40px; /* NOVO: Margem para os controles */
+        }
+
+        /* Responsivo - ajustes para mobile */
+        @media (max-width: 768px) {
+            .modal-image-gallery {
+                height: 300px;
+                padding-bottom: 30px;
+            }
+            
+            .modal-image-controls {
+                bottom: -5px; /* Ainda mais próximo em mobile */
+                padding: 10px 15px;
+                gap: 12px;
+            }
+            
+            .modal-control-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
+            }
+            
+            .modal-image-thumbnails {
+                bottom: -50px;
+                max-width: 90%;
+                padding: 8px 12px;
+            }
+            
+            .modal-thumbnail {
+                width: 50px;
+                height: 32px;
+            }
+        }
+
+        .modal-project-header {
+            margin-bottom: 2rem; /* [cite: 474] */
+        }
+
+        .modal-project-category {
+            display: inline-block; /* [cite: 475] */
+            background: linear-gradient(135deg, var(--primary-color, #FFA500), var(--secondary-color, #FF6B35)); /* [cite: 475] */
+            color: white; /* [cite: 475] */
+            padding: 0.5rem 1.2rem; /* [cite: 475] */
+            border-radius: 20px; /* [cite: 475] */
+            font-size: 0.9rem; /* [cite: 475] */
+            font-weight: 600; /* [cite: 475] */
+            margin-bottom: 1rem; /* [cite: 476] */
+            text-transform: uppercase; /* [cite: 476] */
+            letter-spacing: 0.5px; /* [cite: 476] */
+        }
+
+        .modal-project-title {
+            font-size: 2.2rem; /* [cite: 477] */
+            color: var(--dark-color, #1a1a1a); /* [cite: 477] */
+            margin-bottom: 1rem; /* [cite: 477] */
+            font-weight: 700; /* [cite: 477] */
+            line-height: 1.2; /* [cite: 477] */
+        }
+
+        .modal-project-description {
+            font-size: 1.1rem; /* [cite: 478] */
+            line-height: 1.8; /* [cite: 478] */
+            color: #555; /* [cite: 478] */
+            margin-bottom: 2.5rem; /* [cite: 478] */
+        }
+
+        .modal-project-specs {
+            display: block; /* Remove o grid layout [cite: 479] */
+            margin-bottom: 2.5rem; /* [cite: 480] */
+            padding-top: 1rem; /* [cite: 480] */
+            border-top: 1px solid #f0f0f0; /* [cite: 480] */
+        }
+
+        .specs-list {
+            list-style: none; /* [cite: 481] */
+            padding: 0; /* [cite: 481] */
+            margin: 0; /* [cite: 481] */
+            column-count: 2; /* Cria duas colunas [cite: 482] */
+            column-gap: 2rem; /* [cite: 482] */
+        }
+        .spec-item {
+            display: flex; /* [cite: 483] */
+            align-items: center; /* [cite: 483] */
+            gap: 12px; /* [cite: 483] */
+            padding: 12px 0; /* [cite: 483] */
+            border-bottom: 1px solid #f5f5f5; /* [cite: 483] */
+            break-inside: avoid-column; /* Evita que um item quebre entre colunas [cite: 484] */
+        }
+        .spec-item:last-child {
+            border-bottom: none; /* [cite: 485] */
+        }
+        .spec-item-icon {
+            font-size: 1.5rem; /* Ícone um pouco menor [cite: 486] */
+            color: var(--primary-color); /* [cite: 487] */
+            background-color: rgba(255, 165, 0, 0.1); /* [cite: 487] */
+            width: 40px; /* [cite: 487] */
+            height: 40px; /* [cite: 487] */
+            border-radius: 50%; /* [cite: 487] */
+            display: inline-flex; /* [cite: 487] */
+            align-items: center; /* [cite: 488] */
+            justify-content: center; /* [cite: 488] */
+            flex-shrink: 0; /* [cite: 488] */
+        }
+        .spec-item-content {
+            display: flex; /* [cite: 489] */
+            flex-direction: column; /* [cite: 489] */
+        }
+
+
+        .spec-item-label {
+            font-size: 0.9rem; /* [cite: 490] */
+            color: #666; /* [cite: 490] */
+            font-weight: 500; /* [cite: 490] */
+        }
+
+        .spec-item-value {
+            font-size: 1.1rem; /* [cite: 491] */
+            color: var(--dark-color); /* [cite: 491] */
+            font-weight: 600; /* [cite: 491] */
+        }
+
+        .modal-spec-card {
+            background: var(--light-color, #f5f5f5); /* [cite: 496] */
+            padding: 1.5rem; /* [cite: 496] */
+            border-radius: 15px; /* [cite: 496] */
+            text-align: center; /* [cite: 496] */
+            border-left: 4px solid var(--primary-color, #FFA500); /* [cite: 496] */
+            transition: all 0.3s ease; /* [cite: 496] */
+            position: relative; /* [cite: 496] */
+            overflow: hidden; /* [cite: 497] */
+        }
+
+        .modal-spec-card::before {
+            content: ''; /* [cite: 498] */
+            position: absolute; /* [cite: 498] */
+            top: 0; /* [cite: 498] */
+            left: 0; /* [cite: 498] */
+            width: 100%; /* [cite: 498] */
+            height: 100%; /* [cite: 498] */
+            background: linear-gradient(135deg, var(--primary-color, #FFA500), var(--secondary-color, #FF6B35)); /* [cite: 498] */
+            opacity: 0; /* [cite: 499] */
+            transition: opacity 0.3s ease; /* [cite: 499] */
+            z-index: 1; /* [cite: 499] */
+        }
+
+        .modal-spec-card:hover::before {
+            opacity: 0.1; /* [cite: 500] */
+        }
+
+        .modal-spec-card:hover {
+            transform: translateY(-5px); /* [cite: 501] */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15); /* [cite: 501] */
+        }
+
+        .modal-spec-icon {
+            font-size: 2.5rem; /* [cite: 502] */
+            color: var(--primary-color, #FFA500); /* [cite: 502] */
+            margin-bottom: 0.8rem; /* [cite: 502] */
+            position: relative; /* [cite: 502] */
+            z-index: 2; /* [cite: 502] */
+        }
+
+        .modal-spec-label {
+            font-weight: 600; /* [cite: 503] */
+            color: var(--dark-color, #1a1a1a); /* [cite: 503] */
+            font-size: 1rem; /* [cite: 503] */
+            margin-bottom: 0.3rem; /* [cite: 503] */
+            position: relative; /* [cite: 503] */
+            z-index: 2; /* [cite: 504] */
+        }
+
+        .modal-spec-value {
+            color: #666; /* [cite: 505] */
+            font-size: 1.1rem; /* [cite: 505] */
+            font-weight: 500; /* [cite: 505] */
+            position: relative; /* [cite: 505] */
+            z-index: 2; /* [cite: 505] */
+        }
+
+        /* Modal Action Buttons */
+        .modal-project-actions {
+            display: flex; /* [cite: 506] */
+            gap: 1rem; /* [cite: 506] */
+            justify-content: center; /* [cite: 506] */
+            flex-wrap: wrap; /* [cite: 506] */
+            margin-top: 2rem; /* [cite: 506] */
+            padding-top: 2rem; /* [cite: 507] */
+            border-top: 1px solid #eee; /* [cite: 507] */
+        }
+
+        .modal-action-btn {
+            padding: 12px 30px; /* [cite: 508] */
+            border: none; /* [cite: 508] */
+            border-radius: 25px; /* [cite: 508] */
+            font-weight: 600; /* [cite: 508] */
+            cursor: pointer; /* [cite: 508] */
+            transition: all 0.3s ease; /* [cite: 508] */
+            text-decoration: none; /* [cite: 508] */
+            display: inline-flex; /* [cite: 509] */
+            align-items: center; /* [cite: 509] */
+            gap: 10px; /* [cite: 509] */
+            font-size: 1rem; /* [cite: 509] */
+        }
+
+        .modal-action-primary {
+            background: linear-gradient(135deg, var(--primary-color, #FFA500), var(--secondary-color, #FF6B35)); /* [cite: 510] */
+            color: white; /* [cite: 510] */
+        }
+
+        .modal-action-primary:hover {
+            transform: translateY(-2px); /* [cite: 511] */
+            box-shadow: 0 8px 20px rgba(255,165,0,0.4); /* [cite: 511] */
+            color: white; /* [cite: 511] */
+            text-decoration: none; /* [cite: 511] */
+        }
+
+        .modal-action-secondary {
+            background: white; /* [cite: 512] */
+            color: var(--primary-color, #FFA500); /* [cite: 512] */
+            border: 2px solid var(--primary-color, #FFA500); /* [cite: 512] */
+        }
+
+        .modal-action-secondary:hover {
+            background: var(--primary-color, #FFA500); /* [cite: 513] */
+            color: white; /* [cite: 513] */
+            text-decoration: none; /* [cite: 513] */
+        }
+
+        /* Modal Loading State */
+        .modal-loading {
+            display: flex; /* [cite: 514] */
+            justify-content: center; /* [cite: 514] */
+            align-items: center; /* [cite: 514] */
+            height: 200px; /* [cite: 514] */
+            flex-direction: column; /* [cite: 514] */
+            gap: 1rem; /* [cite: 514] */
+            background: white; /* [cite: 515] */
+            border-radius: 20px; /* [cite: 515] */
+        }
+
+        .modal-loading-spinner {
+            width: 50px; /* [cite: 516] */
+            height: 50px; /* [cite: 516] */
+            border: 5px solid #f3f3f3; /* [cite: 516] */
+            border-top: 5px solid var(--primary-color, #FFA500); /* [cite: 516] */
+            border-radius: 50%; /* [cite: 516] */
+            animation: modalSpin 1s linear infinite; /* [cite: 517] */
+        }
+
+        @keyframes modalSpin {
+            0% { transform: rotate(0deg); } /* [cite: 518] */
+            100% { transform: rotate(360deg); } /* [cite: 519] */
+        }
+
+        /* Zoom Indicator */
+        .zoom-indicator {
+            position: absolute; /* [cite: 57] */
+            top: 20px; /* [cite: 57] */
+            left: 20px; /* [cite: 57] */
+            background: rgba(0,0,0,0.7); /* [cite: 57] */
+            color: white; /* [cite: 57] */
+            padding: 8px 12px; /* [cite: 57] */
+            border-radius: 20px; /* [cite: 57] */
+            font-size: 12px; /* [cite: 57] */
+            backdrop-filter: blur(5px); /* [cite: 58] */
+        }
+
+        /* Animations from css.txt */
+        @keyframes modalFadeIn {
+            from { opacity: 0; } /* [cite: 59] */
+            to { opacity: 1; } /* [cite: 60] */
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px) scale(0.9); /* [cite: 61] */
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0) scale(1); /* [cite: 62] */
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design for Project Modal */
+        @media (max-width: 768px) {
+            .modal-image-gallery {
+                height: 300px; /* [cite: 47] */
+            }
+
+            .project-modal-content {
+                width: 95%; /* [cite: 48] */
+                margin: 5% auto; /* [cite: 48] */
+            }
+
+            .modal-image-controls {
+                gap: 10px; /* [cite: 49] */
+                padding: 10px 15px; /* [cite: 49] */
+            }
+
+            .modal-control-btn {
+                width: 35px; /* [cite: 50] */
+                height: 35px; /* [cite: 50] */
+                font-size: 14px; /* [cite: 50] */
+            }
+
+            .modal-image-thumbnails {
+                bottom: 70px; /* [cite: 51] */
+                max-width: 90%; /* [cite: 51] */
+            }
+
+            .specs-list {
+                column-count: 1; /* Uma coluna em telas menores [cite: 520] */
+            }
+
+            .project-modal-body {
+                padding: 1.5rem; /* [cite: 523] */
+            }
+
+            .modal-project-title {
+                font-size: 1.8rem; /* [cite: 524] */
+            }
+
+            .modal-project-specs {
+                grid-template-columns: 1fr 1fr; /* [cite: 525] */
+                gap: 1rem; /* [cite: 525] */
+            }
+
+            .modal-spec-card {
+                padding: 1rem; /* [cite: 526] */
+            }
+
+            .modal-spec-icon {
+                font-size: 2rem; /* [cite: 527] */
+            }
+
+            .modal-action-btn {
+                padding: 10px 20px; /* [cite: 528] */
+                font-size: 0.9rem; /* [cite: 528] */
+            }
+
+            .modal-project-actions {
+                flex-direction: column; /* [cite: 529] */
+                align-items: stretch; /* [cite: 529] */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal-image-gallery {
+                height: 250px; /* [cite: 52] */
+            }
+
+            .modal-image-controls {
+                position: relative; /* [cite: 53] */
+                bottom: auto; /* [cite: 53] */
+                left: auto; /* [cite: 53] */
+                transform: none; /* [cite: 53] */
+                margin-top: 15px; /* [cite: 53] */
+                justify-content: center; /* [cite: 54] */
+                background: rgba(0,0,0,0.5); /* [cite: 54] */
+            }
+
+            .modal-image-thumbnails {
+                position: relative; /* [cite: 55] */
+                bottom: auto; /* [cite: 55] */
+                left: auto; /* [cite: 55] */
+                transform: none; /* [cite: 55] */
+                margin-top: 10px; /* [cite: 55] */
+                justify-content: center; /* [cite: 56] */
+                background: rgba(0,0,0,0.3); /* [cite: 56] */
+            }
+
+            .modal-project-specs {
+                grid-template-columns: 1fr; /* [cite: 530] */
+            }
+
+            .modal-image-gallery {
+                height: 250px; /* [cite: 531] */
+            }
+
+            .modal-project-title {
+                font-size: 1.5rem; /* [cite: 532] */
+            }
+        }
+
+        /* Smoother Modal Entry Animations */
+        .project-modal.opening .project-modal-content {
+            animation: modalSlideInMobile 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* [cite: 533] */
+        }
+
+        @keyframes modalSlideInMobile {
+            0% {
+                transform: translateY(100px) scale(0.9); /* [cite: 534] */
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0) scale(1); /* [cite: 535] */
+                opacity: 1;
+            }
+        }
+
+        /* Cursor pointer on cards */
+        .project-card,
+        .carousel-project-card {
+            cursor: pointer; /* [cite: 536] */
+            user-select: none; /* [cite: 536] */
+        }
+
+        /* More pronounced hover effect */
+        .project-card:hover,
+        .carousel-project-card:hover {
+            transform: translateY(-8px) scale(1.02); /* [cite: 537] */
+        }
+
+        /* Improved Loading */
+        .modal-loading {
+            background: white; /* [cite: 538] */
+            border-radius: 20px; /* [cite: 538] */
+        }
+
+        /* Smooth transition for images */
+        .modal-image-main {
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* [cite: 539] */
+        }
+
+        /* Smooth scroll for thumbnails */
+        .modal-image-thumbnails {
+            scrollbar-width: thin; /* [cite: 540] */
+            scrollbar-color: rgba(255,255,255,0.5) transparent; /* [cite: 540] */
+        }
+
+        .modal-image-thumbnails::-webkit-scrollbar {
+            height: 4px; /* [cite: 541] */
+        }
+
+        .modal-image-thumbnails::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1); /* [cite: 542] */
+            border-radius: 2px; /* [cite: 542] */
+        }
+
+        .modal-image-thumbnails::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.5); /* [cite: 543] */
+            border-radius: 2px; /* [cite: 543] */
+        }
+
+        /* Video Thumbnail Styles */
+        .loading-thumbnail {
+            position: relative; /* [cite: 544] */
+        }
+
+        .loading-thumbnail::after {
+            content: ''; /* [cite: 545] */
+            position: absolute; /* [cite: 545] */
+            top: 50%; /* [cite: 545] */
+            left: 50%; /* [cite: 545] */
+            width: 20px; /* [cite: 546] */
+            height: 20px; /* [cite: 546] */
+            margin: -10px 0 0 -10px; /* [cite: 546] */
+            border: 2px solid rgba(255,255,255,0.3); /* [cite: 546] */
+            border-top: 2px solid rgba(255,255,255,0.8); /* [cite: 546] */
+            border-radius: 50%; /* [cite: 546] */
+            animation: thumbnailSpin 1s linear infinite; /* [cite: 546] */
+            z-index: 2; /* [cite: 547] */
+        }
+
+        .thumbnail-loaded::after {
+            display: none; /* [cite: 548] */
+        }
+
+        @keyframes thumbnailSpin {
+            0% { transform: rotate(0deg); } /* [cite: 549] */
+            100% { transform: rotate(360deg); } /* [cite: 550] */
+        }
+
+        .video-fallback-icon {
+            position: absolute; /* [cite: 551] */
+            top: 50%; /* [cite: 551] */
+            left: 50%; /* [cite: 551] */
+            transform: translate(-50%, -50%); /* [cite: 551] */
+            z-index: 2; /* [cite: 552] */
+            pointer-events: none; /* [cite: 552] */
+        }
+
+        /* Improve video indicator */
+        .carousel-video-indicator {
+            position: absolute; /* [cite: 553] */
+            bottom: 10px; /* [cite: 553] */
+            right: 10px; /* [cite: 553] */
+            background: rgba(0,0,0,0.8); /* [cite: 553] */
+            color: white; /* [cite: 553] */
+            padding: 6px 10px; /* [cite: 554] */
+            border-radius: 15px; /* [cite: 554] */
+            font-size: 0.8rem; /* [cite: 554] */
+            font-weight: 600; /* [cite: 554] */
+            z-index: 3; /* [cite: 554] */
+            display: flex; /* [cite: 554] */
+            align-items: center; /* [cite: 554] */
+            gap: 5px; /* [cite: 554] */
+            backdrop-filter: blur(5px); /* [cite: 554] */
+        }
+
+        /* Responsive Design for Main Layout */
+        @media (max-width: 1200px) {
+            .carousel-project-card {
+                flex: 0 0 300px; /* [cite: 406] */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed; /* [cite: 407] */
+                left: -100%; top: 70px; /* [cite: 407] */
+                flex-direction: column; background: rgba(26, 26, 26, 0.98); /* [cite: 407] */
+                width: 100%; text-align: center; transition: 0.3s; /* [cite: 407] */
+                padding: 2rem 0; /* [cite: 408] */
+                backdrop-filter: blur(10px); /* [cite: 408] */
+            }
+            .nav-links.active { left: 0; /* [cite: 409] */ }
+            .menu-toggle { display: flex; /* [cite: 410] */ }
+
+            .hero h1 { font-size: 2.5rem; /* [cite: 411] */ }
+            .hero p { font-size: 1.2rem; /* [cite: 412] */ }
+
+            .about-content, .location-content { grid-template-columns: 1fr; /* [cite: 413] */ }
+
+            .contact-buttons { flex-direction: column; /* [cite: 414] */
+                align-items: center; }
+
+            h2 { font-size: 2.2rem; /* [cite: 415] */ }
+
+            .contact-form .form-row { grid-template-columns: 1fr !important; /* [cite: 416] */ }
+
+            .services-grid { grid-template-columns: 1fr; /* [cite: 417] */ }
+            .products-grid { grid-template-columns: 1fr; gap: 1.5rem; /* [cite: 418] */ }
+
+            .weg-logo-container img { max-width: 200px; /* [cite: 419] */ }
+
+            section { padding: 60px 0; /* [cite: 420] */ }
+
+            .container { padding: 0 1rem; /* [cite: 421] */ }
+
+            .carousel-wrapper {
+                gap: 1rem; /* [cite: 422] */
+            }
+
+            .carousel-project-card {
+                flex: 0 0 280px; /* [cite: 423] */
+            }
+
+            .carousel-btn {
+                width: 40px; /* [cite: 424] */
+                height: 40px; /* [cite: 424] */
+                font-size: 1rem; /* [cite: 424] */
+            }
+
+            .carousel-project-content {
+                padding: 1.5rem; /* [cite: 425] */
+            }
+
+            .carousel-project-specs {
+                grid-template-columns: 1fr; /* [cite: 426] */
+                gap: 0.4rem; /* [cite: 426] */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 2rem; /* [cite: 427] */ }
+            .hero p { font-size: 1.1rem; /* [cite: 428] */ }
+
+            .logo { font-size: 1.2rem; /* [cite: 429] */ }
+            .logo-img { height: 45px; /* [cite: 430] */ }
+
+            .cta-button { padding: 12px 30px; /* [cite: 431] */
+                font-size: 1rem; }
+
+            h2 { font-size: 1.8rem; /* [cite: 432] */ }
+
+            .service-card, .product-card { padding: 1.5rem; /* [cite: 433] */ }
+
+            .contact-form { padding: 1.5rem; /* [cite: 434] */
+                margin: 2rem auto; }
+
+            .location-info { padding: 1.5rem; /* [cite: 435] */ }
+
+            .whatsapp-float { width: 50px; /* [cite: 436] */
+                height: 50px; font-size: 24px; }
+
+            .carousel-wrapper {
+                flex-direction: column; /* [cite: 437] */
+                gap: 1.5rem; /* [cite: 437] */
+            }
+
+            .carousel-project-card {
+                flex: 0 0 260px; /* [cite: 438] */
+            }
+
+            .carousel-navigation {
+                order: -1; /* [cite: 439] */
+                display: flex; /* [cite: 439] */
+                gap: 1rem; /* [cite: 439] */
+                justify-content: center; /* [cite: 439] */
+            }
+        }
+
+        /* Animations (General) */
+        @keyframes fadeInLeft { from { opacity: 0; /* [cite: 440] */ transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes fadeInRight { from { opacity: 0; /* [cite: 441] */ transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+        .fade-in { opacity: 0; /* [cite: 442] */ transform: translateY(30px); transition: all 0.8s ease; }
+        .fade-in.active { opacity: 1; transform: translateY(0); /* [cite: 443] */ }
+
+        /* Form responsive grid */
+        .form-row {
+            display: grid; /* [cite: 444] */
+            grid-template-columns: 1fr 1fr; /* [cite: 444] */
+            gap: 1rem; /* [cite: 444] */
+        }
     </style>
+
 </head>
 <body>
     <header>
@@ -392,8 +1597,9 @@
             <ul class="nav-links">
                 <li><a href="#home">Início</a></li>
                 <li><a href="#about">Sobre</a></li>
-                <li><a href="#services">Serviços</a></li>
+                <li><a href="#services">Áreas de Atuação</a></li>
                 <li><a href="#weg">Soluções WEG</a></li>
+                <li><a href="#projects">Nossos Projetos</a></li>
                 <li><a href="#location">Localização</a></li>
                 <li><a href="#contact">Contato</a></li>
             </ul>
@@ -401,7 +1607,7 @@
     </header>
 
     <section id="home" class="hero">
-        <div class="hero-content">
+        <div class="hero-content fade-in">
             <h1>SOL TECH ENERGIA SOLAR</h1>
             <p>Transformando luz solar em economia e sustentabilidade com a força WEG</p>
             <a href="https://wa.me/556436011000" class="cta-button" target="_blank">
@@ -427,7 +1633,7 @@
 
     <section id="services" class="services">
         <div class="container">
-            <h2>Nossos Serviços</h2>
+            <h2>Nossas Áreas de Atuação</h2>
             <div class="services-grid fade-in">
                 <div class="service-card">
                     <div class="service-icon"><i class="fas fa-home"></i></div>
@@ -451,16 +1657,16 @@
     <section id="weg" class="weg-section">
         <div class="container">
             <div class="weg-logo-container">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/WEG_logo.svg/2560px-WEG_logo.svg.png" alt="WEG Logo">
+                <img src="weg.svg" alt="WEG Logo">
             </div>
-            <h2>Parceiros Oficiais WEG Solar</h2>
+            <h2>Integrador Autorizado WEG Solar</h2>
             <div class="weg-content fade-in" style="text-align: center;">
                 <div class="weg-badge">
                     <i class="fas fa-certificate" style="margin-right: 10px;"></i>
-                    Integradores Oficiais WEG
+                    Integrador Autorizado WEG Solar
                 </div>
                  <p style="font-size: 1.1rem; max-width: 800px; margin: 0 auto 3rem auto; line-height: 1.8;">
-                    Como <strong>Integradores Oficiais</strong>, combinamos a tradição e a tecnologia de ponta da WEG com nossa expertise local. Oferecemos soluções completas com a garantia de uma das marcas mais respeitadas do mundo, assegurando máxima performance e tranquilidade para seu investimento.
+                    Como <strong>Integradores Autorizados</strong>, combinamos a tradição e a tecnologia de ponta da WEG com nossa expertise local. Oferecemos soluções completas com a garantia de uma das marcas mais respeitadas do mundo, assegurando máxima performance e tranquilidade para seu investimento.
                 </p>
 
                 <h3 style="text-align: center; margin: 3rem 0 2rem 0; color: var(--dark-color); font-size: 1.8rem;">
@@ -494,6 +1700,53 @@
         </div>
     </section>
 
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2>Nossos Projetos</h2>
+            <div class="projects-intro fade-in">
+                <p style="font-size: 1.1rem; max-width: 700px; margin: 0 auto 2rem;">
+                    Conheça alguns dos nossos projetos realizados em diferentes tipos de instalação. 
+                    Cada projeto é desenvolvido com excelência técnica e atenção aos detalhes.
+                </p>
+            </div>
+            
+            <div class="projects-loading" id="projectsLoading">
+                <div class="spinner"></div>
+                <p>Carregando projetos...</p>
+            </div>
+            
+            <!-- Carrossel de Projetos -->
+            <div class="projects-carousel-container fade-in" id="projectsCarouselContainer" style="display: none;">
+                <div class="carousel-wrapper">
+                    <button class="carousel-btn carousel-prev" id="carouselPrev">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    
+                    <div class="carousel-container">
+                        <div class="carousel-track" id="carouselTrack">
+                            <!-- Projetos serão inseridos aqui via JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <button class="carousel-btn carousel-next" id="carouselNext">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                
+                <!-- Indicadores -->
+                <div class="carousel-indicators" id="carouselIndicators">
+                    <!-- Indicadores serão inseridos aqui via JavaScript -->
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="galeria.html" class="view-all-btn">
+                    <i class="fas fa-images" style="margin-right: 10px;"></i>
+                    Ver Todos os Projetos
+                </a>
+            </div>
+        </div>
+    </section>
 
     <section id="location" class="location">
         <div class="container">
@@ -501,7 +1754,7 @@
             <div class="location-content fade-in">
                 <div class="location-info">
                     <h3>Visite Nossa Sede</h3>
-                    <p><i class="fas fa-map-marker-alt" style="color: var(--primary-color);"></i> São Luís de Montes Belos - GO, Nº 2223</p>
+                    <p><i class="fas fa-map-marker-alt" style="color: var(--primary-color);"></i> Av. Hermógenes Coelho, Nº 1000 - São Luís de Montes Belos - GO</p>
                     <p><i class="fas fa-phone" style="color: var(--primary-color);"></i> (64) 3601-1000</p>
                     <p><i class="fab fa-whatsapp" style="color: var(--primary-color);"></i> WhatsApp: (64) 3601-1000</p>
                     <p><i class="fas fa-clock" style="color: var(--primary-color);"></i> Segunda a Sexta: 8h às 18h</p>
@@ -509,7 +1762,7 @@
                 </div>
                 <div class="map-container">
                     <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3824.270928578717!2d-50.379206685135!3d-16.51261598859943!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x936171a938c3a1b1%3A0x6b8c9f7a3f303a2a!2sSOL%20TECH%20ENERGIA%20SOLAR!5e0!3m2!1spt-BR!2sbr!4v1678886432123!5m2!1spt-BR!2sbr" 
+                        src="https://maps.google.com/maps?q=-16.537220,-50.359790&t=&z=17&ie=UTF8&iwloc=&output=embed"
                         width="100%" height="100%" style="border:0;" 
                         allowfullscreen="" loading="lazy"
                         referrerpolicy="no-referrer-when-downgrade">
@@ -527,17 +1780,23 @@
             <div class="contact-form fade-in">
                 <h3 style="color: var(--text-color); margin-bottom: 1.5rem; text-align: center;">Solicite seu Orçamento Gratuito</h3>
                 <form id="contactForm" onsubmit="handleSubmit(event)">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-row">
                         <div class="form-group"><label for="name">Nome Completo *</label><input type="text" id="name" name="name" required></div>
                         <div class="form-group"><label for="email">E-mail *</label><input type="email" id="email" name="email" required></div>
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-row">
                         <div class="form-group"><label for="phone">Telefone/WhatsApp *</label><input type="tel" id="phone" name="phone" required></div>
                         <div class="form-group"><label for="city">Cidade</label><input type="text" id="city" name="city"></div>
                     </div>
                     <div class="form-group"><label for="consumption">Valor médio da conta de luz (R$)</label><input type="number" id="consumption" name="consumption" placeholder="Ex: 350"></div>
                     <div class="form-group"><label for="message">Mensagem</label><textarea id="message" name="message" placeholder="Conte-nos sobre seu projeto ou dúvidas..."></textarea></div>
-                    <button type="submit" class="submit-btn"><i class="fas fa-paper-plane" style="margin-right: 10px;"></i> Enviar Solicitação</button>
+                    
+                    <div id="form-feedback" class="form-feedback"></div>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane" style="margin-right: 10px;"></i> Enviar Solicitação
+                    </button>
+                   
+                    
                 </form>
             </div>
             
@@ -553,7 +1812,7 @@
             <div class="company-info">
                 <h3>SOL TECH ENERGIA SOLAR</h3>
                 <p>CNPJ: 10.619.680/0001-80</p>
-                <p>São Luís de Montes Belos - GO, Nº 2223</p>
+                <p>Av. Hermógenes Coelho, Nº 1000 - São Luís de Montes Belos - GO</p>
             </div>
             <div class="social-links">
                 <a href="https://www.instagram.com/sol_tech_ofc/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
@@ -566,8 +1825,71 @@
     <a href="https://wa.me/556436011000" class="whatsapp-float" target="_blank" title="Fale conosco no WhatsApp">
         <i class="fab fa-whatsapp"></i>
     </a>
+    
+    <!-- Modal de Projeto - Adicionar antes do </body> -->
+    <div id="projectModal" class="project-modal">
+        <div class="project-modal-content">
+            <span class="project-modal-close">&times;</span>
+            
+            <!-- Galeria de Imagens -->
+            <div class="modal-image-gallery">
+                <div class="modal-image-main" id="modalMainImage">
+                    <div class="modal-image-placeholder">📸</div>
+                </div>
+                
+                <!-- Navegação de Imagens (só aparece se houver múltiplas) -->
+                <button class="modal-image-nav modal-image-prev" id="modalImagePrev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="modal-image-nav modal-image-next" id="modalImageNext">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                
+                <!-- Miniaturas (só aparece se houver múltiplas) -->
+                <div class="modal-image-thumbnails" id="modalImageThumbnails">
+                    <!-- Miniaturas serão inseridas aqui via JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Conteúdo -->
+            <div class="project-modal-body">
+                <!-- Loading State -->
+                <div class="modal-loading" id="modalLoading">
+                    <div class="modal-loading-spinner"></div>
+                    <p>Carregando detalhes do projeto...</p>
+                </div>
+                
+                <!-- Conteúdo do Projeto -->
+                <div id="modalContent" style="display: none;">
+                    <div class="modal-project-header">
+                        <div class="modal-project-category" id="modalCategory"></div>
+                        <h2 class="modal-project-title" id="modalTitle"></h2>
+                        <div class="modal-project-description" id="modalDescription"></div>
+                    </div>
+                    
+                    <!-- Especificações -->
+                    <div class="modal-project-specs" id="modalSpecs">
+                        <!-- Especificações serão inseridas aqui via JavaScript -->
+                    </div>
+                    
+                    <!-- Botões de Ação -->
+                    <div class="modal-project-actions">
+                        <a href="#" class="modal-action-btn modal-action-primary" id="modalWhatsappBtn">
+                            <i class="fab fa-whatsapp"></i>
+                            Solicitar Orçamento
+                        </a>
+                        <a href="galeria.html" class="modal-action-btn modal-action-secondary">
+                            <i class="fas fa-images"></i>
+                            Ver Mais Projetos
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
+
         function toggleMenu() {
             document.querySelector('.nav-links').classList.toggle('active');
         }
@@ -588,26 +1910,862 @@
                 if (entry.isIntersecting) entry.target.classList.add('active');
             });
         }, { threshold: 0.1, rootMargin: '0px 0px -100px 0px' });
-        
+
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-        function handleSubmit(event) {
+        // ####################################################################
+        // ## FUNÇÃO DE ENVIO DO FORMULÁRIO CORRIGIDA E NO LOCAL CERTO ##
+        // ####################################################################
+        async function handleSubmit(event) {
             event.preventDefault();
-            const formData = new FormData(event.target);
-            const data = Object.fromEntries(formData);
-            let message = `*Nova solicitação de orçamento - SOL TECH*\n\n`;
-            message += `👤 *Nome:* ${data.name}\n`;
-            message += `📧 *E-mail:* ${data.email}\n`;
-            message += `📱 *Telefone:* ${data.phone}\n`;
-            if (data.city) message += `🏙️ *Cidade:* ${data.city}\n`;
-            if (data.consumption) message += `💡 *Conta de luz:* R$ ${data.consumption}\n`;
-            if (data.message) message += `💬 *Mensagem:* ${data.message}\n`;
-            const encodedMessage = encodeURIComponent(message);
-            const whatsappUrl = `https://wa.me/556436011000?text=${encodedMessage}`;
-            alert('Você será redirecionado para o WhatsApp para concluir sua solicitação!');
-            window.open(whatsappUrl, '_blank');
-            event.target.reset();
+            const form = event.target;
+            const button = form.querySelector('.submit-btn');
+            const feedbackDiv = document.getElementById('form-feedback');
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+            feedbackDiv.style.display = 'none';
+
+            try {
+                const response = await fetch('/api/contact.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Erro do Servidor (Status ${response.status}): ${errorText}`);
+                }
+                
+                const result = await response.json();
+
+                if (result.message && result.message.includes("sucesso")) {
+                    feedbackDiv.className = 'form-feedback success';
+                    feedbackDiv.innerHTML = '<i class="fas fa-check-circle"></i> Solicitação enviada com sucesso! Entraremos em contato em breve.';
+                    form.reset();
+                } else {
+                    throw new Error(result.message || 'Ocorreu um erro na resposta.');
+                }
+
+            } catch (error) {
+                console.error("Erro detalhado:", error);
+                feedbackDiv.className = 'form-feedback error';
+                
+                if (error.message.includes("Failed to fetch")) {
+                    feedbackDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Não foi possível conectar ao servidor. Verifique sua internet.`;
+                } else {
+                    feedbackDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Ocorreu um erro ao enviar a solicitação. Tente novamente mais tarde.`;
+                }
+            
+            } finally {
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Solicitação';
+                feedbackDiv.style.display = 'block';
+                
+                setTimeout(() => {
+                    feedbackDiv.style.display = 'none';
+                }, 7000);
+            }
         }
+
+        // ####################################################################
+        // ## CARROSSEL DE PROJETOS - FUNCIONALIDADE JAVASCRIPT CORRIGIDA ##
+        // ####################################################################
+
+        // Carrossel de Projetos - Funcionalidade JavaScript
+        class ProjectsCarousel {
+            constructor() {
+                this.currentSlide = 0;
+                this.projects = [];
+                this.slidesPerView = this.getSlidesPerView();
+                this.track = null;
+                this.prevBtn = null;
+                this.nextBtn = null;
+                this.indicators = null;
+                
+                this.init();
+                this.setupEventListeners();
+            }
+            
+            init() {
+                this.track = document.getElementById('carouselTrack');
+                this.prevBtn = document.getElementById('carouselPrev');
+                this.nextBtn = document.getElementById('carouselNext');
+                this.indicators = document.getElementById('carouselIndicators');
+            }
+            
+            setupEventListeners() {
+                this.prevBtn?.addEventListener('click', () => this.prevSlide());
+                this.nextBtn?.addEventListener('click', () => this.nextSlide());
+                
+                window.addEventListener('resize', () => {
+                    this.slidesPerView = this.getSlidesPerView();
+                    this.updateCarousel();
+                });
+                
+                document.addEventListener('keydown', (e) => {
+                    if (!this.isOpen()) return;
+                    
+                    switch(e.key) {
+                        case 'Escape':
+                            this.close(); // Já vai pausar os vídeos através do método close() modificado
+                            break;
+                        case 'ArrowLeft':
+                            this.prevImage();
+                            break;
+                        case 'ArrowRight':
+                            this.nextImage();
+                            break;
+                    }
+                });
+                
+                let startX = 0;
+                this.track?.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; });
+                
+                this.track?.addEventListener('touchend', (e) => {
+                    const endX = e.changedTouches[0].clientX;
+                    const diff = startX - endX;
+                    if (Math.abs(diff) > 50) {
+                        if (diff > 0) this.nextSlide();
+                        else this.prevSlide();
+                    }
+                });
+            }
+            
+            getSlidesPerView() {
+                const width = window.innerWidth;
+                if (width < 480) return 1;
+                if (width < 768) return 1.2;
+                if (width < 1024) return 2;
+                if (width < 1200) return 2.5;
+                return 3;
+            }
+
+            loadProjects(projects) {
+                this.projects = projects;
+                this.renderProjects();
+                this.renderIndicators();
+                this.updateCarousel();
+                document.getElementById('projectsCarouselContainer').style.display = 'block';
+            }
+            
+            // Substitua a função renderProjects() inteira por esta versão:
+            renderProjects() {
+                if (!this.track || !this.projects.length) return;
+
+                this.track.innerHTML = this.projects.map(project => {
+                    const primaryMedia = project.media && project.media.length > 0 ? project.media[0] : null;
+                    const hasMedia = !!primaryMedia;
+                    const isVideo = hasMedia && primaryMedia.media_type === 'video';
+                    const isImage = hasMedia && primaryMedia.media_type === 'image';
+
+                    let mediaClasses = 'carousel-project-image';
+                    let mediaStyle = '';
+                    let mediaIcon = '';
+                    let videoIndicator = '';
+                    let dataAttributes = '';
+
+                    if (hasMedia) {
+                        mediaClasses += ' has-media';
+                        
+                        if (isVideo) {
+                            mediaClasses += ' is-video loading-thumbnail';
+                            const videoPath = `upload/images/projects/${primaryMedia.path}`;
+                            
+                            // Fundo escuro temporário
+                            mediaStyle = 'background-color: #2a2a2a;';
+                            dataAttributes = `data-video-path="${videoPath}"`;
+                            
+                            mediaIcon = '<div class="carousel-project-view-icon"><i class="fas fa-play"></i></div>';
+                            videoIndicator = '<div class="carousel-video-indicator"><i class="fas fa-video"></i> Vídeo</div>';
+                            
+                        } else if (isImage) {
+                            mediaClasses += ' is-image';
+                            mediaStyle = `background-image: url('upload/images/projects/${primaryMedia.path}');`;
+                            mediaIcon = '<div class="carousel-project-view-icon"><i class="fas fa-search-plus"></i></div>';
+                        }
+                    }
+
+                    return `
+                    <div class="carousel-project-card" data-project-id="${project.id}">
+                        <div class="${mediaClasses}" style="${mediaStyle}" ${dataAttributes}>
+                            ${mediaIcon}
+                            ${videoIndicator}
+                        </div>
+                        <div class="carousel-project-content">
+                            <span class="carousel-project-type">${project.category.name}</span>
+                            <h3 class="carousel-project-title">${project.title}</h3>
+                        </div>
+                    </div>`;
+                }).join('');
+
+                // Reattach event listeners
+                this.track.querySelectorAll('.carousel-project-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        const projectId = card.dataset.projectId;
+                        if (projectId && window.projectModal) {
+                            window.projectModal.open(projectId);
+                        }
+                    });
+                });
+
+                // NOVO: Aplicar thumbnails de vídeo após renderizar
+                setTimeout(() => {
+                    applyVideoThumbnails();
+                }, 100);
+            }
+            
+            updateCarousel() {
+                if (!this.track || !this.projects.length) return;
+                
+                const slideWidth = 320 + 32;
+                const offset = this.currentSlide * slideWidth;
+                
+                this.track.style.transform = `translateX(-${offset}px)`;
+                this.updateButtons();
+                this.updateIndicators();
+            }
+            
+            updateButtons() {
+                const maxSlides = Math.max(0, this.projects.length - Math.floor(this.slidesPerView));
+                if (this.prevBtn) this.prevBtn.disabled = this.currentSlide <= 0;
+                if (this.nextBtn) this.nextBtn.disabled = this.currentSlide >= maxSlides;
+            }
+            
+            updateIndicators() {
+                const maxSlides = Math.max(0, this.projects.length - Math.floor(this.slidesPerView));
+                const totalSlides = maxSlides + 1;
+                
+                if (this.indicators && this.indicators.children.length !== totalSlides) {
+                    this.renderIndicators();
+                }
+                
+                this.indicators?.querySelectorAll('.carousel-indicator').forEach((indicator, index) => {
+                    indicator.classList.toggle('active', index === this.currentSlide);
+                });
+            }
+            
+            renderIndicators() {
+                if (!this.indicators || !this.projects.length) return;
+                
+                const maxSlides = Math.max(0, this.projects.length - Math.floor(this.slidesPerView));
+                const totalSlides = maxSlides + 1;
+                
+                if (totalSlides <= 1) {
+                    this.indicators.innerHTML = '';
+                    return;
+                }
+                
+                this.indicators.innerHTML = Array.from({length: totalSlides}, (_, i) => 
+                    `<button class="carousel-indicator ${i === 0 ? 'active' : ''}" data-slide="${i}"></button>`
+                ).join('');
+                
+                this.indicators.querySelectorAll('.carousel-indicator').forEach((indicator, index) => {
+                    indicator.addEventListener('click', () => this.goToSlide(index));
+                });
+            }
+
+            nextSlide() {
+                const maxSlides = Math.max(0, this.projects.length - Math.floor(this.slidesPerView));
+                if (this.currentSlide < maxSlides) {
+                    this.currentSlide++;
+                    this.updateCarousel();
+                }
+            }
+            
+            prevSlide() {
+                if (this.currentSlide > 0) {
+                    this.currentSlide--;
+                    this.updateCarousel();
+                }
+            }
+
+            goToSlide(slideIndex) {
+                const maxSlides = Math.max(0, this.projects.length - Math.floor(this.slidesPerView));
+                this.currentSlide = Math.min(Math.max(slideIndex, 0), maxSlides);
+                this.updateCarousel();
+            }
+        }
+
+        async function loadFeaturedProjects() {
+            const loading = document.getElementById('projectsLoading');
+            if (!loading) return;
+            try {
+                loading.style.display = 'block';
+                const response = await fetch('/api/projects');
+                const data = await response.json();
+                loading.style.display = 'none';
+
+                if (data.records && data.records.length > 0) {
+                    const featuredProjects = data.records.filter(project => project.featured === true);
+                    if (featuredProjects.length > 0) {
+                        const carousel = new ProjectsCarousel();
+                        carousel.loadProjects(featuredProjects);
+                        if (window.projectModal) {
+                            projectModal.attachCardListeners();
+                        }
+                        
+                        // NOVO: Aplicar thumbnails após carregamento
+                        setTimeout(() => {
+                            applyVideoThumbnails();
+                        }, 500);
+                    } else {
+                        showNoFeaturedState();
+                    }
+                } else {
+                    showEmptyState();
+                }
+            } catch (error) {
+                console.error("Erro ao carregar projetos:", error);
+                loading.style.display = 'none';
+                showErrorState();
+            }
+        }
+
+        function showNoFeaturedState() {
+            const container = document.getElementById('projectsCarouselContainer');
+            if (container) {
+                container.innerHTML = `<div style="text-align: center; padding: 3rem; color: #666;"><i class="fas fa-star" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; color: var(--primary-color);"></i><h3>Nenhum projeto em destaque</h3><p>Marque alguns projetos como "destaque" no painel administrativo para exibi-los aqui.</p><a href="galeria.html" style="color: var(--primary-color); text-decoration: none; font-weight: bold; margin-top: 1rem; display: inline-block;">Ver todos os projetos →</a></div>`;
+                container.style.display = 'block';
+            }
+        }
+
+        function showEmptyState() {
+            const container = document.getElementById('projectsCarouselContainer');
+            if (container) {
+                container.innerHTML = `<div style="text-align: center; padding: 3rem; color: #666;"><i class="fas fa-solar-panel" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i><h3>Projetos em breve</h3><p>Estamos preparando nossa galeria de projetos. Volte em breve!</p></div>`;
+                container.style.display = 'block';
+            }
+        }
+
+        function showErrorState() {
+            const container = document.getElementById('projectsCarouselContainer');
+            if (container) {
+                container.innerHTML = `<div style="text-align: center; padding: 3rem; color: #d32f2f;"><i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i><h3>Erro ao carregar projetos</h3><p>Não foi possível conectar com o servidor. Tente novamente mais tarde.</p></div>`;
+                container.style.display = 'block';
+            }
+        }
+
+        // ####################################################################
+        // ## SISTEMA DE MODAL DE PROJETOS - CORRIGIDO ##
+        // ####################################################################
+
+        class ProjectModal {
+            constructor() {
+                this.modal = document.getElementById('projectModal');
+                this.modalContent = document.getElementById('modalContent');
+                this.modalLoading = document.getElementById('modalLoading');
+                this.closeBtn = document.querySelector('.project-modal-close');
+                this.mainImage = document.getElementById('modalMainImage');
+                this.prevBtn = document.getElementById('modalImagePrev');
+                this.nextBtn = document.getElementById('modalImageNext');
+                this.thumbnailsContainer = document.getElementById('modalImageThumbnails');
+                this.currentProject = null;
+                this.currentImageIndex = 0;
+                this.media = []; // Corrigido: usar 'media' em vez de 'images'
+                this.init();
+            }
+            
+            init() {
+                this.closeBtn?.addEventListener('click', () => this.close());
+                this.modal?.addEventListener('click', (e) => {
+                    if (e.target === this.modal) this.close();
+                });
+
+                this.prevBtn?.addEventListener('click', () => this.prevImage());
+                this.nextBtn?.addEventListener('click', () => this.nextImage());
+                
+                document.addEventListener('keydown', (e) => {
+                    if (!this.isOpen()) return;
+                    if (e.key === 'Escape') this.close();
+                    if (e.key === 'ArrowLeft') this.prevImage();
+                    if (e.key === 'ArrowRight') this.nextImage();
+                });
+                this.attachCardListeners();
+            }
+            
+            attachCardListeners() {
+                document.querySelectorAll('.carousel-project-card, .project-card').forEach(card => {
+                    card.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const projectId = card.getAttribute('data-project-id');
+                        if (projectId) this.open(projectId);
+                    });
+                });
+            }
+            
+            async open(projectId) {
+                if (!projectId) return;
+                this.modal.style.display = 'block';
+                this.modal.classList.add('opening');
+                this.modalLoading.style.display = 'flex';
+                this.modalContent.style.display = 'none';
+                document.body.style.overflow = 'hidden';
+                
+                try {
+                    const response = await fetch(`/api/projects.php?id=${projectId}`);
+                    if (!response.ok) throw new Error('Projeto não encontrado');
+                    const project = await response.json();
+                    this.currentProject = project;
+                    this.renderProject(project);
+                    this.modalLoading.style.display = 'none';
+                    this.modalContent.style.display = 'block';
+                } catch (error) {
+                    console.error('Erro ao carregar projeto:', error);
+                    this.showError('Não foi possível carregar os detalhes do projeto.');
+                }
+            }
+            
+            renderProject(project) {
+                document.getElementById('modalCategory').textContent = project.category?.name || 'Projeto';
+                document.getElementById('modalTitle').textContent = project.title || 'Sem título';
+                const description = project.detailed_description || project.description || 'Sem descrição.';
+                document.getElementById('modalDescription').innerHTML = description.replace(/\n/g, '<br>');
+                this.setupMedia(project.media || []); // Corrigido: usar 'media'
+                this.renderSpecs(project.specifications || {});
+                this.setupWhatsAppButton(project);
+            }
+            
+            // ===== CORRIGIDO: setupMedia usando 'media' =====
+            setupMedia(media) {
+                console.log('Configurando mídias:', media);
+                this.media = media.filter(m => m && m.path);
+                this.currentMediaIndex = 0;
+
+                if (this.media.length === 0) {
+                    this.mainImage.innerHTML = '<div class="modal-image-placeholder">📸</div>';
+                    this.mainImage.style.backgroundImage = 'none';
+                    this.hideImageNavigation();
+                    return;
+                }
+
+                console.log('Total de mídias válidas:', this.media.length);
+                this.showCurrentMedia();
+
+                if (this.media.length > 1) {
+                    this.showImageNavigation();
+                    this.renderThumbnails();
+                } else {
+                    this.hideImageNavigation();
+                }
+            }
+            
+            // ===== CORRIGIDO: showCurrentMedia usando 'media' =====
+            showCurrentMedia() {
+                if (this.media.length === 0) return;
+
+                const currentMedia = this.media[this.currentMediaIndex];
+                const mediaUrl = `upload/images/projects/${currentMedia.path}`;
+                
+                console.log('Mostrando mídia:', this.currentMediaIndex, 'de', this.media.length, '- URL:', mediaUrl);
+
+                this.mainImage.innerHTML = '';
+                this.mainImage.style.backgroundImage = 'none';
+
+                if (currentMedia.media_type === 'video') {
+                    const videoElement = document.createElement('video');
+                    videoElement.src = mediaUrl;
+                    videoElement.controls = true;
+                    videoElement.style.cssText = 'max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);';
+                    this.mainImage.appendChild(videoElement);
+                    
+                    this.addVideoControls(videoElement);
+                } else {
+                    const img = document.createElement('img');
+                    img.src = mediaUrl;
+                    img.alt = 'Projeto Solar';
+                    img.style.cssText = 'max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); cursor: zoom-in;';
+                    img.onclick = () => this.openFullscreen();
+                    
+                    this.addImageControls();
+                    this.mainImage.appendChild(img);
+                }
+            }
+            
+
+            // ===== NOVOS MÉTODOS PARA CONTROLES =====
+            addImageControls() {
+                const existingControls = this.modal.querySelector('.modal-image-controls');
+                if (existingControls) existingControls.remove();
+                
+                const controls = document.createElement('div');
+                controls.className = 'modal-image-controls';
+                
+                // Apenas os controles que cabem na barra
+                let controlsHTML = '';
+                
+                if (this.media.length > 1) {
+                    controlsHTML += '<button class="modal-control-btn" onclick="window.projectModal.prevImage()" title="Anterior"><i class="fas fa-chevron-left"></i></button>';
+                }
+                
+                controlsHTML += '<button class="modal-control-btn fullscreen-btn" onclick="window.projectModal.openFullscreen()" title="Tela Cheia"><i class="fas fa-expand"></i></button>';
+                
+                if (this.media.length > 1) {
+                    controlsHTML += '<button class="modal-control-btn" onclick="window.projectModal.nextImage()" title="Próxima"><i class="fas fa-chevron-right"></i></button>';
+                }
+                
+                controls.innerHTML = controlsHTML;
+                
+                const gallery = this.modal.querySelector('.modal-image-gallery');
+                gallery.appendChild(controls);
+            }
+
+            addVideoControls(videoElement) {
+                const existingControls = this.modal.querySelector('.modal-image-controls');
+                if (existingControls) existingControls.remove();
+                
+                const controls = document.createElement('div');
+                controls.className = 'modal-image-controls';
+                
+                let controlsHTML = '';
+                
+                if (this.media.length > 1) {
+                    controlsHTML += '<button class="modal-control-btn" onclick="window.projectModal.prevImage()" title="Anterior"><i class="fas fa-chevron-left"></i></button>';
+                }
+                
+                controlsHTML += '<button class="modal-control-btn" onclick="window.projectModal.togglePlayPause()" title="Play/Pause"><i class="fas fa-play"></i></button>';
+                controlsHTML += '<button class="modal-control-btn" onclick="window.projectModal.toggleMute()" title="Mudo"><i class="fas fa-volume-up"></i></button>';
+                
+                if (this.media.length > 1) {
+                    controlsHTML += '<button class="modal-control-btn" onclick="window.projectModal.nextImage()" title="Próxima"><i class="fas fa-chevron-right"></i></button>';
+                }
+                
+                controls.innerHTML = controlsHTML;
+                
+                const gallery = this.modal.querySelector('.modal-image-gallery');
+                gallery.appendChild(controls);
+                
+                // Event listeners para atualizar ícones
+                videoElement.addEventListener('play', () => {
+                    const playBtn = controls.querySelector('i.fa-play, i.fa-pause');
+                    if (playBtn) playBtn.className = 'fas fa-pause';
+                });
+                
+                videoElement.addEventListener('pause', () => {
+                    const playBtn = controls.querySelector('i.fa-play, i.fa-pause');
+                    if (playBtn) playBtn.className = 'fas fa-play';
+                });
+                
+                videoElement.addEventListener('volumechange', () => {
+                    const muteBtn = controls.querySelector('i.fa-volume-up, i.fa-volume-mute');
+                    if (muteBtn) {
+                        muteBtn.className = videoElement.muted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+                    }
+                });
+            }
+
+            // NOVO: Controle de mudo para vídeos
+            toggleMute() {
+                const video = this.mainImage.querySelector('video');
+                if (video) {
+                    video.muted = !video.muted;
+                }
+            }
+
+            togglePlayPause() {
+                const video = this.mainImage.querySelector('video');
+                if (video) {
+                    if (video.paused) {
+                        video.play();
+                    } else {
+                        video.pause();
+                    }
+                }
+            }
+
+
+
+
+
+
+
+            // ATUALIZADO: Sem referência às setas laterais
+            showImageNavigation() {
+                // REMOVIDO: Controle das setas laterais
+                if (this.thumbnailsContainer) {
+                    this.thumbnailsContainer.style.display = 'flex';
+                    this.thumbnailsContainer.classList.add('show');
+                    this.thumbnailsContainer.classList.remove('hide');
+                }
+            }
+
+            hideImageNavigation() {
+                // REMOVIDO: Controle das setas laterais
+                if (this.thumbnailsContainer) {
+                    this.thumbnailsContainer.style.display = 'none';
+                    this.thumbnailsContainer.classList.add('hide');
+                    this.thumbnailsContainer.classList.remove('show');
+                }
+            }
+            
+            // ===== CORRIGIDO: renderThumbnails usando 'media' =====
+            renderThumbnails() {
+                if (!this.thumbnailsContainer || this.media.length <= 1) return;
+                
+                console.log('Renderizando', this.media.length, 'thumbnails');
+                
+                this.thumbnailsContainer.innerHTML = this.media.map((item, index) => {
+                    const isActive = index === this.currentMediaIndex ? 'active' : '';
+                    const isVideo = item.media_type === 'video';
+                    
+                    if (isVideo) {
+                        return `
+                            <div class="modal-thumbnail ${isActive}" 
+                                style="background-color: #333; display:flex; align-items:center; justify-content:center;" 
+                                data-index="${index}" 
+                                title="Vídeo ${index + 1}">
+                                <i class="fas fa-play" style="color:white; font-size:12px;"></i>
+                            </div>
+                        `;
+                    } else {
+                        return `
+                            <div class="modal-thumbnail ${isActive}" 
+                                style="background-image: url('upload/images/projects/${item.path}')" 
+                                data-index="${index}"
+                                title="Imagem ${index + 1}">
+                            </div>
+                        `;
+                    }
+                }).join('');
+
+                // Event listeners para os thumbnails
+                this.thumbnailsContainer.querySelectorAll('.modal-thumbnail').forEach((thumb, index) => {
+                    thumb.addEventListener('click', () => {
+                        console.log('Clicou no thumbnail:', index);
+                        this.goToMedia(index);
+                    });
+                });
+                
+                // Força a exibição dos thumbnails
+                this.showImageNavigation();
+            }
+            
+
+
+            
+            // ===== CORRIGIDAS: funções de navegação usando 'media' =====
+            // ATUALIZADO: Melhor controle da navegação
+            goToMedia(index) {
+                console.log('Navegando diretamente para mídia:', index);
+                if (index >= 0 && index < this.media.length) {
+                    this.currentMediaIndex = index;
+                    this.showCurrentMedia();
+                    this.updateThumbnails();
+                }
+            }
+
+            prevImage() {
+                console.log('Navegando para imagem anterior');
+                if (this.media.length <= 1) return;
+                this.currentMediaIndex = this.currentMediaIndex === 0 ? this.media.length - 1 : this.currentMediaIndex - 1;
+                console.log('Novo índice:', this.currentMediaIndex);
+                this.showCurrentMedia();
+                this.updateThumbnails();
+            }
+
+            nextImage() {
+                console.log('Navegando para próxima imagem');
+                if (this.media.length <= 1) return;
+                this.currentMediaIndex = this.currentMediaIndex === this.media.length - 1 ? 0 : this.currentMediaIndex + 1;
+                console.log('Novo índice:', this.currentMediaIndex);
+                this.showCurrentMedia();
+                this.updateThumbnails();
+            }
+            
+            updateThumbnails() {
+                if (!this.thumbnailsContainer) return;
+                
+                const thumbnails = this.thumbnailsContainer.querySelectorAll('.modal-thumbnail');
+                thumbnails.forEach((thumb, index) => {
+                    thumb.classList.toggle('active', index === this.currentMediaIndex);
+                });
+                
+                console.log('Thumbnail ativo:', this.currentMediaIndex);
+            }
+            
+            renderSpecs(specs) {
+                const specsContainer = document.getElementById('modalSpecs');
+                if (!specsContainer) return;
+
+                const specMapping = {
+                    power: { label: 'Potência', icon: 'fa-bolt' },
+                    panels: { label: 'Painéis', icon: 'fa-solar-panel' },
+                    area: { label: 'Área', icon: 'fa-expand-arrows-alt' },
+                    savings: { label: 'Economia Mensal', icon: 'fa-coins' },
+                    location: { label: 'Localização', icon: 'fa-map-marker-alt' },
+                    year: { label: 'Ano', icon: 'fa-calendar' }
+                };
+
+                const specItems = Object.entries(specs)
+                    .filter(([key, value]) => value && specMapping[key])
+                    .map(([key, value]) => {
+                        const spec = specMapping[key];
+                        return `<li class="spec-item"><div class="spec-item-icon"><i class="fas ${spec.icon}"></i></div><div class="spec-item-content"><span class="spec-item-label">${spec.label}</span><span class="spec-item-value">${value}</span></div></li>`;
+                    });
+                
+                if (specItems.length === 0) {
+                    specsContainer.innerHTML = '<p style="text-align: center; color: #666;">Especificações técnicas não disponíveis.</p>';
+                } else {
+                    specsContainer.innerHTML = `<ul class="specs-list">${specItems.join('')}</ul>`;
+                }
+            }
+            
+            setupWhatsAppButton(project) {
+                const whatsappBtn = document.getElementById('modalWhatsappBtn');
+                if (!whatsappBtn) return;
+                const message = `Olá! Tenho interesse no projeto "${project.title}". Gostaria de solicitar um orçamento similar.`;
+                whatsappBtn.href = `https://wa.me/556436011000?text=${encodeURIComponent(message)}`;
+                whatsappBtn.target = '_blank';
+            }
+            
+            showError(message) {
+                this.modalLoading.innerHTML = `<div style="text-align: center; color: #d32f2f;"><i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i><h3>Erro</h3><p>${message}</p><button onclick="window.projectModal.close()" style="margin-top: 1rem; padding: 10px 20px; background: #d32f2f; color: white; border: none; border-radius: 5px; cursor: pointer;">Fechar</button></div>`;
+            }
+
+
+            pauseAllVideos() {
+                // Pausa vídeos no container principal da modal
+                const videos = this.mainImage.querySelectorAll('video');
+                videos.forEach(video => {
+                    video.pause();
+                    video.currentTime = 0; // Opcional: volta para o início
+                });
+                
+                // Também pausa qualquer vídeo que possa estar em outros containers
+                const allModalVideos = this.modal.querySelectorAll('video');
+                allModalVideos.forEach(video => {
+                    video.pause();
+                    video.currentTime = 0;
+                });
+            }           
+
+
+
+            close() {
+                this.pauseAllVideos();
+                
+                // Limpar controles
+                const existingControls = this.modal.querySelector('.modal-image-controls');
+                if (existingControls) existingControls.remove();
+
+                this.modal.style.display = 'none';
+                this.modal.classList.remove('opening');
+                document.body.style.overflow = 'auto';
+                this.currentProject = null;
+                this.media = [];
+                this.currentMediaIndex = 0;
+
+                // Limpar thumbnails
+                if (this.thumbnailsContainer) {
+                    this.thumbnailsContainer.innerHTML = '';
+                    this.hideImageNavigation();
+                }
+
+                this.mainImage.innerHTML = '<div class="modal-image-placeholder">📸</div>';
+                this.mainImage.style.backgroundImage = 'none';
+            }
+
+        }
+
+
+        
+        // Inicialização
+        let projectModal;
+        document.addEventListener('DOMContentLoaded', function() {
+            projectModal = new ProjectModal();
+            loadFeaturedProjects();
+        });
+
+        // Função global para compatibilidade
+        function openModal(projectId) {
+            if (projectModal) {
+                projectModal.open(projectId);
+            }
+        }
+
+
+
+        // ===== SISTEMA DE THUMBNAILS PARA VÍDEOS =====
+        function generateVideoThumbnail(videoPath, timeInSeconds = 0.5) {
+            return new Promise((resolve, reject) => {
+                const video = document.createElement('video');
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                video.crossOrigin = 'anonymous';
+                video.muted = true;
+                
+                video.onloadedmetadata = () => {
+                    video.currentTime = Math.min(timeInSeconds, video.duration);
+                };
+                
+                video.onseeked = () => {
+                    try {
+                        canvas.width = video.videoWidth;
+                        canvas.height = video.videoHeight;
+                        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                        const thumbnailDataURL = canvas.toDataURL('image/jpeg', 0.8);
+                        resolve(thumbnailDataURL);
+                        video.remove();
+                    } catch (error) {
+                        reject(error);
+                    }
+                };
+                
+                video.onerror = () => reject(new Error('Erro ao carregar vídeo'));
+                video.src = videoPath;
+                video.load();
+            });
+        }
+
+        async function applyVideoThumbnails() {
+            const videoElements = document.querySelectorAll('.carousel-project-image.is-video[data-video-path]');
+            
+            for (const element of videoElements) {
+                try {
+                    const videoPath = element.dataset.videoPath;
+                    if (!videoPath || element.classList.contains('thumbnail-loaded')) continue;
+                    
+                    const thumbnailDataURL = await generateVideoThumbnail(videoPath, 0.5);
+                    
+                    element.style.backgroundImage = `url('${thumbnailDataURL}')`;
+                    element.style.backgroundSize = 'cover';
+                    element.style.backgroundPosition = 'center';
+                    element.style.backgroundRepeat = 'no-repeat';
+                    
+                    element.classList.remove('loading-thumbnail');
+                    element.classList.add('thumbnail-loaded');
+                    
+                } catch (error) {
+                    console.error('Erro ao gerar thumbnail:', error);
+                    
+                    element.style.backgroundColor = '#2a2a2a';
+                    element.style.backgroundImage = 'none';
+                    element.classList.remove('loading-thumbnail');
+                    
+                    if (!element.querySelector('.video-fallback-icon')) {
+                        const iconDiv = document.createElement('div');
+                        iconDiv.className = 'video-fallback-icon';
+                        iconDiv.innerHTML = '<i class="fas fa-play" style="font-size: 3rem; color: rgba(255,255,255,0.7);"></i>';
+                        element.appendChild(iconDiv);
+                    }
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
     </script>
 </body>
 </html>
