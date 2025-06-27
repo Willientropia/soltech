@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SOL TECH ENERGIA SOLAR - Soluções em Energia Solar e Parceria WEG</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -21,14 +21,13 @@
             --weg-blue: #005cb8;
             --shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: var(--text-color);
-            overflow-x: hidden; /* ADICIONADO */
+            overflow-x: hidden;
             background-color: var(--light-color);
-            width: 100%; /* ADICIONADO */
-            max-width: 100vw; /* ADICIONADO */
         }
 
         /* Header */
@@ -48,32 +47,28 @@
         nav {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 1rem; /* ALTERADO de 2rem para 1rem */
+            padding: 0 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            width: 100%; /* ADICIONADO */
         }
 
         .logo {
-            font-size: 1.2rem; /* ALTERADO de 1.5rem */
+            font-size: 1.5rem;
             font-weight: bold;
             color: white;
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 8px; /* ALTERADO de 10px */
+            gap: 10px;
             transition: transform 0.3s ease;
-            flex-shrink: 0; /* ADICIONADO */
         }
 
         .logo-img {
-            height: 45px; /* ALTERADO de 55px */
+            height: 55px;
             width: auto;
             border-radius: 50%;
-            flex-shrink: 0; /* ADICIONADO */
         }
-
 
         .logo:hover {
             transform: scale(1.05);
@@ -82,7 +77,7 @@
         .nav-links {
             display: flex;
             list-style: none;
-            gap: 1.5rem;
+            gap: 2rem;
         }
 
         .nav-links a {
@@ -92,8 +87,6 @@
             position: relative;
             padding: 5px 0;
             font-weight: 500;
-            white-space: nowrap; /* ADICIONADO */
-            font-size: 0.9rem; /* ADICIONADO */
         }
 
         .nav-links a::after {
@@ -155,19 +148,15 @@
         }
 
         .hero h1 {
-            font-size: clamp(2rem, 8vw, 3.5rem); /* ALTERADO - usar clamp */
+            font-size: 3.5rem;
             margin-bottom: 1rem;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
-            word-wrap: break-word; /* ADICIONADO */
         }
 
         .hero p {
-            font-size: clamp(1rem, 4vw, 1.5rem); /* ALTERADO - usar clamp */
+            font-size: 1.5rem;
             margin-bottom: 2rem;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
-            max-width: 600px; /* ADICIONADO */
-            margin-left: auto; /* ADICIONADO */
-            margin-right: auto; /* ADICIONADO */
         }
 
         .cta-button {
@@ -177,13 +166,12 @@
             color: white;
             text-decoration: none;
             border-radius: 50px;
+            font-size: 1.2rem;
             font-weight: bold;
             transition: all 0.3s ease;
             box-shadow: 0 5px 15px rgba(255,165,0,0.4);
             position: relative;
             overflow: hidden;
-            font-size: clamp(1rem, 3vw, 1.2rem); /* ALTERADO - usar clamp */
-            white-space: nowrap; /* ADICIONADO */
         }
 
         .cta-button::before {
@@ -201,28 +189,15 @@
         .cta-button:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(255,165,0,0.5); }
 
         /* Sections */
-        section { 
-            padding: 60px 0; /* ALTERADO de 80px */
-            position: relative; 
-            width: 100%; /* ADICIONADO */
-            overflow: hidden; /* ADICIONADO */
-        }
-
-        .container { 
-            max-width: 1200px; 
-            margin: 0 auto; 
-            padding: 0 1rem; /* ALTERADO de 2rem */
-            width: 100%; /* ADICIONADO */
-        }
-
+        section { padding: 80px 0; position: relative; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
         h2 {
-            font-size: clamp(1.8rem, 5vw, 2.8rem); /* ALTERADO - usar clamp */
-            margin-bottom: 2rem; /* ALTERADO de 3rem */
+            font-size: 2.8rem;
+            margin-bottom: 3rem;
             text-align: center;
             position: relative;
             color: var(--dark-color);
             font-weight: 700;
-            word-wrap: break-word; /* ADICIONADO */
         }
         h2::after {
             content: '';
@@ -260,23 +235,11 @@
 
         /* About Section */
         #about { background: white; }
-        .about-content { 
-            display: grid; 
-            grid-template-columns: 1fr; /* ALTERADO de 1fr 1fr */
-            gap: 2rem; /* ALTERADO de 3rem */
-            align-items: center; 
-            margin-top: 2rem; /* ALTERADO de 3rem */
-        }
-
-        .about-text h3 { 
-            color: var(--primary-color); 
-            font-size: clamp(1.2rem, 4vw, 1.8rem); /* ALTERADO - usar clamp */
-            margin-bottom: 1rem; 
-        }
-    
+        .about-content { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin-top: 3rem; }
+        .about-text h3 { color: var(--primary-color); font-size: 1.8rem; margin-bottom: 1rem; }
         .about-image {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            height: 300px; border-radius: 20px; position: relative;
+            height: 400px; border-radius: 20px; position: relative;
             overflow: hidden; box-shadow: var(--shadow);
             animation: fadeInRight 1s ease;
         }
@@ -292,23 +255,12 @@
 
         /* Services Section */
         #services { background: var(--light-color); }
-        .services-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* ALTERADO de 300px */
-            gap: 2rem; 
-            margin-top: 2rem; /* ALTERADO de 3rem */
-        }
-
-    .service-card {
-            background: white; 
-            padding: 2rem 1.5rem;
-            border-radius: 20px; 
-            text-align: center; 
-            transition: all 0.3s ease; 
-            position: relative; 
-            overflow: hidden; 
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .service-card {
+            background: white; padding: 2.5rem; border-radius: 20px;
+            text-align: center; transition: all 0.3s ease;
+            position: relative; overflow: hidden;
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            width: 100%;
         }
         .service-card::before {
             content: ''; position: absolute; top: 0; left: 0;
@@ -319,13 +271,9 @@
         .service-card:hover::before { transform: scaleX(1); }
         .service-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0,0,0,0.15); }
         .service-icon {
-            font-size: clamp(40px, 8vw, 50px); /* ✅ Remover ; extra */
-            margin-bottom: 1rem; 
-            display: inline-block;
+            font-size: 50px; margin-bottom: 1rem; display: inline-block;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            background-clip: text;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
         }
         .service-card h3 { font-size: 1.5rem; margin-bottom: 1rem; }
 
@@ -365,9 +313,9 @@
 
         .carousel-wrapper {
             position: relative;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 60px; /* Espaço para os botões */
+            display: flex;
+            align-items: center;
+            gap: 2rem;
         }
 
         .carousel-container {
@@ -375,18 +323,16 @@
             overflow: hidden;
             border-radius: 20px;
             position: relative;
-            width: 100%; /* ADICIONE */
-            max-width: calc(100% - 120px);/* ADICIONE */
-            min-width: 320px; /* ADICIONE - largura mínima de um card */
         }
+
         .carousel-track {
             display: flex;
             transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            gap: 2rem; /* ✅ IMPORTANTE: manter este gap */
+            gap: 2rem;
         }
 
         .carousel-project-card {
-            flex: 0 0 320px; /* FIXO em 320px */
+            flex: 0 0 320px;
             background: white;
             border-radius: 20px;
             overflow: hidden;
@@ -396,9 +342,7 @@
             position: relative;
             text-decoration: none;
             color: inherit;
-            width: 320px; /* LARGURA FIXA */
         }
-
 
         .carousel-project-card:hover {
             transform: translateY(-15px);
@@ -550,37 +494,20 @@
 
         /* Botões de Navegação */
         .carousel-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
             border: none;
             width: 50px;
             height: 50px;
-            font-size: 1.2rem;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 1.2rem;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(255,165,0,0.3);
             z-index: 10;
-        }
-
-
-        .carousel-prev {
-             left: 0px; /* ADICIONE */
-        }
-
-        .carousel-next {
-            right: 0px; /* ADICIONE */
-        }
-
-        .carousel-btn:hover {
-            
-            box-shadow: 0 6px 20px rgba(255,165,0,0.4);
         }
 
         .carousel-btn:hover {
@@ -761,13 +688,45 @@
         @media (max-width: 1200px) {
             .carousel-project-card {
                 flex: 0 0 300px;
-                width: 300px;
             }
         }
 
         @media (max-width: 768px) {
+            .nav-links {
+                position: fixed; left: -100%; top: 70px;
+                flex-direction: column; background: rgba(26, 26, 26, 0.98);
+                width: 100%; text-align: center; transition: 0.3s;
+                padding: 2rem 0; backdrop-filter: blur(10px);
+            }
+            .nav-links.active { left: 0; }
+            .menu-toggle { display: flex; }
+            
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1.2rem; }
+            
+            .about-content, .location-content { grid-template-columns: 1fr; }
+            
+            .contact-buttons { flex-direction: column; align-items: center; }
+            
+            h2 { font-size: 2.2rem; }
+            
+            .contact-form .form-row { grid-template-columns: 1fr !important; }
+            
+            .services-grid { grid-template-columns: 1fr; }
+            .products-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+            
+            .weg-logo-container img { max-width: 200px; }
+            
+            section { padding: 60px 0; }
+            
+            .container { padding: 0 1rem; }
+
             .carousel-wrapper {
-                padding: 0 40px; /* Menos padding em mobile */
+                gap: 1rem;
+            }
+            
+            .carousel-project-card {
+                flex: 0 0 280px;
             }
             
             .carousel-btn {
@@ -775,16 +734,52 @@
                 height: 40px;
                 font-size: 1rem;
             }
-        }
-
-        @media (max-width: 480px) {
-            .carousel-project-card {
-                flex: 0 0 260px;
-                width: 260px;
+            
+            .carousel-project-content {
+                padding: 1.5rem;
+            }
+            
+            .carousel-project-specs {
+                grid-template-columns: 1fr;
+                gap: 0.4rem;
             }
         }
 
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1.1rem; }
+            
+            .logo { font-size: 1.2rem; }
+            .logo-img { height: 45px; }
+            
+            .cta-button { padding: 12px 30px; font-size: 1rem; }
+            
+            h2 { font-size: 1.8rem; }
+            
+            .service-card, .product-card { padding: 1.5rem; }
+            
+            .contact-form { padding: 1.5rem; margin: 2rem auto; }
+            
+            .location-info { padding: 1.5rem; }
+            
+            .whatsapp-float { width: 50px; height: 50px; font-size: 24px; }
 
+            .carousel-wrapper {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .carousel-project-card {
+                flex: 0 0 260px;
+            }
+            
+            .carousel-navigation {
+                order: -1;
+                display: flex;
+                gap: 1rem;
+                justify-content: center;
+            }
+        }
 
         /* Animations */
         @keyframes fadeInLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
@@ -795,56 +790,9 @@
         /* Form responsive grid */
         .form-row {
             display: grid;
-            grid-template-columns: 1fr; /* ALTERADO de 1fr 1fr */
+            grid-template-columns: 1fr 1fr;
             gap: 1rem;
-            width: 100%; /* ADICIONADO */
         }
-        @media (min-width: 768px) {
-            .form-row {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-
-        html, body {
-            overflow-x: hidden;
-            width: 100%;
-            max-width: 100%;
-        }
-
-        *, *::before, *::after {
-            box-sizing: border-box;
-        }
-
-        /* Garantir que nenhum elemento ultrapasse a viewport */
-        .container,
-        .hero-content,
-        .carousel-wrapper,
-        .carousel-track,
-        nav,
-        .nav-links,
-        .services-grid,
-        .products-grid,
-        .about-content,
-        .location-content {
-            max-width: 100%;
-            overflow-x: hidden;
-        }
-
-
-        /* Texto que não quebra */
-        h1, h2, h3, h4, h5, h6, p, span, div {
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            hyphens: auto;
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
-        }        
-
-
 
         /* Modal de Projeto */
         .project-modal {
@@ -1062,7 +1010,7 @@
             column-count: 2; /* Cria duas colunas */
             column-gap: 2rem;
         }
-    .spec-item {
+       .spec-item {
             display: flex;
             align-items: center;
             gap: 12px;
@@ -1266,103 +1214,56 @@
         }
 
 
-    
 
-
-        /* Responsivo */
         @media (max-width: 768px) {
-            .nav-links {
-                position: fixed; 
-                left: -100%; 
-                top: 70px;
-                flex-direction: column; 
-                background: rgba(26, 26, 26, 0.98);
-                width: 100%; 
-                text-align: center; 
-                transition: 0.3s;
-                padding: 2rem 0; 
-                backdrop-filter: blur(10px);
-                gap: 1rem;
-            }
-            
-            .nav-links.active { 
-                left: 0; 
-            }
-            
-            .nav-links li {
-                margin: 0.5rem 0;
-            }
-            
-            .menu-toggle { 
-                display: flex; 
-            }
-            
-            /* Animação do hambúrguer */
-            .menu-toggle.active span:nth-child(1) {
-                transform: rotate(-45deg) translate(-5px, 6px);
-            }
-            .menu-toggle.active span:nth-child(2) {
-                opacity: 0;
-            }
-            .menu-toggle.active span:nth-child(3) {
-                transform: rotate(45deg) translate(-5px, -6px);
-            }
-            
-            .hero h1 { font-size: 2.5rem; }
-            .hero p { font-size: 1.2rem; }
-            
-            .about-content, .location-content { grid-template-columns: 1fr; }
-            
-            .contact-buttons { 
-                flex-direction: column; 
-                align-items: center; 
-                gap: 1rem;
-            }
-            
-            .contact-button {
-                width: 100%;
-                max-width: 250px;
-                justify-content: center;
-            }
-            
-            h2 { font-size: 2.2rem; }
-            
-            .contact-form .form-row { grid-template-columns: 1fr !important; }
-            
-            .services-grid { grid-template-columns: 1fr; }
-            .products-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-            
-            .weg-logo-container img { max-width: 200px; }
-            
-            section { padding: 60px 0; }
-            
-            .container { padding: 0 1rem; }
-
-            .carousel-wrapper {
-                gap: 1rem;
-            }
-            
-            .carousel-project-card {
-                flex: 0 0 280px;
-            }
-            
-            .carousel-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 1rem;
-            }
-            
-            .carousel-project-content {
-                padding: 1.5rem;
-            }
-            
-            .carousel-project-specs {
-                grid-template-columns: 1fr;
-                gap: 0.4rem;
+            .specs-list {
+                column-count: 1; /* Uma coluna em telas menores */
             }
         }
 
 
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .project-modal-content {
+                width: 95%;
+                margin: 5% auto;
+            }
+            
+            .modal-image-gallery {
+                height: 300px;
+            }
+            
+            .project-modal-body {
+                padding: 1.5rem;
+            }
+            
+            .modal-project-title {
+                font-size: 1.8rem;
+            }
+            
+            .modal-project-specs {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+            
+            .modal-spec-card {
+                padding: 1rem;
+            }
+            
+            .modal-spec-icon {
+                font-size: 2rem;
+            }
+            
+            .modal-action-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .modal-project-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
 
         @media (max-width: 480px) {
             .modal-project-specs {
@@ -1522,7 +1423,7 @@
                     <i class="fas fa-certificate" style="margin-right: 10px;"></i>
                     Integrador Autorizado WEG Solar
                 </div>
-                <p style="font-size: 1.1rem; max-width: 800px; margin: 0 auto 3rem auto; line-height: 1.8;">
+                 <p style="font-size: 1.1rem; max-width: 800px; margin: 0 auto 3rem auto; line-height: 1.8;">
                     Como <strong>Integradores Autorizados</strong>, combinamos a tradição e a tecnologia de ponta da WEG com nossa expertise local. Oferecemos soluções completas com a garantia de uma das marcas mais respeitadas do mundo, assegurando máxima performance e tranquilidade para seu investimento.
                 </p>
 
@@ -1652,7 +1553,7 @@
                     <button type="submit" class="submit-btn">
                         <i class="fas fa-paper-plane" style="margin-right: 10px;"></i> Enviar Solicitação
                     </button>
-                
+                   
                     
                 </form>
             </div>
@@ -1686,7 +1587,7 @@
     <!-- Modal de Projeto - Adicionar antes do </body> -->
     <div id="projectModal" class="project-modal">
         <div class="project-modal-content">
-            <span class="project-modal-close">×</span>
+            <span class="project-modal-close">&times;</span>
             
             <!-- Galeria de Imagens -->
             <div class="modal-image-gallery">
@@ -1748,45 +1649,27 @@
     <script>
 
         function toggleMenu() {
-            const navLinks = document.querySelector('.nav-links');
-            const menuToggle = document.querySelector('.menu-toggle');
-            
-            navLinks.classList.toggle('active');
-            menuToggle.classList.toggle('active');
+            document.querySelector('.nav-links').classList.toggle('active');
         }
-
-        // ADICIONAR - Fechar menu mobile ao clicar fora
-        document.addEventListener('click', function(event) {
-            const navLinks = document.querySelector('.nav-links');
-            const menuToggle = document.querySelector('.menu-toggle');
-            const nav = document.querySelector('nav');
-            
-            if (!nav.contains(event.target) && navLinks.classList.contains('active')) {
-                navLinks.classList.remove('active');
-                menuToggle.classList.remove('active');
-            }
-        });
-
 
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    const headerHeight = document.querySelector('header').offsetHeight;
-                    const targetPosition = target.offsetTop - headerHeight - 20;
-                    
-                    window.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
-                    });
-                    
-                    // Fechar menu mobile após clicar
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     document.querySelector('.nav-links').classList.remove('active');
-                    document.querySelector('.menu-toggle').classList.remove('active');
                 }
             });
         });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -100px 0px' });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
         // ####################################################################
         // ## FUNÇÃO DE ENVIO DO FORMULÁRIO CORRIGIDA E NO LOCAL CERTO ##
@@ -1798,10 +1681,6 @@
             const feedbackDiv = document.getElementById('form-feedback');
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
-
-            console.log('Dados a serem enviados:', data); // ADICIONE ESTA LINHA
-            console.log('JSON stringificado:', JSON.stringify(data)); // ADICIONE ESTA LINHA
-
 
             button.disabled = true;
             button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
@@ -1904,12 +1783,12 @@
             }
             
             getSlidesPerView() {
-                const containerWidth = this.track?.parentElement?.offsetWidth || window.innerWidth - 120;
-                const cardWidth = 320;
-                const gap = 32;
-                
-                // Calcula quantos cards completos cabem
-                return Math.floor(containerWidth / (cardWidth + gap));
+                const width = window.innerWidth;
+                if (width < 480) return 1;
+                if (width < 768) return 1.2;
+                if (width < 1024) return 2;
+                if (width < 1200) return 2.5;
+                return 3;
             }
 
             loadProjects(projects) {
@@ -1984,15 +1863,11 @@
                     });
                 });
             }
-                            
+            
             updateCarousel() {
                 if (!this.track || !this.projects.length) return;
                 
-                const cardWidth = 320;
-                const gap = 32;
-                const slideWidth = cardWidth + gap;
-                
-                // Calcular offset baseado no slide atual
+                const slideWidth = 320 + 32;
                 const offset = this.currentSlide * slideWidth;
                 
                 this.track.style.transform = `translateX(-${offset}px)`;
@@ -2001,10 +1876,7 @@
             }
             
             updateButtons() {
-                // Calcula quantos slides são possíveis
-                const visibleCards = this.getSlidesPerView();
-                const maxSlides = Math.max(0, this.projects.length - visibleCards);
-                
+                const maxSlides = Math.max(0, this.projects.length - Math.floor(this.slidesPerView));
                 if (this.prevBtn) this.prevBtn.disabled = this.currentSlide <= 0;
                 if (this.nextBtn) this.nextBtn.disabled = this.currentSlide >= maxSlides;
             }
@@ -2353,16 +2225,6 @@
         // Inicialização
         let projectModal;
         document.addEventListener('DOMContentLoaded', function() {
-            // ✅ MOVER PARA CÁ
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) entry.target.classList.add('active');
-                });
-            }, { threshold: 0.1, rootMargin: '0px 0px -100px 0px' });
-
-            document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-            
-            // Inicializar modal e carrossel
             projectModal = new ProjectModal();
             loadFeaturedProjects();
         });
